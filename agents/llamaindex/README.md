@@ -25,7 +25,7 @@ The template builds a simple application with external tool for addressing Dummy
 
 The high level structure of the repository is as follows:  
 
-llamaindex-workflow-agent-base  
+llamaindex  
  ┣ src  
  ┃ ┗ llama_index_workflow_agent_base  
  ┃   ┣ agent.py  
