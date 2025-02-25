@@ -25,9 +25,11 @@ The template builds a simple application with external tool for addressing Web S
 
 The high level structure of the repository is as follows:  
 
-langgraph-react-agent-base  
+langgraph  
  ┣ src  
- ┃ ┣ langgraph_react_agent_base  
+ ┃ ┗ langgraph_react_agent_base  
+ ┃   ┣ agent.py  
+ ┃   ┗ tools.py  
  ┣ schema  
  ┣ ai_service.py  
  ┣ config.toml  
