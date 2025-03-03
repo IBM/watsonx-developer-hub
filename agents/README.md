@@ -8,9 +8,9 @@ Designed to help you get started quickly with examples that can be easily custom
 
 | Template                 | 
 | ------------------------ |
-| [LangGraph](./langgraph/) |
-| [LlamaIndex](./llamaindex/) |
-| [CrewAI](./crewai/) |
+| [LangGraph](./base/langgraph-react-agent/) |
+| [LlamaIndex](./base/llamaindex-websearch-agent/) |
+| [CrewAI](./base/crewai-websearch-agent/) |
 
 ## Community Templates
 
@@ -18,7 +18,7 @@ Templates published and maintained by the community.
 
 | Template                                            | Framework | Description                                                       |
 | --------------------------------------------------- | --------- | ----------------------------------------------------------------- |
-| [arXiv Research Agent](./langgraph-arxiv-research/) | Langraph  | Agent to search and summarize research papers published on arXiv. |
+| [arXiv Research Agent](./community/langgraph-arxiv-research/) | Langraph  | Agent to search and summarize research papers published on arXiv. |
 
 ## Support
 

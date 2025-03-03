@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "llama_index_workflow_agent_base"
+version = "0.1.0"
+description = "A template for a LlamaIndex LLM app deployable on IBM Cloud as an ai_service. This particular example focues on a WatsonX chatbot enhanced with external tools (function calling)."
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "llama_index_workflow_agent_base", from = "src" }
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.13"
+llama-index-llms-ibm = "^0.3.1"
+llama-index = "0.12.15"
+llama-index-core = "0.12.15"
+llama-index-utils-workflow = "^0.3.0"
+python-dotenv = "^1.0.1"
+ibm-watsonx-ai = { version = ">=1.2.6", python = ">=3.11,<3.13" }
+numpy = "<2"
+pytest = "^8.3.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

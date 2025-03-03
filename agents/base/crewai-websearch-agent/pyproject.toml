@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "crewai-web-search"
+version = "0.1.0"
+description = "A template for a CrewAI LLM app deployable on IBM Cloud as an ai_service. This particular example focuses on a WatsonX chatbot enhanced with external tools (function calling)."
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "assistance_crew", from = "src" }
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+crewai = "^0.102"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+
+python-dotenv = "^1.0.1"
+ibm-watsonx-ai = "^1.2.7"
+pytest = "^8.3.3"
+numpy = "<2.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
