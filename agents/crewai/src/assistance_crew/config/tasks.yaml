@@ -1,6 +1,0 @@
-generate_response_task:
-  description: >
-    Respond to user prompt: {user_prompt}. Use tool Web Search if needed.
-  expected_output: >
-    A concise and polite response on the user prompt: {user_prompt}
-  agent: ai_assistant
