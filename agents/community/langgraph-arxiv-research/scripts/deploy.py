@@ -86,7 +86,8 @@ meta_props = {
     client.repository.AIServiceMetaNames.SOFTWARE_SPEC_ID: asset_id,
     client.repository.AIServiceMetaNames.NAME: "online ai_service",
     client.repository.AIServiceMetaNames.REQUEST_DOCUMENTATION: request_schema,
-    client.repository.AIServiceMetaNames.RESPONSE_DOCUMENTATION: response_schema
+    client.repository.AIServiceMetaNames.RESPONSE_DOCUMENTATION: response_schema,
+    client.repository.AIServiceMetaNames.TAGS: ["wx-agent"]
 }
 
 stored_ai_service_details = client.repository.store_ai_service(deployable_ai_service, meta_props)
@@ -101,6 +102,8 @@ meta_props = {
         "url": client.credentials.url,
         **dep_config["custom"],
     },
+    client.repository.AIServiceMetaNames.TAGS: ["wx-agent"]
+
 }
 
 deployment_details = client.deployments.create(ai_service_id, meta_props)
