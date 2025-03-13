@@ -1,0 +1,16 @@
+from beeai_framework.tools import StringToolOutput
+from beeai_framework.tools.tool import Tool
+
+
+@tool
+def dummy_web_search(query: str) -> StringToolOutput:
+    """
+    Web search tool that return static list of strings.
+
+    Args:
+        query: User query to search in web.
+
+    Returns:
+        Dummy list of web search results.
+    """
+    return StringToolOutput("IBM watsonx.ai")
