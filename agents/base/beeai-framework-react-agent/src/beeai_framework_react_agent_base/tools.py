@@ -1,5 +1,5 @@
 from beeai_framework.tools import StringToolOutput
-from beeai_framework.tools.tool import Tool
+from beeai_framework import tool
 
 
 @tool

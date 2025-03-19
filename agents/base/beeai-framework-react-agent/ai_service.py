@@ -1,23 +1,49 @@
 def deployable_ai_service(context, **custom):
+    import asyncio
+    import nest_asyncio
+    import threading
     from ibm_watsonx_ai import APIClient, Credentials
     from beeai_framework_react_agent_base.agent import get_beeai_framework_agent
-    from beeai_framework.messages import (
-        AssistantMessage,
-        CustomMessage,
-        SystemMessage,
-        UserMessage,
+    from beeai_framework.agents.types import AgentExecutionConfig
+    from beeai_framework.backend.message import (
+        Message,
     )
+    from beeai_framework.backend.message import SystemMessage
+    from beeai_framework.memory.unconstrained_memory import UnconstrainedMemory
+
+
+    nest_asyncio.apply() # Inject support for nested event loops
+
+    persistent_loop = (
+        asyncio.new_event_loop()
+    ) # Create a persistent event loop that will be used by generate and generate_stream
+
+    def start_loop(loop: asyncio.AbstractEventLoop) -> None:
+        asyncio.set_event_loop(loop)
+        loop.run_forever()
+
+    threading.Thread(
+        target=start_loop, args=(persistent_loop,), daemon=True
+    ).start() # Run a persistent loop in a separate daemon thread
 
     model_id = custom.get("model_id")
-    client = APIClient(
-        credentials=Credentials(url=custom.get("url"), token=context.generate_token()),
-        space_id=custom.get("space_id"),
-    )
 
-    agent = get_beeai_framework_agent(client, custom.get("project_id"), model_id)
+    def get_formatted_message(resp: Message) -> dict | None:
+        role = resp.role
+        if resp.content:
+            if role == "assistant":
+                return {"role": role, "content": resp.content}
+            elif role == "tool":
+                return {
+                    "role": role,
+                    "id": f"fake_id_{resp.tool_call_id}", # TODO does this need to be from message tool result conent?
+                    "tool_call_id": resp.tool.call_id,
+                    "name": resp.tool_name,
+                    "content": resp.content,
+                }
 
 
-    def generate(context) -> dict:
+    async def generate_async(context) -> dict:
         """
         The `generate` function handles the REST call to the inference endpoint
         POST /ml/v4/deployments/{id_or_name}/ai_service
@@ -40,30 +66,49 @@ def deployable_ai_service(context, **custom):
         Please note that the `system message` MUST be placed first in the list of messages!
         """
 
-        # TODO
+        memory = UnconstrainedMemory()
+        system_message = SystemMessage(content="You are a helpful AI assistant, please respond to the user's query to the best of your ability!")
 
-    def generate_stream(context) -> dict:
+        await memory.add(system_message)
+
+        client = APIClient(
+            credentials=Credentials(
+                url=custom.get("url"),
+                api_key=custom.get("api_key"),
+            ),
+        )
+
+        agent = get_beeai_framework_agent(client, model_id, custom.get("project_id"))
+
+        payload = context.get_json()
+        messages = payload.get("messages", [])
+
+        response = await agent.run(
+             prompt=messages[0]["content"],
+             execution=AgentExecutionConfig(max_retries_per_step=3, total_max_retries=10, max_iterations=20),
+        )
+
+        return response
+
+    def generate(context) -> dict:
         """
-        The `generate_stream` function handles the REST call to the Server-Sent Events (SSE) inference endpoint
-        POST /ml/v4/deployments/{id_or_name}/ai_service_stream
+        A synchronous wrapper for the asynchronous `generate_async` method.
+        """
+        payload = context.get_json()
 
-        The generate function should return a dict
+        future = asyncio.run_coroutine_threadsafe(
+            generate_async(context), persistent_loop
+        )
+        choices = []
+        generated_response = future.result()
 
-        A JSON body sent to the above endpoint should follow the format:
-        {
-            "messages": [
-                {
-                    "role": "system",
-                    "content": "You are a helpful assistant that uses tools to answer questions in detail.",
-                },
-                {
-                    "role": "user",
-                    "content": "Hello!",
-                },
-            ]
+        output = get_formatted_message(generated_response.result)
+        if output is not None:
+            choices.append({"index": 0, "message": output})
+        
+        return {
+            "headers": {"Content-Type": "application/json"},
+            "body": {"choices": choices},
         }
-        Please note that the `system message` MUST be placed first in the list of messages!
-        """
-        # TODO
 
-    return generate, generate_stream
+    return (generate,)
