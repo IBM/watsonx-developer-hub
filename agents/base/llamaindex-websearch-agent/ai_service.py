@@ -61,7 +61,9 @@ def deployable_ai_service(context, **custom):
                     ],
                 }
 
-    def get_formatted_message_stream(resp: ChatMessage) -> list | None:
+    def get_formatted_message_stream(
+        resp: ChatMessage, is_assistant: bool = False
+    ) -> list | None:
 
         if isinstance(resp, StartEvent):
 
@@ -85,51 +87,78 @@ def deployable_ai_service(context, **custom):
                     if event_input.role == "tool":
 
                         tool_call_id = event_input.additional_kwargs["tool_call_id"]
-                        to_queue = {
-                            "role": "tool",
-                            "id": f"fake_id_{tool_call_id}",
-                            "tool_call_id": tool_call_id,
-                            "name": event_input.additional_kwargs["name"],
-                            "content": event_input.blocks[0].text,
-                        }
+                        if is_assistant:
+                            to_queue = {
+                                "role": "assistant",
+                                "step_details": {
+                                    "type": "tool_response",
+                                    "id": f"tool_call_id_{tool_call_id}",
+                                    "tool_call_id": tool_call_id,
+                                    "name": event_input.additional_kwargs["name"],
+                                    "content": event_input.blocks[0].text,
+                                },
+                            }
+                        else:
+                            to_queue = {
+                                "role": "tool",
+                                "id": f"tool_call_id_{tool_call_id}",
+                                "tool_call_id": tool_call_id,
+                                "name": event_input.additional_kwargs["name"],
+                                "content": event_input.blocks[0].text,
+                            }
 
                         responses.append(to_queue)
 
             return responses
 
         elif isinstance(resp, ToolCallEvent):
-
+            # Tool calls
             responses = []
 
             for tool_call in resp.tool_calls:
 
                 arguments_str = json.dumps(tool_call.tool_kwargs)
 
-                to_queue = {
-                    "role": "assistant",
-                    "tool_calls": [
-                        {
-                            "id": tool_call.tool_id,
-                            "type": "function",
-                            "function": {
-                                "name": tool_call.tool_name,
-                                "arguments": arguments_str,
-                            },
-                        }
-                    ],
-                }
+                if is_assistant:
+                    to_queue = {
+                        "role": "assistant",
+                        "step_details": {
+                            "type": "tool_calls",
+                            "tool_calls": [
+                                {
+                                    "id": tool_call.tool_id,
+                                    "name": tool_call.tool_name,
+                                    "args": arguments_str,
+                                }
+                            ],
+                        },
+                    }
+                else:
+                    to_queue = {
+                        "role": "assistant",
+                        "tool_calls": [
+                            {
+                                "id": tool_call.tool_id,
+                                "type": "function",
+                                "function": {
+                                    "name": tool_call.tool_name,
+                                    "arguments": arguments_str,
+                                },
+                            }
+                        ],
+                    }
 
                 responses.append(to_queue)
 
             return responses
 
         elif isinstance(resp, StopEvent):
-
+            # Final response
             resp_result = resp.result
             resp_response = resp_result["response"]
             to_queue = {
                 "role": "assistant",
-                "delta": resp_response.message.blocks[0].text,
+                "content": resp_response.message.blocks[0].text,
             }
 
             return [to_queue]
@@ -204,6 +233,9 @@ def deployable_ai_service(context, **custom):
         workflow = get_workflow_closure(client, model_id)
 
         payload = context.get_json()
+        headers = context.get_headers()
+        is_assistant = headers.get("X-Ai-Interface") == "assistant"
+
         messages = payload.get("messages", [])
 
         if messages and messages[0]["role"] == "system":
@@ -215,9 +247,36 @@ def deployable_ai_service(context, **custom):
         handler = agent.run(input=messages)
 
         async for ev in handler.stream_events():
-            if (messages := get_formatted_message_stream(ev)) is not None:
+            if (messages := get_formatted_message_stream(ev, is_assistant)) is not None:
                 for message in messages:
-                    yield {"choices": [{"index": 0, "message": message}]}
+                    if isinstance(ev, ToolCallEvent):
+                        yield {
+                            "choices": [
+                                {
+                                    "index": 0,
+                                    "delta": message,
+                                    "finish_reason": "tool_calls",
+                                }
+                            ]
+                        }
+                    elif isinstance(ev, StopEvent):
+                        finish_reason = (
+                            ev.result["response"]
+                            .raw.get("choices")[0]
+                            .get("finish_reason")
+                        )
+                        yield {
+                            "choices": [
+                                {
+                                    "index": 0,
+                                    "delta": message,
+                                    "finish_reason": finish_reason,
+                                }
+                            ]
+                        }
+                    else:
+                        # Tool call result
+                        yield {"choices": [{"index": 0, "delta": message}]}
 
         await handler
 
@@ -225,18 +284,13 @@ def deployable_ai_service(context, **custom):
         """
         A synchronous wrapper for the asynchronous `generate_async` method.
         """
-        payload = context.get_json()
-        messages = payload.get("messages", [])
-        history_length = len(messages)
 
         future = asyncio.run_coroutine_threadsafe(
             generate_async(context), persistent_loop
         )
         generated_response = future.result()
-        choices = []
-        for el in generated_response["messages"][history_length:]:
-            if (message := get_formatted_message(el)) is not None:
-                choices.append({"index": 0, "message": message})
+        message = get_formatted_message(generated_response[-1])
+        choices = [{"index": 0, "message": message}]
 
         return {
             "headers": {"Content-Type": "application/json"},
