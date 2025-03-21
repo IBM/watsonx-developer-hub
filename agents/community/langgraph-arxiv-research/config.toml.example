@@ -9,3 +9,5 @@
 # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
   model_id = "mistralai/mistral-large"  # underlying model of WatsonxChat
   thread_id = "thread-1" # More info here: https://langchain-ai.github.io/langgraph/how-tos/persistence/
+  space_id = "PLACEHOLDER FOR YOUR SPACE ID"
+  url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`

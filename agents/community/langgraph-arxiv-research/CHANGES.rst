@@ -1,3 +1,7 @@
+Version 0.1.5
+-------------
+- Alignment response schema with Chat Open API.
+
 Version 0.1.4
 -------------
 - unified response and request schemas with the watsonx.ai Chat API https://cloud.ibm.com/apidocs/watsonx-ai#text-chat,

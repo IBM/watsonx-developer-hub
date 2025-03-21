@@ -8,14 +8,21 @@ stream = True
 config = load_config("deployment")
 
 client = ibm_watsonx_ai.APIClient(
-    credentials=ibm_watsonx_ai.Credentials(url=config["watsonx_url"], api_key=config["watsonx_apikey"]),
-    space_id=config["space_id"])
+    credentials=ibm_watsonx_ai.Credentials(
+        url=config["watsonx_url"], api_key=config["watsonx_apikey"]
+    ),
+    space_id=config["space_id"],
+)
 
-# Executing deployed AI service
+# Executing deployed AI service with provided scoring data
 if stream:
-    ai_service_invoke = lambda payload: client.deployments.run_ai_service_stream(deployment_id, payload)
+    ai_service_invoke = lambda payload: client.deployments.run_ai_service_stream(
+        deployment_id, payload
+    )
 else:
-    ai_service_invoke = lambda payload: client.deployments.run_ai_service(deployment_id, payload)
+    ai_service_invoke = lambda payload: client.deployments.run_ai_service(
+        deployment_id, payload
+    )
 
 chat = InteractiveChat(ai_service_invoke, stream=stream)
 chat.run()

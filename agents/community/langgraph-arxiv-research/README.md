@@ -2,15 +2,17 @@
 
 Table of contents:
 
-- [Introduction](#introduction)
-- [Directory structure and file descriptions](#directory-structure-and-file-descriptions)
-- [Prerequisites](#prerequisites)
-- [Cloning and setting up the template](#cloning-and-setting-up-the-template)
-- [Running the agent locally](#running-the-agent-locally)
-- [Modifying and configuring the template](#optional-modify-and-configure-the-template)
-- [Running unit tests for the template](#testing-the-template)
-- [Deploying on Cloud](#deploying-on-ibm-cloud)
-- [Inferencing the deployment](#querying-the-deployment)
+- [arXiv Research Agent](#arxiv-research-agent)
+  - [Introduction](#introduction)
+  - [Directory structure and file descriptions](#directory-structure-and-file-descriptions)
+  - [Prerequisites](#prerequisites)
+  - [Cloning and setting up the template](#cloning-and-setting-up-the-template)
+  - [Running the agent locally](#running-the-agent-locally)
+  - [Optional: Modify and configure the template](#optional-modify-and-configure-the-template)
+  - [Testing the template](#testing-the-template)
+  - [Deploying on IBM Cloud](#deploying-on-ibm-cloud)
+  - [Querying the deployment](#querying-the-deployment)
+    - [What's next?](#whats-next)
 
 ## Introduction
 
@@ -31,13 +33,13 @@ langgraph-arxiv-research
  ┃ ┣ langgraph_react_agent  
  ┣ schema  
  ┣ ai_service.py  
- ┣ config.toml  
+ ┣ config.toml.example  
  ┣ pyproject.toml
 
 - `langgraph_react_agent` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).
 - `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.
 - `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic
-- `config.toml` file: A configuration file that stores the deployment metadata. It can also be used to tweak the model for your use case.
+- `config.toml` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
 
 ## Prerequisites
 

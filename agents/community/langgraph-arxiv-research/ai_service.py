@@ -1,4 +1,6 @@
 def deployable_ai_service(context, **custom):
+    from typing import Generator
+
     from langgraph_react_agent.agent import get_graph_closure
     from ibm_watsonx_ai import APIClient, Credentials
     from langchain_core.messages import (
@@ -16,38 +18,65 @@ def deployable_ai_service(context, **custom):
 
     graph = get_graph_closure(client, model_id)
 
-    def get_formatted_message(resp: BaseMessage) -> dict | None:
+    def get_formatted_message(
+        resp: BaseMessage, is_assistant: bool = False
+    ) -> dict | None:
         role = resp.type
 
         if resp.content:
-            if role == "AIMessageChunk":
-                return {"role": "assistant", "delta": resp.content}
-            elif role == "ai":
+            if role in {"AIMessageChunk", "ai"}:
                 return {"role": "assistant", "content": resp.content}
             elif role == "tool":
-                return {
-                    "role": role,
-                    "id": resp.id,
-                    "tool_call_id": resp.tool_call_id,
-                    "name": resp.name,
-                    "content": resp.content,
-                }
+                if is_assistant:
+                    return {
+                        "role": "assistant",
+                        "step_details": {
+                            "type": "tool_response",
+                            "id": resp.id,
+                            "tool_call_id": resp.tool_call_id,
+                            "name": resp.name,
+                            "content": resp.content,
+                        },
+                    }
+                else:
+                    return {
+                        "role": role,
+                        "id": resp.id,
+                        "tool_call_id": resp.tool_call_id,
+                        "name": resp.name,
+                        "content": resp.content,
+                    }
         elif role == "ai":  # this implies resp.additional_kwargs
             if additional_kw := resp.additional_kwargs:
                 tool_call = additional_kw["tool_calls"][0]
-                return {
-                    "role": "assistant",
-                    "tool_calls": [
-                        {
-                            "id": tool_call["id"],
-                            "type": "function",
-                            "function": {
-                                "name": tool_call["function"]["name"],
-                                "arguments": tool_call["function"]["arguments"],
-                            },
-                        }
-                    ],
-                }
+                if is_assistant:
+                    return {
+                        "role": "assistant",
+                        "step_details": {
+                            "type": "tool_calls",
+                            "tool_calls": [
+                                {
+                                    "id": tool_call["id"],
+                                    "name": tool_call["function"]["name"],
+                                    "args": tool_call["function"]["arguments"],
+                                }
+                            ],
+                        },
+                    }
+                else:
+                    return {
+                        "role": "assistant",
+                        "tool_calls": [
+                            {
+                                "id": tool_call["id"],
+                                "type": "function",
+                                "function": {
+                                    "name": tool_call["function"]["name"],
+                                    "arguments": tool_call["function"]["arguments"],
+                                },
+                            }
+                        ],
+                    }
 
     def convert_dict_to_message(_dict: dict) -> BaseMessage:
         """Convert user message in dict to langchain_core.messages.BaseMessage"""
@@ -57,16 +86,7 @@ def deployable_ai_service(context, **custom):
         elif _dict["role"] == "system":
             return SystemMessage(content=_dict["content"])
         else:
-            data = _dict.get("data")
-            user_message = _dict["content"]
-            # If data is provided, enhance the question string with the data
-            if data:
-                exog_data = data.get("exog", [])
-                endog_data = data.get("endog", [])
-
-                # Append the data information to the question string
-                user_message += f" Explanatory variables (independent): {exog_data}. Dependent variable (response): {endog_data}."
-            return HumanMessage(content=user_message)
+            return HumanMessage(content=_dict["content"])
 
     def generate(context) -> dict:
         """
@@ -74,8 +94,6 @@ def deployable_ai_service(context, **custom):
         POST /ml/v4/deployments/{id_or_name}/ai_service
 
         The generate function should return a dict
-        The following optional keys are supported currently
-        - data
 
         A JSON body sent to the above endpoint should follow the format:
         {
@@ -87,10 +105,6 @@ def deployable_ai_service(context, **custom):
                 {
                     "role": "user",
                     "content": "Hello!",
-                    "data"[OPTIONAL]: {
-                        "exog": <explanatory variables (independent variables)>,
-                        "endog": <dependent variable (response variable)>
-                    }
                 },
             ]
         }
@@ -113,10 +127,8 @@ def deployable_ai_service(context, **custom):
             "configurable": {"thread_id": custom.get("thread_id")}
         }  # Checkpointer configuration
 
-        prev_checkpoint_n = len(list(agent.checkpointer.list(config)))
         # Invoke agent
         generated_response = agent.invoke({"messages": messages}, config)
-        new_mess_n = len(list(agent.checkpointer.list(config))) - prev_checkpoint_n - 1
 
         choices = []
         execute_response = {
@@ -124,20 +136,21 @@ def deployable_ai_service(context, **custom):
             "body": {"choices": choices},
         }
 
-        for resp in generated_response["messages"][-new_mess_n:]:
-            if (message := get_formatted_message(resp)) is not None:
-                choices.append({"index": 0, "message": message})
+        choices.append(
+            {
+                "index": 0,
+                "message": get_formatted_message(generated_response["messages"][-1]),
+            }
+        )
 
         return execute_response
 
-    def generate_stream(context) -> dict:
+    def generate_stream(context) -> Generator[dict, ..., ...]:
         """
         The `generate_stream` function handles the REST call to the Server-Sent Events (SSE) inference endpoint
         POST /ml/v4/deployments/{id_or_name}/ai_service_stream
 
         The generate function should return a dict
-        The following optional keys are supported currently
-        - data
 
         A JSON body sent to the above endpoint should follow the format:
         {
@@ -149,15 +162,14 @@ def deployable_ai_service(context, **custom):
                 {
                     "role": "user",
                     "content": "Hello!",
-                    "data"[OPTIONAL]: {
-                        "exog": <explanatory variables (independent variables)>,
-                        "endog": <dependent variable (response variable)>
-                    }
                 },
             ]
         }
         Please note that the `system message` MUST be placed first in the list of messages!
         """
+        headers = context.get_headers()
+        is_assistant = headers.get("X-Ai-Interface") == "assistant"
+
         client.set_token(context.get_token())
 
         payload = context.get_json()
@@ -193,8 +205,20 @@ def deployable_ai_service(context, **custom):
             else:
                 continue
 
-            if (message := get_formatted_message(msg_obj)) is not None:
-                chunk_response = {"choices": [{"index": 0, "message": message}]}
+            if (
+                message := get_formatted_message(msg_obj, is_assistant=is_assistant)
+            ) is not None:
+                chunk_response = {
+                    "choices": [
+                        {
+                            "index": 0,
+                            "delta": message,
+                            "finish_reason": msg_obj.response_metadata.get(
+                                "finish_reason"
+                            ),
+                        }
+                    ]
+                }
                 yield chunk_response
 
     return generate, generate_stream
