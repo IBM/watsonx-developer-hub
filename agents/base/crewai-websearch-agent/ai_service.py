@@ -56,10 +56,13 @@ def deployable_ai_service(context, **custom):
 
         # Do not include history
         user_question = messages[-1]["content"]
-        custom_system = ""
+        custom_instruction = ""
         if (message := messages[0])["role"] == "system":
-            custom_system = message["content"]
-        inputs = {"user_prompt": user_question, "custom_system": custom_system}
+            custom_instruction = message["content"]
+        inputs = {
+            "user_prompt": user_question,
+            "custom_instruction": custom_instruction,
+        }
         llm = LLM(
             model=f"watsonx/{model_id}",
             ## watsonx credentials
@@ -78,9 +81,7 @@ def deployable_ai_service(context, **custom):
         )
 
         choices = [
-            {"index": 0, "message": step_dict}
-            for step in intermediate_steps
-            if (step_dict := convert_step_to_dict(step)) is not None
+            {"index": 0, "message": convert_step_to_dict(intermediate_steps[-1])}
         ]
         execute_response = {
             "headers": {"Content-Type": "application/json"},

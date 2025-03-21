@@ -30,7 +30,7 @@ crewai-websearch-agent
  ┃ ┗ assistance_crew    
  ┃     ┣ config  
  ┃     ┣ tools  
- ┃     ┣ __init__.py  
+ ┃     ┣ \_\_init\_\_.py  
  ┃     ┗ crew.py  
  ┣ schema  
  ┣ ai_service.py  
@@ -58,17 +58,11 @@ In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use
 ```sh
 git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
 cd watsonx-developer-hub
-git sparse-checkout add agents/base/crewai-websearch-agent
+git sparse-checkout add agents/crewai
 ```  
 
-Move to the directory with the agent template:
-
-```sh
-cd agents/base/crewai-websearch-agent/
-```
-
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/crewai-websearch-agent`  
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/crewai`  
 
 
 ### Step 2: Install poetry  
@@ -82,7 +76,7 @@ pipx install --python 3.11 poetry
 Running the below commands will install the repository in a separate virtual environment  
 
 ```sh
-poetry install --with dev
+poetry install
 ```
 
 ### Step 4 (OPTIONAL): Activate the virtual environment  

@@ -7,4 +7,4 @@ ai_assistant:
   backstory: >
     You are an experienced assistant. You are known for always being able to find the best answer to a user's question. 
     When necessary, you are able to find relevant information on the web and present it in a clear and concise manner. 
-    {custom_system}
+    {custom_instruction}

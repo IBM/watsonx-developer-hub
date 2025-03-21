@@ -50,21 +50,29 @@ class InteractiveChat:
 
             _ = yield q, "question"
 
-    def _print_message(self, message: dict) -> None:
-        header = f" {message['role'].capitalize()} Message ".center(80, "=")
-        if delta := message.get("delta"):
+    def _print_message(self, choice: dict) -> None:
+        if delta := choice.get("delta"):
             if not self._delta_start:
+                header = f" {delta['role'].capitalize()} Message ".center(80, "=")
                 print("\n", header)
-                self._delta_start = True
-            print(delta, flush=True, end="")
+                self._delta_start = (
+                    True
+                    and (choice.get("finish_reason") is None)
+                    and delta["role"] != "tool"
+                )
+            print(delta.get("content") or delta.get("tool_calls"), flush=True, end="")
         else:
+            header = f" {choice['message']['role'].capitalize()} Message ".center(
+                80, "="
+            )
             print("\n", header)
-            print(f"{message.get('content', message)}")
+            print(f"{choice['message'].get('content', choice['message'])}")
 
     def run(self) -> None:
         # TODO implement signal handling (especially Ctrl-C)
         while True:
             try:
+                q = None
 
                 user_loop = self._user_input_loop()
 
@@ -105,7 +113,7 @@ class InteractiveChat:
                                 if type(r) == str:
                                     r = json.loads(r)
                                 for c in r["choices"]:
-                                    self._print_message(c["message"])
+                                    self._print_message(c)
                             self._delta_start = False
                         else:
                             resp_choices = resp.get("body", resp)["choices"]
@@ -114,7 +122,7 @@ class InteractiveChat:
                             )
 
                             for c in choices:
-                                self._print_message(c["message"])
+                                self._print_message(c)
 
             except EOFError:
                 break
