@@ -105,7 +105,6 @@ meta_props = {
     client.deployments.ConfigurationMetaNames.NAME: f"online CrewAI service app",
     client.deployments.ConfigurationMetaNames.ONLINE: {},
     client.deployments.ConfigurationMetaNames.CUSTOM: {
-        "project_id": dep_config.get("project_id"),
         "url": client.credentials.url,
         **dep_config["custom"],
     },

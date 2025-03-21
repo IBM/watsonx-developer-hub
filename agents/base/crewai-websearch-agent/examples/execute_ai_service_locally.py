@@ -16,7 +16,6 @@ client = APIClient(
 )
 
 custom = {
-    "project_id": dep_config["project_id"],
     "url": client.credentials.url,
     **dep_config["custom"],
 }
