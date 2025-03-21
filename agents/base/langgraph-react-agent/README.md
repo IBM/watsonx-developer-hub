@@ -32,13 +32,13 @@ langgraph-react-agent
  ┃   ┗ tools.py  
  ┣ schema  
  ┣ ai_service.py  
- ┣ config.toml  
+ ┣ config.toml.example  
  ┣ pyproject.toml  
 
 - `langgraph-react-agent-base` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
 - `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
 - `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic  
-- `config.toml` file: A configuration file that stores the deployment metadata. It can also be used to tweak the model for your use case.  
+- `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
 
 ## Prerequisites  
 
