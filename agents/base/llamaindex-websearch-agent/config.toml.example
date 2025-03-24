@@ -1,3 +1,6 @@
+[cli.options]
+  stream = true
+
 [deployment]
   watsonx_apikey = "PLACEHOLDER FOR YOUR APIKEY"
   watsonx_url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
@@ -9,3 +12,8 @@
   model_id = "mistralai/mistral-large"  # underlying model of WatsonxChat
   space_id = "PLACEHOLDER FOR YOUR SPACE ID"
   url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
+
+[deployment.software_specification]
+  name = "" # name for sw spec, if not provided we use default that will be build based on the package name
+  overwrite = false # by default is false - if sw spec already exists, throw an error
+  base_sw_spec = "runtime-24.1-py3.11" # default rt24.1
