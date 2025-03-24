@@ -1,4 +1,4 @@
-def deployable_ai_service(context, **custom):
+def deployable_ai_service(context, url = None, space_id = None, model_id = None, thread_id = None):
     from typing import Generator
 
     from langgraph_react_agent.agent import get_graph_closure
@@ -10,10 +10,9 @@ def deployable_ai_service(context, **custom):
         SystemMessage,
     )
 
-    model_id = custom.get("model_id")
     client = APIClient(
-        credentials=Credentials(url=custom.get("url"), token=context.generate_token()),
-        space_id=custom.get("space_id"),
+        credentials=Credentials(url=url, token=context.generate_token()),
+        space_id=space_id,
     )
 
     graph = get_graph_closure(client, model_id)
@@ -124,7 +123,7 @@ def deployable_ai_service(context, **custom):
             agent = graph()
 
         config = {
-            "configurable": {"thread_id": custom.get("thread_id")}
+            "configurable": {"thread_id": thread_id}
         }  # Checkpointer configuration
 
         # Invoke agent
@@ -183,7 +182,7 @@ def deployable_ai_service(context, **custom):
             agent = graph()
 
         # Checkpointer configuration
-        config = {"configurable": {"thread_id": custom.get("thread_id")}}
+        config = {"configurable": {"thread_id": thread_id}}
         response_stream = agent.stream(
             {"messages": messages}, config, stream_mode=["updates", "messages"]
         )

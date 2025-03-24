@@ -1,13 +1,10 @@
-def deployable_ai_service(context, **custom):
+def deployable_ai_service(context, url = None, project_id = None, model_id = None):
     """AI service with AI Assistance Crew that can be deployed to a server."""
     from crewai import LLM
     from crewai.agents.parser import AgentAction, AgentFinish
     from crewai.agents.crew_agent_executor import ToolResult
 
     from assistance_crew.crew import AssistanceAgents
-
-    model_id = custom.get("model_id")
-    project_id = custom.get("project_id")
 
     def convert_step_to_dict(
         crewai_step: AgentAction | AgentFinish | ToolResult,
@@ -67,7 +64,7 @@ def deployable_ai_service(context, **custom):
             model=f"watsonx/{model_id}",
             ## watsonx credentials
             token=context.get_token(),
-            api_base=custom.get("url"),
+            api_base=url,
             project_id=project_id,
             ## model params
             temperature=0.7,

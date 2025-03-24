@@ -1,4 +1,4 @@
-def deployable_ai_service(context, **custom):
+def deployable_ai_service(context, url = None, space_id = None, model_id = None):
     import asyncio
     import nest_asyncio
     import threading
@@ -27,8 +27,6 @@ def deployable_ai_service(context, **custom):
     threading.Thread(
         target=start_loop, args=(persistent_loop,), daemon=True
     ).start()  # We run a persistent loop in a separate daemon thread
-
-    model_id = custom.get("model_id")
 
     def get_formatted_message(resp: ChatMessage) -> dict | None:
         role = resp.role
@@ -188,8 +186,8 @@ def deployable_ai_service(context, **custom):
         Please note that the `system message` MUST be placed first in the list of messages!
         """
         client = APIClient(
-            credentials=Credentials(url=custom.get("url"), token=context.get_token()),
-            space_id=custom.get("space_id"),
+            credentials=Credentials(url=url, token=context.get_token()),
+            space_id=space_id,
         )
         workflow = get_workflow_closure(client, model_id)
 
@@ -227,8 +225,8 @@ def deployable_ai_service(context, **custom):
         Please note that the `system message` MUST be placed first in the list of messages!
         """
         client = APIClient(
-            credentials=Credentials(url=custom.get("url"), token=context.get_token()),
-            space_id=custom.get("space_id"),
+            credentials=Credentials(url=url, token=context.get_token()),
+            space_id=space_id,
         )
         workflow = get_workflow_closure(client, model_id)
 
