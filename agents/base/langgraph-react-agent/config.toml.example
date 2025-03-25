@@ -11,8 +11,8 @@
 [deployment]
   # One of the below is required.
   # To determine your `api_key`, refer to `IBM Cloud console API keys <https://cloud.ibm.com/iam/apikeys>`_.
-  watsonx_apikey = "PLACEHOLDER FOR YOUR APIKEY"
-  watsonx_token = "PLACEHOLDER FOR YOUR TOKEN"
+  watsonx_apikey = ""
+  watsonx_token = ""
 
   # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
   watsonx_url = ""
