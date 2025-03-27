@@ -14,12 +14,14 @@ Table of contents:
 
 ## Introduction  
 
-This repository provides a basic template for LLM apps built using LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
+This repository provides a Agentic RAG template for LLM apps built using LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
 An AI service is a deployable unit of code that captures the logic of your generative AI use case. For and in-depth description of the topic please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).  
 
 [^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
 
-The template builds a simple application with external tool for addressing Web Search Agent use case.  
+The template builds a simple application with IBM watsonx Utility Agent Tool for addressing RAG use case. The structure of graph is as follows
+
+![alt text](agentic_rag.png "LangGraph Agentic RAG")
 
 ## Directory structure and file descriptions  
 

@@ -16,14 +16,8 @@ def deployable_ai_service(context, **custom):
         space_id=custom.get("space_id"),
     )
 
-    graph = get_graph_closure(
-        client,
-        model_id,
-        tool_config={
-            "projectId": custom.get("tool_config_projectId"),
-            "vectorIndexId": custom.get("tool_config_vectorIndexId"),
-        },
-    )
+    graph = get_graph_closure(client, model_id, tool_config={"projectId": custom.get("tool_config_projectId"),
+                                                             "vectorIndexId": custom.get("tool_config_vectorIndexId")})
 
     def get_formatted_message(
         resp: BaseMessage, is_assistant: bool = False
@@ -198,8 +192,6 @@ def deployable_ai_service(context, **custom):
         for chunk_type, data in response_stream:
             if chunk_type == "messages":
                 msg_obj = data[0]
-                if msg_obj.type == "tool":
-                    continue
             elif chunk_type == "updates":
                 if agent := data.get("agent"):
                     msg_obj = agent["messages"][0]
