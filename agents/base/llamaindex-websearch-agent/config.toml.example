@@ -14,7 +14,7 @@
   watsonx_apikey = ""
   watsonx_token = ""
 
-  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
+  # should follow the format: `https://{REGION}.ml.cloud.ibm.com` for IBM Cloud or point to URL of your CP4D cluster
   watsonx_url = ""
 
   # Deployment space id is required to create deployment with AI service content.
@@ -28,7 +28,7 @@
 # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
   model_id = "mistralai/mistral-large"  # underlying model of WatsonxChat
   space_id = "PLACEHOLDER_FOR_YOUR_SPACE_ID"
-  url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
+  url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com` for IBM Cloud or point to URL of your CP4D cluster
 
 [deployment.software_specification]
   # Name for derived software specification. If not provided, default one is used that will be build based on the package name: "{pkg_name}-sw-spec"
