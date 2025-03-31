@@ -14,24 +14,38 @@ from langgraph.checkpoint.memory import MemorySaver
 
 from langchain import hub
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.messages import BaseMessage, SystemMessage
+from langchain_core.messages import BaseMessage, SystemMessage, AIMessage
 
-from langgraph_react_agent_base import retriever_tool_watsonx
+from langgraph_agentic_rag import retriever_tool_watsonx
 
 
-def get_graph_closure(client: APIClient, model_id: str, tool_config: dict) -> Callable:
+def get_graph_closure(
+    client: APIClient,
+    model_id: str,
+    tool_config: dict,
+    base_knowledge_description: str | None = None,
+) -> Callable:
     """Graph generator closure."""
 
     # Initialise ChatWatsonx
     chat = ChatWatsonx(model_id=model_id, watsonx_client=client)
 
-    TOOLS = [retriever_tool_watsonx(api_client=client, tool_config=tool_config)]
+    TOOLS = [
+        retriever_tool_watsonx(
+            api_client=client,
+            tool_config=tool_config,
+        )
+    ]
 
     # Initialise memory saver
     memory = MemorySaver()
 
     # Define system prompt
-    default_system_prompt = "You are a helpful AI assistant, please respond to the user's query to the best of your ability!"
+    default_system_prompt = (
+        f"You are a helpful AI assistant, please respond to the user's query to the best of your ability!"
+        "\n\n"
+        f"Vector Store Index knowledge description: {base_knowledge_description or ''}"
+    )
 
     class AgentState(TypedDict):
         # The add_messages function defines how an update should be processed
@@ -52,7 +66,7 @@ def get_graph_closure(client: APIClient, model_id: str, tool_config: dict) -> Ca
                 state (messages): The current state
 
             Returns:
-                dict: The updated state with the aqgent response appended to messages
+                dict: The updated state with the agent response appended to messages
             """
             messages = state["messages"]
 
@@ -79,11 +93,10 @@ def get_graph_closure(client: APIClient, model_id: str, tool_config: dict) -> Ca
         messages = state["messages"]
 
         # Most recent user query
-        question = messages[-2].content
+        question = messages[-3].content
 
         # Tool content
         last_message = messages[-1]
-
         docs = last_message.content
 
         # Prompt
@@ -94,7 +107,7 @@ def get_graph_closure(client: APIClient, model_id: str, tool_config: dict) -> Ca
 
         # Run
         response = rag_chain.invoke({"context": docs, "question": question})
-        return {"messages": [response]}
+        return {"messages": [AIMessage(response)]}
 
     def get_graph(instruction_prompt: SystemMessage | None = None) -> CompiledGraph:
         """Get compiled graph with overwritten system prompt, if provided"""

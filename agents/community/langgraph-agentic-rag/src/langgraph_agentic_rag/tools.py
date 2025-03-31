@@ -6,7 +6,10 @@ if TYPE_CHECKING:
     from ibm_watsonx_ai import APIClient
 
 
-def retriever_tool_watsonx(api_client: "APIClient", tool_config: dict) -> Callable:
+def retriever_tool_watsonx(
+    api_client: "APIClient",
+    tool_config: dict,
+) -> Callable:
 
     from langchain_ibm.toolkit import WatsonxToolkit
 
@@ -18,13 +21,13 @@ def retriever_tool_watsonx(api_client: "APIClient", tool_config: dict) -> Callab
     @tool("retriever", parse_docstring=True)
     def retriever_tool(query: str) -> str:
         """
-        Web search tool that return static list of strings.
+        Vector Store Index retriever tool.
 
         Args:
-            query: User query to search in web.
+            query: User query related to information stored in Vector Index.
 
         Returns:
-            Retrieved chunsk
+            Retrieved chunk.
         """
         return rag_tool.invoke({"input": query})["output"]
 

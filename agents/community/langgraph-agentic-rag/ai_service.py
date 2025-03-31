@@ -1,7 +1,7 @@
 def deployable_ai_service(context, **custom):
     from typing import Generator
 
-    from langgraph_react_agent_base.agent import get_graph_closure
+    from langgraph_agentic_rag.agent import get_graph_closure
     from ibm_watsonx_ai import APIClient, Credentials
     from langchain_core.messages import (
         BaseMessage,
@@ -16,8 +16,15 @@ def deployable_ai_service(context, **custom):
         space_id=custom.get("space_id"),
     )
 
-    graph = get_graph_closure(client, model_id, tool_config={"projectId": custom.get("tool_config_projectId"),
-                                                             "vectorIndexId": custom.get("tool_config_vectorIndexId")})
+    graph = get_graph_closure(
+        client,
+        model_id,
+        tool_config={
+            "projectId": custom.get("tool_config_projectId"),
+            "vectorIndexId": custom.get("tool_config_vectorIndexId"),
+        },
+        base_knowledge_description=custom.get("base_knowledge_description"),
+    )
 
     def get_formatted_message(
         resp: BaseMessage, is_assistant: bool = False

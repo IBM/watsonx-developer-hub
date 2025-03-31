@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "langgraph_react_agent_base"
+name = "langgraph_agentic_rag"
 version = "0.1.0"
 description = "A template for a LangGraph LLM app deployable on IBM Cloud as an ai_service. This particular example focues on a WatsonX chatbot enhanced with external tools (function calling)."
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [
-    { include = "langgraph_react_agent_base", from = "src" }
+    { include = "langgraph_agentic_rag", from = "src" }
 ]
 
 
@@ -15,8 +15,7 @@ python = ">=3.10,<3.13"
 langchain-ibm = "^0.3.9"
 python-dotenv = "^1.0.1"
 ibm-watsonx-ai = { version = ">=1.1.22", python = ">=3.11,<3.13" }
-langgraph = ">=0.3.21"
-langchain = ">=0.3.21"
+langgraph = ">0.2,<0.3"
 pytest = "^8.3.3"
 
 

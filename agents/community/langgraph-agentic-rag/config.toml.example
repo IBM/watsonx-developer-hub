@@ -36,6 +36,9 @@
   tool_config_projectId = ""
   tool_config_vectorIndexId = ""
 
+  # Optional:
+  base_knowledge_description = ""
+
 [deployment.software_specification]
   # Name for derived software specification. If not provided, default one is used that will be build based on the package name: "{pkg_name}-sw-spec"
   name = ""

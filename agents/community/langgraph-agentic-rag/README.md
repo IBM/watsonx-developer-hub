@@ -14,22 +14,26 @@ Table of contents:
 
 ## Introduction  
 
-This repository provides a Agentic RAG template for LLM apps built using LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
+This repository provides an Agentic RAG template for LLM apps built using LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
 An AI service is a deployable unit of code that captures the logic of your generative AI use case. For and in-depth description of the topic please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).  
 
 [^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
 
-The template builds a simple application with IBM watsonx Utility Agent Tool for addressing RAG use case. The structure of graph is as follows
+The template builds an application with IBM watsonx Utility Agent Tool for addressing RAG use case. The structure of RAG graph is as follows
 
 ![alt text](agentic_rag.png "LangGraph Agentic RAG")
+
+> [!NOTE]
+> The template uses predefined `Vector Index Asset` as a source of base knowledge for RAG. For more details about `Vector Index` see https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-prompt-data-index-create.html?context=wx&audience=wdp . To run following Agentic RAG app you should set `tool_config_projectId` and `tool_config_vectorIndexId` in section `deployment.custom` in `config.toml`. Moreover, to help the Agent correctly choose whether or not to use the retriever tool, a description of the underlying knowledge contained in the Vector Index Asset can also be provided in field `base_knowledge_description`.
+
 
 ## Directory structure and file descriptions  
 
 The high level structure of the repository is as follows:  
 
-langgraph-react-agent  
+langgraph-agentic-rag  
  ┣ src  
- ┃ ┗ langgraph_react_agent_base  
+ ┃ ┗ langgraph_agentic_rag  
  ┃   ┣ agent.py  
  ┃   ┗ tools.py  
  ┣ schema  
@@ -37,7 +41,7 @@ langgraph-react-agent
  ┣ config.toml.example  
  ┣ pyproject.toml  
 
-- `langgraph-react-agent-base` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
+- `langgraph-agentic-rag` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
 - `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
 - `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic  
 - `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
@@ -58,17 +62,17 @@ In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use
 ```sh
 git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
 cd watsonx-developer-hub
-git sparse-checkout add agents/base/langgraph-react-agent
+git sparse-checkout add agents/community/langgraph-agentic-rag
 ```  
 
 Move to the directory with the agent template:
 
 ```sh
-cd agents/base/langgraph-react-agent/
+cd agents/base/langgraph-agentic-rag/
 ```
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/langgraph-react-agent/`  
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/langgraph-agentic-rag/`  
 
 
 ### Step 2: Install poetry  
@@ -119,8 +123,8 @@ The [ai_service.py](ai_service.py) file encompasses the core logic of the app al
 For a detailed breakdown of the ai-service's implementation please refer the [IBM Cloud docs](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-create.html?context=wx)  
 
 
-[tools.py](src/langgraph_react_agent_base/tools.py) file stores the definition for tools enhancing the chat model's capabilities.  
-In order to add new tool create a new function, wrap it with the `@tool` decorator and add to the `TOOLS` list in the `extensions` module's [__init__.py](src/langgraph_react_agent_base/__init__.py)
+[tools.py](src/langgraph_agentic_rag/tools.py) file stores the definition for tools enhancing the chat model's capabilities.  
+In order to add new tool create a new function, wrap it with the `@tool` decorator and add to the `TOOLS` list in the `extensions` module's [__init__.py](src/langgraph_agentic_rag/__init__.py)
 
 For more sophisticated use cases (like async tools), please refer to the [langchain docs](https://python.langchain.com/docs/how_to/custom_tools/#creating-tools-from-runnables).  
 
