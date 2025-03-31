@@ -16,10 +16,8 @@ client = APIClient(
 )
 
 custom = {
-    "space_id": dep_config["space_id"],
-    "project_id": dep_config["project_id"],
+    "project_id": dep_config["custom"]["project_id"],
     "url": client.credentials.url,
-    "api_key": dep_config["watsonx_apikey"],
     **dep_config["custom"],
 }
 

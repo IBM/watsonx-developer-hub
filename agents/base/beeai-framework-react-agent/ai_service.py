@@ -2,7 +2,6 @@ def deployable_ai_service(context, **custom):
     import asyncio
     import nest_asyncio
     import threading
-    from ibm_watsonx_ai import APIClient, Credentials
     from beeai_framework_react_agent_base.agent import get_beeai_framework_agent
     from beeai_framework.agents.types import AgentExecutionConfig
     from beeai_framework.backend.message import (
@@ -32,7 +31,7 @@ def deployable_ai_service(context, **custom):
         role = resp.role
         if resp.content:
             if role == "assistant":
-                return {"role": role, "content": resp.content}
+                return {"role": role, "content": ''.join(message.text for message in resp.content)}
             elif role == "tool":
                 return {
                     "role": role,
@@ -71,20 +70,16 @@ def deployable_ai_service(context, **custom):
 
         await memory.add(system_message)
 
-        client = APIClient(
-            credentials=Credentials(
-                url=custom.get("url"),
-                api_key=custom.get("api_key"),
-            ),
-        )
+        token=context.get_token()
+        url=custom.get("url")
 
-        agent = get_beeai_framework_agent(client, model_id, custom.get("project_id"))
+        agent = get_beeai_framework_agent(token, url, model_id, custom.get("project_id"))
 
         payload = context.get_json()
         messages = payload.get("messages", [])
 
         response = await agent.run(
-             prompt=messages[0]["content"],
+             prompt= ''.join(message["content"] for message in messages),
              execution=AgentExecutionConfig(max_retries_per_step=3, total_max_retries=10, max_iterations=20),
         )
 
@@ -94,7 +89,6 @@ def deployable_ai_service(context, **custom):
         """
         A synchronous wrapper for the asynchronous `generate_async` method.
         """
-        payload = context.get_json()
 
         future = asyncio.run_coroutine_threadsafe(
             generate_async(context), persistent_loop
