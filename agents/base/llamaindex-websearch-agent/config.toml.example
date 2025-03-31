@@ -23,8 +23,8 @@
   # variable, that is populated with last created deployment_id every time when command `watsonx-ai service new` finish successfully
   deployment_id = ""
 
-[deployment.custom]
-# during creation of deployment additional parameters can be provided inside `CUSTOM` object for further referencing
+[deployment.online.parameters]
+# during creation of deployment additional parameters can be provided inside `ONLINE` object for further referencing
 # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
   model_id = "mistralai/mistral-large"  # underlying model of WatsonxChat
   space_id = "PLACEHOLDER_FOR_YOUR_SPACE_ID"
