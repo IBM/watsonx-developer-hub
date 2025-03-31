@@ -16,6 +16,7 @@ langchain-ibm = "^0.3.9"
 python-dotenv = "^1.0.1"
 ibm-watsonx-ai = { version = ">=1.1.22", python = ">=3.11,<3.13" }
 langgraph = ">0.2,<0.3"
+langchain = "^0.3.21"
 pytest = "^8.3.3"
 
 
