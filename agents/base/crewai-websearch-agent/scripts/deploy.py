@@ -106,7 +106,6 @@ meta_props = {
     client.deployments.ConfigurationMetaNames.NAME:
         f"online ai_service test",
     client.deployments.ConfigurationMetaNames.ONLINE: {"parameters": online_parameters},
-    client.repository.AIServiceMetaNames.TAGS: ["wx-agent"],
 }
 
 deployment_details = client.deployments.create(ai_service_id, meta_props)
