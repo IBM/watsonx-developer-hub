@@ -8,6 +8,7 @@ from examples._interactive_chat import InteractiveChat
 stream = True
 config = load_config()
 dep_config = config["deployment"]
+online_parameters = dep_config["online"]["parameters"]
 
 client = APIClient(
     credentials=Credentials(
@@ -15,14 +16,10 @@ client = APIClient(
     )
 )
 
-custom = {
-    "space_id": dep_config["space_id"],
-    "url": client.credentials.url,
-    **dep_config["online"]["parameters"],
-}
-
 context = RuntimeContext(api_client=client)
-ai_service_resp_func = deployable_ai_service(context=context, **custom)[stream]
+ai_service_resp_func = deployable_ai_service(context=context, **online_parameters)[
+    stream
+]
 
 
 def ai_service_invoke(payload):
