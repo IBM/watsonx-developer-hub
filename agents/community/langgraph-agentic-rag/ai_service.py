@@ -1,4 +1,4 @@
-def deployable_ai_service(context, **custom):
+def deployable_ai_service(context, url, model_id, space_id, thread_id, tool_config_projectId, tool_config_vectorIndexId, base_knowledge_description = None):
     from typing import Generator
 
     from langgraph_agentic_rag.agent import get_graph_closure
@@ -10,20 +10,19 @@ def deployable_ai_service(context, **custom):
         SystemMessage,
     )
 
-    model_id = custom.get("model_id")
     client = APIClient(
-        credentials=Credentials(url=custom.get("url"), token=context.generate_token()),
-        space_id=custom.get("space_id"),
+        credentials=Credentials(url=url, token=context.generate_token()),
+        space_id=space_id,
     )
 
     graph = get_graph_closure(
         client,
         model_id,
         tool_config={
-            "projectId": custom.get("tool_config_projectId"),
-            "vectorIndexId": custom.get("tool_config_vectorIndexId"),
+            "projectId": tool_config_projectId,
+            "vectorIndexId": tool_config_vectorIndexId,
         },
-        base_knowledge_description=custom.get("base_knowledge_description"),
+        base_knowledge_description=base_knowledge_description,
     )
 
     def get_formatted_message(
@@ -132,7 +131,7 @@ def deployable_ai_service(context, **custom):
             agent = graph()
 
         config = {
-            "configurable": {"thread_id": custom.get("thread_id")}
+            "configurable": {"thread_id": thread_id}
         }  # Checkpointer configuration
 
         # Invoke agent
@@ -191,7 +190,7 @@ def deployable_ai_service(context, **custom):
             agent = graph()
 
         # Checkpointer configuration
-        config = {"configurable": {"thread_id": custom.get("thread_id")}}
+        config = {"configurable": {"thread_id": thread_id}}
         response_stream = agent.stream(
             {"messages": messages}, config, stream_mode=["updates", "messages"]
         )

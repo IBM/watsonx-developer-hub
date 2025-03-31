@@ -18,7 +18,7 @@ client = APIClient(
 custom = {
     "space_id": dep_config["space_id"],
     "url": client.credentials.url,
-    **dep_config["custom"],
+    **dep_config["online"]["parameters"],
 }
 
 context = RuntimeContext(api_client=client)
