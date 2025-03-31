@@ -68,11 +68,11 @@ git sparse-checkout add agents/community/langgraph-agentic-rag
 Move to the directory with the agent template:
 
 ```sh
-cd agents/base/langgraph-agentic-rag/
+cd agents/community/langgraph-agentic-rag/
 ```
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/langgraph-agentic-rag/`  
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/langgraph-agentic-rag/`  
 
 
 ### Step 2: Install poetry  
