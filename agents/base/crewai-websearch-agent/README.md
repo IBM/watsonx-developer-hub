@@ -8,16 +8,16 @@ Table of contents:
 * [Modifying and configuring the template](#modifying-and-configuring-the-template)  
 * [Running unit tests for the template](#running-unit-tests-for-the-template)  
 * [Running the application locally](#running-the-application-locally)  
-* [Deploying on Cloud](#deploying-on-ibm-cloud)  
-* [Inferencing the deployment](#inferencing-the-deployment)  
+* [Deploying](#deploying)  
+* [Querying the deployment](#querying-the-deployment)  
 
 
 ## Introduction  
 
-This repository provides a basic template for LLM apps built using CrewAI framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
-An AI service is a deployable unit of code that captures the logic of your generative AI use case. For and in-depth description of the topic please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).  
+This repository provides a basic template for LLM apps built using CrewAI framework. It also makes it easy to deploy them as an AI service as part of _IBM watsonx.ai_ for IBM Cloud and _IBM watsonx.ai software_ for IBM Cloud Pak® for Data[^1].  
+An AI service is a deployable unit of code that captures the logic of your generative AI use case. For an in-depth description of the topic please refer to the [IBM watsonx.ai Saas documentation](https://www.ibm.com/docs/en/watsonx/saas?topic=code-coding-deploying-ai-services-templates) and [IBM watsonx.ai software 2.1 documentation](https://www.ibm.com/docs/en/watsonx/w-and-w/2.1.x?topic=assets-deploying-ai-services).  
 
-[^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
+[^1] AI service templates differ negligibly between SaaS and on prem environemnts. For the sake of simplicity throughout this README we'll be calling them _AI service templates on watsonx.ai_ --- interchangeably for both environments.  
 
 The template builds a simple application with external tool for addressing Web Search Agent use case.  
 
@@ -58,11 +58,11 @@ In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use
 ```sh
 git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
 cd watsonx-developer-hub
-git sparse-checkout add agents/crewai
+git sparse-checkout add agents/base/crewai-websearch-agent
 ```  
 
-> [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/crewai`  
+> [!NOTE]  
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/crewai-websearch-agent`  
 
 
 ### Step 2: Install poetry  
@@ -116,6 +116,21 @@ For a detailed breakdown of the ai-service's implementation please refer the [IB
 [tools.py](src/assistance_crew/tools/tools.py) file stores the definition for tools enhancing the chat model's capabilities.  
 To add a new tool, create a class that extends the `crewai.tools.BaseTool` base class and has a `_run` method defined.
 
+> [!WARNING]  
+> In order for the template to succesfully work with IBM Cloud Pak® for Data environment the `ibm_watsonx_ai.APIClient` object has to be initialised differently. Please update in the following files the way it's done to match the below example:  
+> - agents/base/langgraph-react-agent/examples/query_existing_deployment.py
+> - agents/base/langgraph-react-agent/scripts/deploy.py
+> ```python  
+> ibm_watsonx_ai.APIClient(
+>     credentials=ibm_watsonx_ai.Credentials(
+>       url=dep_config["watsonx_url"], 
+>       api_key=dep_config["watsonx_apikey"]
+>       instance_id="openshift",
+>       username="<user_to_authenticate_with_to_the_cluster>"
+>       ),
+>     space_id=dep_config["space_id"])
+> ```  
+
 ## Testing the template  
 
 The `tests/` directory's structure resembles the repository. Adding new tests should follow this convention.  
@@ -128,13 +143,13 @@ pytest -r 'fEsxX' tests/
 
 ## Running the application locally  
 
-It is possible to run (or even debug) the ai-service locally, however it still requires creating the connection to the IBM Cloud.  
+It is possible to run (or even debug) the ai-service locally, however it still requires creating the connection to the IBM Cloud or IBM Cloud Pak® for Data cluster.  
 
 ### Step 1: Fill in the `config` file  
 
 Enter the necessary credentials in the `config.toml` file.  
 
-### Step 2: Run the script for local AI service execution  
+### Step 2: Run the script for local _AI service template on watsonx.ai_ execution  
 
 ```sh
 python examples/execute_ai_service_locally.py
@@ -145,9 +160,9 @@ python examples/execute_ai_service_locally.py
 Choose from some pre-defined questions or ask the model your own.
 
 
-## Deploying on IBM Cloud  
+## Deploying  
 
-Follow these steps to deploy the model on IBM Cloud.  
+Follow these steps to deploy the model on IBM Cloud or IBM Cloud Pak® for Data cluster.  
 
 ### Step 1: Fill in the `config` file  
 

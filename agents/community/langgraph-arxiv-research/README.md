@@ -10,17 +10,16 @@ Table of contents:
   - [Running the agent locally](#running-the-agent-locally)
   - [Optional: Modify and configure the template](#optional-modify-and-configure-the-template)
   - [Testing the template](#testing-the-template)
-  - [Deploying on IBM Cloud](#deploying-on-ibm-cloud)
+  - [Deploying](#deploying)
   - [Querying the deployment](#querying-the-deployment)
     - [What's next?](#whats-next)
 
 ## Introduction
 
-This repository provides a basic template for LLM apps built using LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].
+This repository provides a basic template for LLM apps built using LangGraph framework. It also makes it easy to deploy them as an AI service as part of _IBM watsonx.ai_ for IBM Cloud and _IBM watsonx.ai software_ for IBM Cloud Pak® for Data[^1].  
+An AI service is a deployable unit of code that captures the logic of your generative AI use case. For an in-depth description of the topic please refer to the [IBM watsonx.ai Saas documentation](https://www.ibm.com/docs/en/watsonx/saas?topic=code-coding-deploying-ai-services-templates) and [IBM watsonx.ai software 2.1 documentation](https://www.ibm.com/docs/en/watsonx/w-and-w/2.1.x?topic=assets-deploying-ai-services).  
 
-An AI service is a deployable unit of code that captures the logic of your generative AI use case. For and in-depth description of the topic please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).
-
-[^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.
+[^1] AI service templates differ negligibly between SaaS and on prem environemnts. For the sake of simplicity throughout this README we'll be calling them _AI service templates on watsonx.ai_ --- interchangeably for both environments.  
 
 The template builds a ReAct agent that can browse the web for arXiv research papers and summarize these papers for you.
 
@@ -64,8 +63,8 @@ langgraph-arxiv-research
   cd agents/community/langgraph-arxiv-research/
   ```
 
-  > [!NOTE]
-  > From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/langgraph-arxiv-research/`
+  > [!NOTE]  
+  > From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/langgraph-arxiv-research/`  
 
 - ### Step 2: Install the template
 
@@ -106,9 +105,9 @@ Everything is now set up to run the agent locally in the next section.
 
 ## Running the agent locally
 
-You can run the agent locally and interact with the agent via a terminal-based chat application.
+It is possible to run (or even debug) the ai-service locally, however it still requires creating the connection to the IBM Cloud or IBM Cloud Pak® for Data cluster.  
 
-- ### Step 1: Run the script for local AI service execution
+- ### Step 1: Run the script for local _AI service template on watsonx.ai_ execution
 
   ```sh
   poetry run python examples/execute_ai_service_locally.py
@@ -151,9 +150,9 @@ Running the below command will run the complete tests suite:
 poetry run pytest -r 'fEsxX' tests/
 ```
 
-## Deploying on IBM Cloud
+## Deploying
 
-Follow these steps to deploy the model on IBM Cloud.
+Follow these steps to deploy the model on IBM Cloud or IBM Cloud Pak® for Data cluster.  
 
 - ### Step 1: Fill in the `config` file
 
