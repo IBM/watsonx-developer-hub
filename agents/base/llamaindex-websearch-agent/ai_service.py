@@ -287,7 +287,7 @@ def deployable_ai_service(context, url = None, space_id = None, model_id = None)
             generate_async(context), persistent_loop
         )
         generated_response = future.result()
-        message = get_formatted_message(generated_response[-1])
+        message = get_formatted_message(generated_response["messages"][-1])
         choices = [{"index": 0, "message": message}]
 
         return {
