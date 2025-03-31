@@ -8,6 +8,7 @@ from examples._interactive_chat import InteractiveChat
 stream = False  # streaming is not supported by CrewAI
 config = load_config()
 dep_config = config["deployment"]
+online_parameters = dep_config["online"]["parameters"]
 
 client = APIClient(
     credentials=Credentials(
@@ -15,19 +16,12 @@ client = APIClient(
     )
 )
 
-custom = {
-    "url": client.credentials.url,
-    **dep_config["custom"],
-}
-
 context = RuntimeContext(api_client=client)
-ai_service_resp_func = deployable_ai_service(context=context, **custom)[stream]
-
+ai_service_resp_func = deployable_ai_service(context=context, **online_parameters)[stream]
 
 def ai_service_invoke(payload):
     context.request_payload_json = payload
     return ai_service_resp_func(context)
-
 
 chat = InteractiveChat(ai_service_invoke, stream=stream)
 chat.run()
