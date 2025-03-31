@@ -16,7 +16,7 @@ autogen = "^0.8.3"
 autogen-agentchat = "^0.4.6"
 autogen-core = "^0.4.6"
 autogen-ext = "^0.4.6"
-autogen_watsonx_client = "^0.0.7"
+autogen_watsonx_client = "^0.0.6"
 
 
 [tool.poetry.group.dev]

@@ -11,17 +11,20 @@ from autogen_agent_base import TOOLS
 
 
 def get_workflow_closure(
-    credentials: Credentials, model_id: str, space_id: str
+    credentials: Credentials,
+    model_id: str,
+    project_id: str | None = None,
+    space_id: str | None = None,
 ) -> Callable:
     """Workflow generator closure."""
 
-    # Initialise WatsonxLLM
+    # Initialise WatsonxClientConfiguration
     wx_config = WatsonxClientConfiguration(
         model_id=model_id,  # pick a model you have access to on wx.ai here
-        api_key=credentials.api_key,
+        token=credentials.token,
         url=credentials.url,
         space_id=space_id,
-        project_id=None,
+        project_id=project_id,
     )
 
     wx_client = WatsonXChatCompletionClient(**wx_config)
