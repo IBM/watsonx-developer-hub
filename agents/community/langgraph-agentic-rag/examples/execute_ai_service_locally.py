@@ -17,11 +17,15 @@ client = APIClient(
 )
 
 context = RuntimeContext(api_client=client)
-ai_service_resp_func = deployable_ai_service(context=context, **online_parameters)[stream]
+ai_service_resp_func = deployable_ai_service(context=context, **online_parameters)[
+    stream
+]
+
 
 def ai_service_invoke(payload):
     context.request_payload_json = payload
     return ai_service_resp_func(context)
+
 
 chat = InteractiveChat(ai_service_invoke, stream=stream)
 chat.run()

@@ -1,7 +1,7 @@
-def deployable_ai_service(context, url = None, space_id = None, model_id = None, thread_id = None):
+def deployable_ai_service(context, url, model_id, space_id, thread_id, tool_config_projectId, tool_config_vectorIndexId, base_knowledge_description = None):
     from typing import Generator
 
-    from langgraph_react_agent.agent import get_graph_closure
+    from langgraph_agentic_rag.agent import get_graph_closure
     from ibm_watsonx_ai import APIClient, Credentials
     from langchain_core.messages import (
         BaseMessage,
@@ -15,7 +15,15 @@ def deployable_ai_service(context, url = None, space_id = None, model_id = None,
         space_id=space_id,
     )
 
-    graph = get_graph_closure(client, model_id)
+    graph = get_graph_closure(
+        client,
+        model_id,
+        tool_config={
+            "projectId": tool_config_projectId,
+            "vectorIndexId": tool_config_vectorIndexId,
+        },
+        base_knowledge_description=base_knowledge_description,
+    )
 
     def get_formatted_message(
         resp: BaseMessage, is_assistant: bool = False
@@ -190,8 +198,6 @@ def deployable_ai_service(context, url = None, space_id = None, model_id = None,
         for chunk_type, data in response_stream:
             if chunk_type == "messages":
                 msg_obj = data[0]
-                if msg_obj.type == "tool":
-                    continue
             elif chunk_type == "updates":
                 if agent := data.get("agent"):
                     msg_obj = agent["messages"][0]
