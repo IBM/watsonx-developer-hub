@@ -5,11 +5,9 @@ def deployable_ai_service(context, **custom):
     from typing import Generator, AsyncGenerator
     from ibm_watsonx_ai import Credentials
     from autogen_core import CancellationToken
-    from autogen_agentchat.ui import Console
     from autogen_agent_base.agent import get_workflow_closure
-    from autogen_agentchat.messages import TextMessage
+    from autogen_agentchat.messages import TextMessage, BaseMessage
     from autogen_agentchat.base import TaskResult
-    from autogen_watsonx_client.client import _autogen_message_to_watsonx_message
 
     nest_asyncio.apply()  # We inject support for nested event loops
     persistent_loop = (
@@ -23,6 +21,48 @@ def deployable_ai_service(context, **custom):
     threading.Thread(
         target=start_loop, args=(persistent_loop,), daemon=True
     ).start()  # We run a persistent loop in a separate daemon thread
+
+    def get_choice_from_message(message: BaseMessage) -> dict:
+        choice = {
+            "index": 0,
+            "delta": {
+                "role": message.source,
+                "content": message.content,
+            },
+            "finish_reason": "tool_calls",
+        }
+        if message.type == "ToolCallRequestEvent":
+            choice["delta"]["role"] = "assistant"
+            tool_calls = []
+            for function_call in message.content:
+                tool = {
+                    "id": function_call.id,
+                    "name": function_call.name,
+                    "args": function_call.arguments,
+                }
+                tool_calls.append(tool)
+            choice["delta"]["step_details"] = {
+                "type": "tool_calls",
+                "tool_calls": tool_calls,
+            }
+
+        elif message.type == "ToolCallExecutionEvent":
+            choice["delta"]["role"] = "assistant"
+            tool_calls = []
+            for function_call in message.content:
+                tool = {
+                    "content": function_call.content,
+                    "tool_call_id": function_call.call_id,
+                    "name": function_call.name,
+                    "is_error": function_call.is_error,
+                }
+                tool_calls.append(tool)
+            choice["delta"]["step_details"] = {
+                "type": "tool_calls",
+                "tool_calls": tool_calls,
+            }
+
+        return choice
 
     async def generate_async(context) -> dict:
         """
@@ -105,25 +145,34 @@ def deployable_ai_service(context, **custom):
             TextMessage(content=message.get("content"), source=message.get("role"))
             for message in messages
         ]
-
+        content = ""
         async for message in agent().run_stream(task=text_messages):
-            if isinstance(message, TaskResult):
-                # print("Stop Reason:", message)
+            if getattr(message, "type", None) is None:  # e.g TaskResult
                 break
-            else:
-                delta = {
+
+            choice = {
+                "index": 0,
+                "delta": {
                     "role": message.source,
                     "content": message.content,
-                }
-                yield {
-                    "choices": [
-                        {
-                            "index": 0,
-                            "delta": delta,
-                            "finish_reason": "tool_calls",
-                        }
-                    ]
-                }
+                },
+            }
+
+            if message.source == "user":
+                choice["finish_reason"] = ""
+
+            elif isinstance(message.content, list):
+                choice = get_choice_from_message(message)
+
+            elif isinstance(message.content, str):
+                if message.type == "ToolCallSummaryMessage":
+                    choice["delta"]["role"] = "tool"
+                    choice["delta"]["finish_reason"] = "tool_calls"
+                if message.content == content:
+                    break
+                content += message.content
+
+            yield {"choices": [choice]}
 
     def generate(context) -> dict:
         """
@@ -163,7 +212,6 @@ def deployable_ai_service(context, **custom):
                 value = future.result()
             except StopAsyncIteration:
                 break
-            # print(value)
             yield value
 
     return generate, generate_stream
