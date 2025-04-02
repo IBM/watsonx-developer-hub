@@ -4,7 +4,7 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
     from crewai.agents.parser import AgentAction, AgentFinish
     from crewai.agents.crew_agent_executor import ToolResult
 
-    from assistance_crew.crew import AssistanceAgents
+    from crewai_web_search.crew import AssistanceAgents
 
     def convert_step_to_dict(
         crewai_step: AgentAction | AgentFinish | ToolResult,

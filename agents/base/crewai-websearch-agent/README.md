@@ -27,7 +27,7 @@ The high level structure of the repository is as follows:
 
 crewai-websearch-agent  
  ┣ src  
- ┃ ┗ assistance_crew    
+ ┃ ┗ crewai_web_search    
  ┃     ┣ config  
  ┃     ┣ tools  
  ┃     ┣ \_\_init\_\_.py  
@@ -37,7 +37,7 @@ crewai-websearch-agent
  ┣ config.toml.example  
  ┗ pyproject.toml  
 
-- `assistance_crew` folder: Contains CrewAI agents configuration yaml files (`src/assistance_crew/config`) and auxiliary files used by the deployed function. These files provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
+- `crewai_web_search` folder: Contains CrewAI agents configuration yaml files (`src/crewai_web_search/config`) and auxiliary files used by the deployed function. These files provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
 - `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
 - `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic  
 - `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case.
@@ -105,7 +105,7 @@ For detailed description and API please refer to the [IBM watsonx.ai Parameter S
 Sensitive data should not be passed unencrypted, e.g. in the configuration file. The recommended way to handle them is to make use of the [IBM Cloud® Secrets Manager](https://cloud.ibm.com/apidocs/secrets-manager/secrets-manager-v2). The approach to integrating the Secrets Manager's API with the app is for the user to decide on.  
 
 
-The [crew.py](src/assistance_crew/crew.py) creates an AI crew, which consists of agents and their tasks.
+The [crew.py](src/crewai_web_search/crew.py) creates an AI crew, which consists of agents and their tasks.
 For detailed info on how to modify the crew object please refer to [CrewAI's official docs](https://docs.crewai.com/quickstart)  
 
 
@@ -113,7 +113,7 @@ The [ai_service.py](ai_service.py) file encompasses the core logic of the app al
 For a detailed breakdown of the ai-service's implementation please refer the [IBM Cloud docs](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-create.html?context=wx)  
 
 
-[tools.py](src/assistance_crew/tools/tools.py) file stores the definition for tools enhancing the chat model's capabilities.  
+[tools.py](src/crewai_web_search/tools/tools.py) file stores the definition for tools enhancing the chat model's capabilities.  
 To add a new tool, create a class that extends the `crewai.tools.BaseTool` base class and has a `_run` method defined.
 
 ## Testing the template  

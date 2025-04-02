@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [
-    { include = "assistance_crew", from = "src" }
+    { include = "crewai_web_search", from = "src" }
 ]
 
 

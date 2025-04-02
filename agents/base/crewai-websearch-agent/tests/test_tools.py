@@ -1,4 +1,4 @@
-from assistance_crew.tools import WebSearchTool
+from crewai_web_search.tools import WebSearchTool
 
 
 class TestTools:
