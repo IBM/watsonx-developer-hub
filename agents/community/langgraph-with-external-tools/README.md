@@ -1,4 +1,4 @@
-# A Base LangGraph LLM app template with function calling capabilities  
+# LangGraph LLM Template with External Tool Integration  
 
 Table of contents:  
 * [Introduction](#introduction)  
@@ -122,7 +122,7 @@ langgraph-with-external-tools
  ┣ config.toml.example  
  ┣ pyproject.toml  
 
-- `langgraph-react-agent-base` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
+- `langgraph-with-external-tools` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
 - `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
 - `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic  
 - `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
@@ -143,17 +143,17 @@ In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use
 ```sh
 git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
 cd watsonx-developer-hub
-git sparse-checkout add agents/base/langgraph-react-agent
+git sparse-checkout add agents/community/langgraph-with-external-tools
 ```  
 
 Move to the directory with the agent template:
 
 ```sh
-cd agents/base/langgraph-react-agent/
+cd agents/community/langgraph-with-external-tools
 ```
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/langgraph-react-agent/`  
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/langgraph-with-external-tools`  
 
 
 ### Step 2: Install poetry  
@@ -204,8 +204,8 @@ The [ai_service.py](ai_service.py) file encompasses the core logic of the app al
 For a detailed breakdown of the ai-service's implementation please refer the [IBM Cloud docs](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-create.html?context=wx)  
 
 
-[tools.py](src/langgraph_react_agent_base/tools.py) file stores the definition for tools enhancing the chat model's capabilities.  
-In order to add new tool create a new function, wrap it with the `@tool` decorator and add to the `TOOLS` list in the `extensions` module's [__init__.py](src/langgraph_react_agent_base/__init__.py)
+[tools.py](src/langgraph_with_external_tools/tools.py) file stores the definition for tools enhancing the chat model's capabilities.  
+In order to add new tool create a new function, wrap it with the `@tool` decorator and add to the `TOOLS` list in the `extensions` module's [__init__.py](src/langgraph_with_external_tools/__init__.py)
 
 For more sophisticated use cases (like async tools), please refer to the [langchain docs](https://python.langchain.com/docs/how_to/custom_tools/#creating-tools-from-runnables).  
 
