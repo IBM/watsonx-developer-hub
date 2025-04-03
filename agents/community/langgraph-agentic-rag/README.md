@@ -1,15 +1,15 @@
 # The Agentic RAG LangGraph template with watsonx Utility Agent Tool  
 
 Table of contents:  
-* [Introduction](#introduction)  
-* [Directory structure and file descriptions](#directory-structure-and-file-descriptions)  
-* [Prerequisites](#prerequisites)  
-* [Cloning and setting up the template](#cloning-and-setting-up-the-template)  
-* [Modifying and configuring the template](#modifying-and-configuring-the-template)  
-* [Running unit tests for the template](#running-unit-tests-for-the-template)  
-* [Running the application locally](#running-the-application-locally)  
-* [Deploying on Cloud](#deploying-on-ibm-cloud)  
-* [Inferencing the deployment](#inferencing-the-deployment)  
+- [Introduction](#introduction)  
+- [Directory structure and file descriptions](#directory-structure-and-file-descriptions)  
+- [Prerequisites](#prerequisites)  
+- [Cloning and setting up the template locally](#cloning-and-setting-up-the-template-locally)  
+- [Modifying and configuring the template](#modifying-and-configuring-the-template)  
+- [Running unit tests for the template](#testing-the-template)  
+- [Running the application locally](#running-the-application-locally)  
+- [Deploying on IBM Cloud](#deploying-on-ibm-cloud)  
+- [Inferencing the deployment](#querying-the-deployment)  
 
 
 ## Introduction  
@@ -147,7 +147,11 @@ It is possible to run (or even debug) the ai-service locally, however it still r
 
 ### Step 1: Fill in the `config` file  
 
-Enter the necessary credentials in the `config.toml` file.  
+Copy the content of `config.toml.example` to `config.toml` file.
+```sh
+cp config.toml.example config.toml
+```
+Enter the necessary credentials and parameters in the `config.toml` file.  
 
 ### Step 2: Run the script for local AI service execution  
 
@@ -162,17 +166,9 @@ Choose from some pre-defined questions or ask the model your own.
 
 ## Deploying on IBM Cloud  
 
-Follow these steps to deploy the model on IBM Cloud.  
+Follow these steps to deploy the model on IBM Cloud. Please make sure that `config.toml` contains all required data to make deployment successfully.
 
-### Step 1: Fill in the `config` file  
-
-Copy the content of `config.toml.example` to `config.toml` file.
-```sh
-cp config.toml.example config.toml
-```
-Enter the necessary credentials and parameters in the `config.toml` file.  
-
-### Step 2: Run the deployment script  
+### Step 1: Run the deployment script  
 
 ```sh
 python scripts/deploy.py
