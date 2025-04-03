@@ -1,4 +1,4 @@
-# A Base LangGraph LLM app template with function calling capabilities  
+# The Agentic RAG LangGraph template with watsonx Utility Agent Tool  
 
 Table of contents:  
 * [Introduction](#introduction)  
@@ -17,15 +17,18 @@ Table of contents:
 This repository provides an Agentic RAG template for LLM apps built using LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
 An AI service is a deployable unit of code that captures the logic of your generative AI use case. For and in-depth description of the topic please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).  
 
-[^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
 
 The template builds an application with IBM watsonx Utility Agent Tool for addressing RAG use case. The structure of RAG graph is as follows
 
 ![alt text](agentic_rag.png "LangGraph Agentic RAG")
 
 > [!NOTE]
-> The template uses predefined `Vector Index Asset` as a source of base knowledge for RAG. For more details about `Vector Index` see https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-prompt-data-index-create.html?context=wx&audience=wdp . To run following Agentic RAG app you should set `tool_config_projectId` and `tool_config_vectorIndexId` in section `deployment.online.parameters` in `config.toml`. Moreover, to help the Agent correctly choose whether or not to use the retriever tool, a description of the underlying knowledge contained in the Vector Index Asset can also be provided in field `base_knowledge_description`.
+> The template uses predefined `Vector Index Asset` as a source of base knowledge for RAG. For more details about `Vector Index Asset` see [documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-prompt-data-index-create.html?context=wx&audience=wdp) . 
+> 
+> To run following Agentic RAG app you should set `tool_config_projectId` and `tool_config_vectorIndexId` in section `deployment.online.parameters` in `config.toml`. Moreover, to help the Agent correctly choose whether to use the retriever tool or not, a description of the underlying knowledge contained in the Vector Index Asset can also be provided in field `base_knowledge_description`.
 
+
+[^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
 
 ## Directory structure and file descriptions  
 
@@ -163,7 +166,11 @@ Follow these steps to deploy the model on IBM Cloud.
 
 ### Step 1: Fill in the `config` file  
 
-Enter the necessary credentials in the `config.toml` file.  
+Copy the content of `config.toml.example` to `config.toml` file.
+```sh
+cp config.toml.example config.toml
+```
+Enter the necessary credentials and parameters in the `config.toml` file.  
 
 ### Step 2: Run the deployment script  
 
