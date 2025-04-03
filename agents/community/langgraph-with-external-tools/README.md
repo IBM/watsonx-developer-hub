@@ -162,7 +162,7 @@ cd agents/community/langgraph-with-external-tools
 pipx install --python 3.11 poetry
 ```
 
-### Step 3: Install the template    
+### Step 3: Install the template  
 
 Running the below commands will install the repository in a separate virtual environment  
 
