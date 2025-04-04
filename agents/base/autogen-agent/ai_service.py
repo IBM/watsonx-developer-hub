@@ -6,8 +6,12 @@ def deployable_ai_service(context, **custom):
     from ibm_watsonx_ai import Credentials
     from autogen_core import CancellationToken
     from autogen_agent_base.agent import get_workflow_closure
-    from autogen_agentchat.messages import TextMessage, BaseMessage
-    from autogen_agentchat.base import TaskResult
+    from autogen_agentchat.messages import (
+        TextMessage,
+        BaseChatMessage,
+        BaseAgentEvent,
+        BaseMessage,
+    )
 
     nest_asyncio.apply()  # We inject support for nested event loops
     persistent_loop = (
@@ -161,16 +165,18 @@ def deployable_ai_service(context, **custom):
             if message.source == "user":
                 choice["finish_reason"] = ""
 
-            elif isinstance(message.content, list):
-                choice = get_choice_from_message(message)
+            elif isinstance(message, BaseAgentEvent):
+                if message.type == "ModelClientStreamingChunkEvent":
+                    content += message.content
+                else:
+                    choice = get_choice_from_message(message)
 
-            elif isinstance(message.content, str):
+            elif isinstance(message, BaseChatMessage):
                 if message.type == "ToolCallSummaryMessage":
                     choice["delta"]["role"] = "tool"
                     choice["delta"]["finish_reason"] = "tool_calls"
                 if message.content == content:
                     break
-                content += message.content
 
             yield {"choices": [choice]}
 
