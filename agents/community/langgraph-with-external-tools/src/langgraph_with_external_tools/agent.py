@@ -17,6 +17,14 @@ def get_graph_closure(
     # Initialise ChatWatsonx
     chat = ChatWatsonx(model_id=model_id, watsonx_client=client)
 
+    TOOLS = [
+        tavily_search_watsonx(
+            api_client=client,
+            service_manager_service_url=service_manager_service_url,
+            secret_id=secret_id,
+        )
+    ]
+
     # Define system prompt
     default_system_prompt = "You are a helpful AI assistant, please respond to the user's query to the best of your ability!"
 
@@ -29,13 +37,7 @@ def get_graph_closure(
         # Create instance of compiled graph
         return create_react_agent(
             chat,
-            tools=[
-                tavily_search_watsonx(
-                    api_client=client,
-                    service_manager_service_url=service_manager_service_url,
-                    secret_id=secret_id,
-                )
-            ],
+            tools=TOOLS,
             checkpointer=memory,
             state_modifier=system_prompt,
         )
