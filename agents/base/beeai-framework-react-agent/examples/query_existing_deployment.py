@@ -4,7 +4,7 @@ from utils import load_config
 from examples._interactive_chat import InteractiveChat
 
 deployment_id = "PLACEHOLDER FOR YOUR DEPLOYMENT ID"
-stream = True
+stream = False
 config = load_config("deployment")
 
 client = ibm_watsonx_ai.APIClient(

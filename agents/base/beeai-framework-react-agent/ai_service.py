@@ -1,4 +1,4 @@
-def deployable_ai_service(context, **custom):
+def deployable_ai_service(context, url = None, project_id = None, model_id = None):
     import asyncio
     import nest_asyncio
     import threading
@@ -24,8 +24,6 @@ def deployable_ai_service(context, **custom):
     threading.Thread(
         target=start_loop, args=(persistent_loop,), daemon=True
     ).start() # Run a persistent loop in a separate daemon thread
-
-    model_id = custom.get("model_id")
 
     def get_formatted_message(resp: Message) -> dict | None:
         role = resp.role
@@ -71,9 +69,8 @@ def deployable_ai_service(context, **custom):
         await memory.add(system_message)
 
         token=context.get_token()
-        url=custom.get("url")
 
-        agent = get_beeai_framework_agent(token, url, model_id, custom.get("project_id"))
+        agent = get_beeai_framework_agent(token, url, model_id, project_id)
 
         payload = context.get_json()
         messages = payload.get("messages", [])

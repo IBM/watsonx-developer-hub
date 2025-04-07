@@ -93,17 +93,11 @@ meta_props = {
 stored_ai_service_details = client.repository.store_ai_service(deployable_ai_service, meta_props)
 ai_service_id = stored_ai_service_details["metadata"].get("id")
 
-meta_props = {
-    client.deployments.ConfigurationMetaNames.NAME:
-        f"online ai_service test",
-    client.deployments.ConfigurationMetaNames.ONLINE: {},
-    client.deployments.ConfigurationMetaNames.CUSTOM: {
-        "space_id": client.default_space_id,
-        "url": client.credentials.url,
-        **dep_config["custom"],
-    },
-    client.repository.AIServiceMetaNames.TAGS: ["wx-agent"]
+online_parameters = dep_config["online"]["parameters"]
 
+meta_props = {
+    client.deployments.ConfigurationMetaNames.NAME: f"online ai_service test", 
+    client.deployments.ConfigurationMetaNames.ONLINE: {"parameters": online_parameters}, 
 }
 
 deployment_details = client.deployments.create(ai_service_id, meta_props)
