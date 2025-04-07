@@ -8,22 +8,18 @@ from examples._interactive_chat import InteractiveChat
 stream = False
 config = load_config()
 dep_config = config["deployment"]
+online_parameters = dep_config["online"]["parameters"]
 
 client = APIClient(
     credentials=Credentials(
         url=dep_config["watsonx_url"], api_key=dep_config["watsonx_apikey"]
-    ),
-    space_id=dep_config["space_id"],
+    )
 )
 
-custom = {
-    "space_id": dep_config["space_id"],
-    "url": client.credentials.url,
-    **dep_config["custom"],
-}
-
 context = RuntimeContext(api_client=client)
-ai_service_resp_func = deployable_ai_service(context=context, **custom)[stream]
+ai_service_resp_func = deployable_ai_service(context=context, **online_parameters)[
+    stream
+]
 
 
 def ai_service_invoke(payload):

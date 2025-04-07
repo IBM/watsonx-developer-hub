@@ -10,10 +10,9 @@ from autogen_agentchat.agents import AssistantAgent
 from autogen_agent_base import TOOLS
 
 
-def get_workflow_closure(
+def get_agent_chat(
     credentials: Credentials,
     model_id: str,
-    project_id: str | None = None,
     space_id: str | None = None,
 ) -> Callable:
     """Workflow generator closure."""
@@ -24,7 +23,6 @@ def get_workflow_closure(
         token=credentials.token,
         url=credentials.url,
         space_id=space_id,
-        project_id=project_id,
     )
 
     wx_client = WatsonXChatCompletionClient(**wx_config)

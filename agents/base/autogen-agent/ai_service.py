@@ -1,11 +1,11 @@
-def deployable_ai_service(context, **custom):
+def deployable_ai_service(context, url=None, space_id=None, model_id=None):
     import asyncio
     import nest_asyncio
     import threading
     from typing import Generator, AsyncGenerator
     from ibm_watsonx_ai import Credentials
     from autogen_core import CancellationToken
-    from autogen_agent_base.agent import get_workflow_closure
+    from autogen_agent_base.agent import get_agent_chat
     from autogen_agentchat.messages import (
         TextMessage,
         BaseChatMessage,
@@ -100,13 +100,10 @@ def deployable_ai_service(context, **custom):
         }
         Please note that the `system message` MUST be placed first in the list of messages!
         """
-        model_id = custom.get("model_id")
 
-        credentials = Credentials(url=custom.get("url"), token=context.get_token())
+        credentials = Credentials(url=url, token=context.get_token())
 
-        agent = get_workflow_closure(
-            credentials, model_id, custom.get("project_id"), custom.get("space_id")
-        )
+        agent = get_agent_chat(credentials, model_id, space_id)
 
         payload = context.get_json()
         messages = payload.get("messages", [])
@@ -143,12 +140,9 @@ def deployable_ai_service(context, **custom):
         }
         Please note that the `system message` MUST be placed first in the list of messages!
         """
-        model_id = custom.get("model_id")
-        credentials = Credentials(url=custom.get("url"), token=context.get_token())
+        credentials = Credentials(url=url, token=context.get_token())
 
-        agent = get_workflow_closure(
-            credentials, model_id, custom.get("project_id"), custom.get("space_id")
-        )
+        agent = get_agent_chat(credentials, model_id, space_id)
 
         payload = context.get_json()
         messages = payload.get("messages", [])

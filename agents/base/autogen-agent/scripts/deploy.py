@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 config = load_config()
 dep_config = config["deployment"]
+online_parameters = dep_config["online"]["parameters"]
 
 client = ibm_watsonx_ai.APIClient(
     credentials=ibm_watsonx_ai.Credentials(
@@ -90,7 +91,7 @@ with (root_dir / "schema" / "response.json").open("r", encoding="utf-8") as file
 
 meta_props = {
     client.repository.AIServiceMetaNames.SOFTWARE_SPEC_ID: asset_id,
-    client.repository.AIServiceMetaNames.NAME: "online crewAI service",
+    client.repository.AIServiceMetaNames.NAME: "online autogen agent ai_service",
     client.repository.AIServiceMetaNames.REQUEST_DOCUMENTATION: request_schema,
     client.repository.AIServiceMetaNames.RESPONSE_DOCUMENTATION: response_schema,
     client.repository.AIServiceMetaNames.TAGS: ["wx-agent"],
@@ -102,12 +103,9 @@ stored_ai_service_details = client.repository.store_ai_service(
 ai_service_id = stored_ai_service_details["metadata"].get("id")
 
 meta_props = {
-    client.deployments.ConfigurationMetaNames.NAME: f"online CrewAI service app",
-    client.deployments.ConfigurationMetaNames.ONLINE: {},
-    client.deployments.ConfigurationMetaNames.CUSTOM: {
-        "url": client.credentials.url,
-        **dep_config["custom"],
-    },
+    client.deployments.ConfigurationMetaNames.NAME:
+        f"online ai_service test",
+    client.deployments.ConfigurationMetaNames.ONLINE: {"parameters": online_parameters},
     client.repository.AIServiceMetaNames.TAGS: ["wx-agent"],
 }
 
