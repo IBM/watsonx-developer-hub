@@ -1,7 +1,7 @@
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task, after_kickoff
 
-from assistance_crew.tools import WebSearchTool
+from crewai_web_search.tools import WebSearchTool
 
 
 @CrewBase
