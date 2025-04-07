@@ -18,6 +18,7 @@ Templates published and maintained by the community.
 
 | Template                                            | Framework | Description                                                       |
 | --------------------------------------------------- | --------- | ----------------------------------------------------------------- |
+| [Agentic RAG](./community/langgraph-agentic-rag/) | Langraph  | Agent to improve how information is retrieved from vector store and used. |
 | [arXiv Research Agent](./community/langgraph-arxiv-research/) | Langraph  | Agent to search and summarize research papers published on arXiv. |
 
 ## Support
