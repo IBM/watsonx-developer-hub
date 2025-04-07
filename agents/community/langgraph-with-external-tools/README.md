@@ -16,7 +16,7 @@ Table of contents:
 ## Introduction  
 
 This repository provides a foundational template for developing Large Language Model (LLM) applications using the LangGraph framework. It facilitates seamless deployment as an AI service within IBM watsonx.ai on IBM Cloud[^1]. The template includes support for integrating external tools and services, with secure credential management handled via a secret manager.  
-An AI service is a deployable unit of code that captures the logic of your generative AI use case. For and in-depth description of the topic please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).  
+An AI service is a deployable unit of code that captures the logic of your generative AI use case. For an in-depth description of the topic, please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).  
 
 The template builds a simple application with external tool for addressing Web Search Agent use case.  
 

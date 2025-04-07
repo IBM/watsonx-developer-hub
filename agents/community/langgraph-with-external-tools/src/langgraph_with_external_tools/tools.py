@@ -1,6 +1,9 @@
 from typing import Callable, TYPE_CHECKING
 
 from langchain_core.tools import tool
+from langchain_tavily import TavilySearch
+from ibm_cloud_sdk_core.authenticators import BearerTokenAuthenticator
+from ibm_secrets_manager_sdk.secrets_manager_v2 import SecretsManagerV2
 
 if TYPE_CHECKING:
     from ibm_watsonx_ai import APIClient
@@ -11,10 +14,6 @@ def tavily_search_watsonx(
     service_manager_service_url: str,
     secret_id: str,
 ) -> Callable:
-
-    from langchain_tavily import TavilySearch
-    from ibm_cloud_sdk_core.authenticators import BearerTokenAuthenticator
-    from ibm_secrets_manager_sdk.secrets_manager_v2 import SecretsManagerV2
 
     authenticator = BearerTokenAuthenticator(api_client.token)
 
