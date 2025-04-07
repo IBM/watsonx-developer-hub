@@ -35,8 +35,15 @@ def deployable_ai_service(context, **custom):
             },
             "finish_reason": "tool_calls",
         }
-        if message.type == "ToolCallRequestEvent":
-            choice["delta"]["role"] = "assistant"
+
+        if message.source == "user":
+            choice["finish_reason"] = "user"
+            return choice
+
+        if message.type == "ToolCallSummaryMessage":
+            choice["delta"]["role"] = "tool"
+            choice["delta"]["finish_reason"] = "tool_calls"
+        elif message.type == "ToolCallRequestEvent":
             tool_calls = []
             for function_call in message.content:
                 tool = {
@@ -45,13 +52,13 @@ def deployable_ai_service(context, **custom):
                     "args": function_call.arguments,
                 }
                 tool_calls.append(tool)
-            choice["delta"]["step_details"] = {
+            choice["delta"] = {
+                "role": message.source,
                 "type": "tool_calls",
                 "tool_calls": tool_calls,
             }
 
         elif message.type == "ToolCallExecutionEvent":
-            choice["delta"]["role"] = "assistant"
             tool_calls = []
             for function_call in message.content:
                 tool = {
@@ -61,7 +68,8 @@ def deployable_ai_service(context, **custom):
                     "is_error": function_call.is_error,
                 }
                 tool_calls.append(tool)
-            choice["delta"]["step_details"] = {
+            choice["delta"] = {
+                "role": message.source,
                 "type": "tool_calls",
                 "tool_calls": tool_calls,
             }
@@ -149,33 +157,24 @@ def deployable_ai_service(context, **custom):
             TextMessage(content=message.get("content"), source=message.get("role"))
             for message in messages
         ]
-        content = ""
+        was_chunk = False
         async for message in agent().run_stream(task=text_messages):
             if getattr(message, "type", None) is None:  # e.g TaskResult
                 break
 
-            choice = {
-                "index": 0,
-                "delta": {
-                    "role": message.source,
-                    "content": message.content,
-                },
-            }
+            delta = {"role": message.source, "content": message.content}
+            choice = {"index": 0, "delta": delta}
 
-            if message.source == "user":
-                choice["finish_reason"] = ""
-
-            elif isinstance(message, BaseAgentEvent):
+            if isinstance(message, BaseAgentEvent):
                 if message.type == "ModelClientStreamingChunkEvent":
-                    content += message.content
+                    was_chunk = True
                 else:
                     choice = get_choice_from_message(message)
 
             elif isinstance(message, BaseChatMessage):
-                if message.type == "ToolCallSummaryMessage":
-                    choice["delta"]["role"] = "tool"
-                    choice["delta"]["finish_reason"] = "tool_calls"
-                if message.content == content:
+                choice = get_choice_from_message(message)
+
+                if was_chunk:
                     break
 
             yield {"choices": [choice]}
