@@ -23,14 +23,12 @@ def get_secret(api_client, secret_name):
 
     secretsManager.set_service_url(service_url.format(instance_ID="insatnce_id"))
 
-    # response = secretsManager.get_secret('1a3b9a7c-f133-b7ee-2b62-1421bbb3ea37')
     response = secretsManager.get_secret_by_name_type(
         secret_type='kv',
         name=secret_name,
         secret_group_name='default'
     )
 
-    # secret = response.get_result()
     return response.result["data"][secret_name]
 
 

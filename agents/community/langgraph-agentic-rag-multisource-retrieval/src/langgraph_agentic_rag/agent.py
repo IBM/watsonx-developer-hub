@@ -229,7 +229,6 @@ def get_graph_closure(
         # Define the nodes
         workflow.add_node("agent", agent)  # agent
         retrieve = ToolNode(TOOLS)
-        # workflow.add_node("rewrite", rewrite)
         workflow.add_node("retrieve", retrieve)  # retrieval
         workflow.add_node("generate", generate)  # generate answer
 
@@ -254,14 +253,12 @@ def get_graph_closure(
         )
 
         # Edges taken after the `action` node is called.
-        # workflow.add_edge("retrieve", "generate")
         workflow.add_edge("generate", END)
-        # workflow.add_edge("rewrite", "agent")
 
         # Compile
-        # graph = workflow.compile(checkpointer=memory)
         graph = workflow.compile()
 
+        # Generate the graph image
         # try:
         #     graph_image = graph.get_graph(xray=True).draw_mermaid_png()
         #     image_path = "multi_source_graph_output.png"
