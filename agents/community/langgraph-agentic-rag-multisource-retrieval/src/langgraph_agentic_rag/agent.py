@@ -262,6 +262,15 @@ def get_graph_closure(
         # graph = workflow.compile(checkpointer=memory)
         graph = workflow.compile()
 
+        # try:
+        #     graph_image = graph.get_graph(xray=True).draw_mermaid_png()
+        #     image_path = "multi_source_graph_output.png"
+
+        #     with open(image_path, "wb") as f:
+        #         f.write(graph_image)
+        # except Exception as e:
+        #     print(f"Error generating graph: {e}")
+
         return graph
 
     return get_graph

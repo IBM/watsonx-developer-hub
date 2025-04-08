@@ -21,7 +21,7 @@ An AI service is a deployable unit of code that captures the logic of your gener
 
 The template builds an application with IBM watsonx Utility Agent Tool for addressing RAG use case. The structure of RAG graph is as follows
 
-![alt text](agentic_rag.png "LangGraph Agentic RAG")
+![alt text](multi_source_graph.png "LangGraph Agentic RAG")
 
 > [!NOTE]
 > The template uses predefined `Vector Index Asset` as a source of base knowledge for RAG. For more details about `Vector Index` see https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-prompt-data-index-create.html?context=wx&audience=wdp . To run following Agentic RAG app you should set `tool_config_projectId` and `tool_config_vectorIndexId` in section `deployment.online.parameters` in `config.toml`. Moreover, to help the Agent correctly choose whether or not to use the retriever tool, a description of the underlying knowledge contained in the Vector Index Asset can also be provided in field `base_knowledge_description`.
