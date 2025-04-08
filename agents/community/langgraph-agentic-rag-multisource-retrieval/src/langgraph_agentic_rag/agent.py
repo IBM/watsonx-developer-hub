@@ -32,7 +32,8 @@ def get_graph_closure(
 
     # Initialise ChatWatsonx
     chat = ChatWatsonx(model_id=model_id, watsonx_client=client)
-    chat_grader = ChatWatsonx(model_id=model_id, watsonx_client=client, disable_streaming = True)
+    grader_model_id = "meta-llama/llama-4-maverick-17b-128e-instruct-fp8"
+    chat_grader = ChatWatsonx(model_id=grader_model_id, watsonx_client=client, disable_streaming = True)
 
     TOOLS = [
         retriever_tool_watsonx(
@@ -88,7 +89,6 @@ def get_graph_closure(
                     print((f"I have tried tool: {m.name}"))
                     tools_used.append(m.name)
                 if m.type == "human":
-                    # query = m.content
                     query = m
                     break
 
@@ -211,43 +211,7 @@ def get_graph_closure(
         else:
             print("---DECISION: DOCS NOT RELEVANT---")
             return "agent"
-    
-    
-    def rewrite(state):
-        """
-        Transform the query to produce a better question.
 
-        Args:
-            state (messages): The current state
-
-        Returns:
-            dict: The updated state with re-phrased question
-        """
-
-        # logger.info("---TRANSFORM QUERY---")
-        print("---TRANSFORM QUERY---")
-        messages = state["messages"]
-        # question = messages[0].content
-        for m in reversed(messages):
-            if m.type == "human":
-                question = m.content
-                break
-        
-
-        msg = [
-            HumanMessage(
-                content=f""" \n 
-        Look at the input and try to reason about the underlying semantic intent / meaning. \n 
-        Here is the initial question:
-        \n ------- \n
-        {question} 
-        \n ------- \n
-        Formulate an improved question, output the question only: """,
-            )
-        ]
-        response = chat.invoke(msg)
-        print("rewrite message", response)
-        return {"messages": [response]}
 
     def get_graph(instruction_prompt: SystemMessage | None = None) -> CompiledGraph:
         """Get compiled graph with overwritten system prompt, if provided"""

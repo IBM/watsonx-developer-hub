@@ -3,7 +3,7 @@ import ibm_watsonx_ai
 from utils import load_config
 from examples._interactive_chat import InteractiveChat
 
-deployment_id = "b7d2a4d0-0a97-42c2-80ea-8c39623a14d8"
+deployment_id = "8af73a87-a451-4d64-8dd7-f5fea7abd8c0"
 stream = True
 config = load_config("deployment")
 
@@ -14,7 +14,7 @@ client = ibm_watsonx_ai.APIClient(
     space_id=config["space_id"],
 )
 
-# # Executing deployed AI service with provided scoring data
+# Executing deployed AI service with provided scoring data
 # if stream:
 #     ai_service_invoke = lambda payload: client.deployments.run_ai_service_stream(
 #         deployment_id, payload

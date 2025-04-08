@@ -701,6 +701,28 @@ files = [
 ]
 
 [[package]]
+name = "ibm-cloud-sdk-core"
+version = "3.23.0"
+description = "Core library used by SDKs for IBM Cloud Services"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "ibm_cloud_sdk_core-3.23.0-py3-none-any.whl", hash = "sha256:9cbdd27de2306abd0916f6905b1d8aaa73b1bae510a4dc2a49fa2a62d40a6de5"},
+    {file = "ibm_cloud_sdk_core-3.23.0.tar.gz", hash = "sha256:393cb7c8e747d2706f495bc29ae54871979ab2f2e7cb907cd4d4d4f011a92d93"},
+]
+
+[package.dependencies]
+PyJWT = ">=2.8.0,<3.0.0"
+python_dateutil = ">=2.8.2,<3.0.0"
+requests = ">=2.31.0,<3.0.0"
+urllib3 = ">=2.1.0,<3.0.0"
+
+[package.extras]
+dev = ["black (>=24.0.0,<25.0.0)", "coverage (>=7.3.2,<8.0.0)", "pylint (>=3.0.0,<4.0.0)", "pytest (>=7.4.2,<8.0.0)", "pytest-cov (>=4.1.0,<5.0.0)", "responses (>=0.23.3,<1.0.0)"]
+publish = ["build", "twine"]
+
+[[package]]
 name = "ibm-cos-sdk"
 version = "2.13.5"
 description = "IBM SDK for Python"
@@ -746,6 +768,24 @@ files = [
 
 [package.dependencies]
 ibm-cos-sdk-core = "2.13.5"
+
+[[package]]
+name = "ibm-secrets-manager-sdk"
+version = "2.1.9"
+description = "IBM Cloud Secrets Manager Python SDK"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "ibm_secrets_manager_sdk-2.1.9-py3-none-any.whl", hash = "sha256:d066beb65ecf522280fb40addfca90d151b998cd6a5af03dd6612a7c976a703c"},
+    {file = "ibm_secrets_manager_sdk-2.1.9.tar.gz", hash = "sha256:9ce6f02b6a290f984ba8a410ccee2800611cc9922c97e5996eea3d1137668788"},
+]
+
+[package.dependencies]
+ibm_cloud_sdk_core = ">=3.21.0,<4.0.0"
+python_dateutil = ">=2.5.3,<3.0.0"
+requests = ">=2.28.2,<3.0.0"
+urllib3 = ">=2.1.0,<3.0.0"
 
 [[package]]
 name = "ibm-watsonx-ai"
@@ -1909,6 +1949,24 @@ toml = ["tomli (>=2.0.1)"]
 yaml = ["pyyaml (>=6.0.1)"]
 
 [[package]]
+name = "pyjwt"
+version = "2.10.1"
+description = "JSON Web Token implementation in Python"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "PyJWT-2.10.1-py3-none-any.whl", hash = "sha256:dcdd193e30abefd5debf142f9adfcdd2b58004e644f25406ffaebd50bd98dacb"},
+    {file = "pyjwt-2.10.1.tar.gz", hash = "sha256:3cc5772eb20009233caf06e9d8a0577824723b44e6648ee0a2aedb6cf9381953"},
+]
+
+[package.extras]
+crypto = ["cryptography (>=3.4.0)"]
+dev = ["coverage[toml] (==5.0.4)", "cryptography (>=3.4.0)", "pre-commit", "pytest (>=6.0.0,<7.0.0)", "sphinx", "sphinx-rtd-theme", "zope.interface"]
+docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
+tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
+
+[[package]]
 name = "pytest"
 version = "8.3.5"
 description = "pytest: simple powerful testing with Python"
@@ -2552,4 +2610,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.13"
-content-hash = "78aab6d18a12428089562fdf3d3d8e804ea4e5fb4778af46e22530740b5afb1c"
+content-hash = "a9328cecd6956b7e96d0e95d139ceae8b0c59e219885c25e18ec8436afedc8ac"
