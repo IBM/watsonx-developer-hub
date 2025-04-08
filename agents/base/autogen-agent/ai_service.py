@@ -36,20 +36,19 @@ def deployable_ai_service(context, url=None, space_id=None, model_id=None):
             "finish_reason": "tool_calls",
         }
 
-        if message.source == "user":
-            choice["finish_reason"] = "user"
-            return choice
-
         if message.type == "ToolCallSummaryMessage":
-            choice["delta"]["role"] = "tool"
-            choice["delta"]["finish_reason"] = "tool_calls"
+            choice["delta"]["role"] = "assistant"
+            choice["finish_reason"] = "stop"
         elif message.type == "ToolCallRequestEvent":
             tool_calls = []
             for function_call in message.content:
                 tool = {
                     "id": function_call.id,
-                    "name": function_call.name,
-                    "args": function_call.arguments,
+                    "type": "function",
+                    "function": {
+                        "name": function_call.name,
+                        "arguments": function_call.arguments,
+                    },
                 }
                 tool_calls.append(tool)
             choice["delta"] = {
@@ -59,19 +58,14 @@ def deployable_ai_service(context, url=None, space_id=None, model_id=None):
             }
 
         elif message.type == "ToolCallExecutionEvent":
-            tool_calls = []
-            for function_call in message.content:
-                tool = {
-                    "content": function_call.content,
-                    "tool_call_id": function_call.call_id,
-                    "name": function_call.name,
-                    "is_error": function_call.is_error,
-                }
-                tool_calls.append(tool)
+            function_call = message.content[0]
             choice["delta"] = {
-                "role": message.source,
+                "role": "tool",
                 "type": "tool_calls",
-                "tool_calls": tool_calls,
+                "content": function_call.content,
+                "tool_call_id": function_call.call_id,
+                "name": function_call.name,
+                "is_error": function_call.is_error,
             }
 
         return choice
@@ -148,7 +142,14 @@ def deployable_ai_service(context, url=None, space_id=None, model_id=None):
         messages = payload.get("messages", [])
 
         text_messages = [
-            TextMessage(content=message.get("content"), source=message.get("role"))
+            TextMessage(
+                content=(
+                    message["content"][0]["text"]
+                    if isinstance(message["content"], list)
+                    else message["content"]
+                ),
+                source=message.get("role"),
+            )
             for message in messages
         ]
         was_chunk = False
@@ -170,6 +171,9 @@ def deployable_ai_service(context, url=None, space_id=None, model_id=None):
 
                 if was_chunk:
                     break
+
+            if message.source == "user":
+                continue
 
             yield {"choices": [choice]}
 
