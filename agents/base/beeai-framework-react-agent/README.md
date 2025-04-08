@@ -19,7 +19,9 @@ An AI service is a deployable unit of code that captures the logic of your gener
 
 [^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
 
-The template builds a simple application with external tool for addressing Web Search Agent use case.  
+The template builds a simple application with external tool for addressing Web Search Agent use case.
+
+Streaming version coming soon to this template.
 
 ## Directory structure and file descriptions  
 

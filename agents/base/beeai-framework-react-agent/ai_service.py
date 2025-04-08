@@ -6,9 +6,8 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
     from beeai_framework.agents.types import AgentExecutionConfig
     from beeai_framework.backend.message import (
         Message,
+        SystemMessage,
     )
-    from beeai_framework.backend.message import SystemMessage
-    from beeai_framework.memory.unconstrained_memory import UnconstrainedMemory
 
 
     nest_asyncio.apply() # Inject support for nested event loops
@@ -33,7 +32,6 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
             elif role == "tool":
                 return {
                     "role": role,
-                    "id": f"fake_id_{resp.tool_call_id}", # TODO does this need to be from message tool result conent?
                     "tool_call_id": resp.tool.call_id,
                     "name": resp.tool_name,
                     "content": resp.content,
@@ -63,14 +61,11 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
         Please note that the `system message` MUST be placed first in the list of messages!
         """
 
-        memory = UnconstrainedMemory()
-        system_message = SystemMessage(content="You are a helpful AI assistant, please respond to the user's query to the best of your ability!")
-
-        await memory.add(system_message)
-
         token=context.get_token()
 
         agent = get_beeai_framework_agent(token, url, model_id, project_id)
+        system_message = SystemMessage(content="You are a helpful AI assistant, please respond to the user's query to the best of your ability!")
+        await agent.memory.add(system_message)
 
         payload = context.get_json()
         messages = payload.get("messages", [])
