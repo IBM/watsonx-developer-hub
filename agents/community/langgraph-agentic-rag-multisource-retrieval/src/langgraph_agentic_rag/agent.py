@@ -19,7 +19,7 @@ from langchain import hub
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.messages import BaseMessage, SystemMessage, AIMessage, HumanMessage
 
-from langgraph_agentic_rag import retriever_tool_watsonx, sql_retriever_tool_watsonx, websearch_tool_watsonx
+from langgraph_agentic_rag import retriever_tool_watsonx, sql_retriever_tool_watsonx, websearch_tool_watsonx, serper_search_tool
 
 
 def get_graph_closure(
@@ -35,6 +35,12 @@ def get_graph_closure(
     grader_model_id = "meta-llama/llama-4-maverick-17b-128e-instruct-fp8"
     chat_grader = ChatWatsonx(model_id=grader_model_id, watsonx_client=client, disable_streaming = True)
 
+    websearch_tool = serper_search_tool(api_client=client)
+    # websearch_tool = websearch_tool_watsonx(
+    #         api_client=client,
+    #         tool_config={"maxResults": 10},
+    #     ),
+
     TOOLS = [
         retriever_tool_watsonx(
             api_client=client,
@@ -43,11 +49,8 @@ def get_graph_closure(
         sql_retriever_tool_watsonx(
             api_client=client,
         ),
-        websearch_tool_watsonx(
-            api_client=client,
-            tool_config={"maxResults": 3},
-        ),
 
+        websearch_tool
     ]
 
     # Initialise memory saver
@@ -83,7 +86,7 @@ def get_graph_closure(
             """
             messages = state["messages"]
             tools_used = []
-            # query = messages[0]
+
             for m in reversed(messages):
                 if hasattr(m, 'tool_call_id'):
                     print((f"I have tried tool: {m.name}"))
@@ -94,7 +97,7 @@ def get_graph_closure(
 
             unused_tools = [t for t in TOOLS if t.name not in tools_used]
             if len(unused_tools) < 1:
-                unused_tools = [websearch_tool_watsonx(api_client=client, tool_config={"maxResults": 3})]
+                unused_tools = [websearch_tool]
 
             model = chat.bind_tools(unused_tools)
             print(f"unused tools: {[u.name for u in unused_tools]}")
@@ -170,11 +173,12 @@ def get_graph_closure(
 
         # Prompt
         prompt = PromptTemplate(
-            template="""You are a grader assessing relevance of a retrieved document to a user question. \n 
-            Here is the retrieved document: \n\n {context} \n\n
-            Here is the user question: {question} \n
-            If the document contains keyword(s) or semantic meaning related to the user question, grade it as relevant. \n
-            If the document mentions it has no data or no results to answer the question, or if the data is not directly available to answer the user question, it means the document is not relevant and grade it as 'no'. \n
+            template="""You are a grader assessing relevance of a retrieved document to a user question.
+            Here is the retrieved document: \n {context} \n
+            Here is the user question: {question}
+            If the document contains keyword(s) or semantic meaning related to the user question, grade it as relevant.
+            If the document mentions it has no data, no results or no information to answer the question, it means the document is NOT relevant and grade it as 'no'.
+            If the data is not directly available to answer the user question, it means the document is NOT relevant and grade it as 'no'.
             Give a binary score 'yes' or 'no' score to indicate whether the document is relevant to the question.""",
             input_variables=["context", "question"],
         )
@@ -185,12 +189,11 @@ def get_graph_closure(
         messages = state["messages"]
         last_message = messages[-1]
 
-        # question = messages[0].content
         msg_cnt = 0
         for m in reversed(messages):
+            msg_cnt += 1
             if m.type == "human":
                 question = m.content
-                msg_cnt += 1
                 break
 
         docs = last_message.content
@@ -198,8 +201,7 @@ def get_graph_closure(
         scored_result = chain.invoke({"question": question, "context": docs})
 
         score = scored_result.binary_score
-        # for m in messages:
-        #     print(m.type, "[messages]", m)
+
         if msg_cnt > 12:
             score = "yes"
             print("number of messages",len(messages))

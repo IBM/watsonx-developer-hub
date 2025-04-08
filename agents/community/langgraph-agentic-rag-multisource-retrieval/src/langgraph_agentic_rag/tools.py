@@ -8,6 +8,7 @@ from langchain_core.tools import tool
 from langchain.chains import create_sql_query_chain
 from langchain_community.utilities import SQLDatabase
 from langchain_ibm import ChatWatsonx
+from langchain_community.utilities import GoogleSerperAPIWrapper
 
 
 if TYPE_CHECKING:
@@ -37,9 +38,7 @@ def sql_retriever_tool_watsonx(
     api_client: "APIClient",
 ) -> Callable:
 
-    # TODO: change to secrets
     db_uri = get_secret(api_client, "PG_URI")
-    print(db_uri)
     db = SQLDatabase.from_uri(db_uri)
     model_id = "meta-llama/llama-3-3-70b-instruct"
     llm = ChatWatsonx(model_id=model_id, watsonx_client=api_client, disable_streaming = True)
@@ -99,10 +98,7 @@ def websearch_tool_watsonx(
     from langchain_ibm.toolkit import WatsonxToolkit
 
     toolkit = WatsonxToolkit(watsonx_client=api_client)
-
-    print(toolkit.get_tools())
     rag_tool = toolkit.get_tool("GoogleSearch")
-    # TODO: include more information in the search
     rag_tool.set_tool_config(tool_config)
 
     @tool("websearch", parse_docstring=True)
@@ -119,3 +115,26 @@ def websearch_tool_watsonx(
         return rag_tool.invoke({"input": query})["output"]
 
     return websearch_tool
+
+
+def serper_search_tool(
+    api_client: "APIClient",
+    # tool_config: dict,
+) -> Callable:
+    apikey = get_secret(api_client, "SERPER_APIKEY")
+    serper_search = GoogleSerperAPIWrapper(serper_api_key=apikey)
+
+    @tool("serpersearch", parse_docstring=True)
+    def serper_search_tool(query: str) -> str:
+        """
+        Search for online trends, news, current events, real-time information, or research topics.
+
+        Args:
+            query: User query related to information on the internet.
+
+        Returns:
+            Retrieved chunk.
+        """
+        return serper_search.run(query)
+
+    return serper_search_tool
