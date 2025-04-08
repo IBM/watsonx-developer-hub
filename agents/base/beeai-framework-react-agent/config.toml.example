@@ -26,7 +26,7 @@
 [deployment.online.parameters]
 # during creation of deployment additional parameters can be provided inside `ONLINE` object for further referencing
 # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
-  model_id = "ibm/granite-3-8b-instruct"  # underlying model for inferencing
+  model_id = "meta-llama/llama-3-3-70b-instruct"  # underlying model for inferencing
   project_id = "" # needed for wx inference in litellm
   url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
 
