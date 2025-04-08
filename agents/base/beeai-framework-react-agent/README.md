@@ -32,7 +32,7 @@ beeai-framework-react-agent
  ┃   ┗ tools.py  
  ┣ schema  
  ┣ ai_service.py  
- ┣ config.toml.example
+ ┣ config.toml.example  
  ┣ pyproject.toml  
 
 - `beeai_framework_react_agent_base` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  

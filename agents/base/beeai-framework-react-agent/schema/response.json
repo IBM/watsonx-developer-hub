@@ -19,64 +19,11 @@
                      "properties":{
                         "role":{
                            "type":"string",
-                           "enum":["assistant", "tool", "system", "user"]
+                           "enum":["assistant", "tool", "user"]
                         },
                         "content":{
                            "title":"Message content.",
                            "type":"string"
-                        },
-                        "delta":{
-                           "title":"Information from event.",
-                           "type":"object",
-                           "properties":{
-                              "content":{
-                                 "title":"Message content.",
-                                 "type":"string"
-                              }
-                           },
-                           "required":[
-                              "role"
-                           ]
-                        },
-                        "tool_calls":{
-                           "title":"Tool call information.",
-                           "type":"array",
-                           "items":{
-                              "type":"object",
-                              "properties":{
-                                 "function":{
-                                    "type":"object",
-                                    "properties":{
-                                       "name":{
-                                          "type":"string",
-                                          "title":"The name of the tool function."
-                                       },
-                                       "arguments":{
-                                          "type":"string",
-                                          "title":"The arguments for the tool function in JSON format."
-                                       }
-                                    },
-                                    "required":[
-                                       "name",
-                                       "arguments"
-                                    ]
-                                 },
-                                 "id":{
-                                    "type":"string",
-                                    "title":"Unique identifier for the tool call."
-                                 },
-                                 "type":{
-                                    "type":"string",
-                                    "const":"function",
-                                    "title":"The type of interaction."
-                                 }
-                              },
-                              "required":[
-                                 "function",
-                                 "id",
-                                 "type"
-                              ]
-                           }
                         },
                         "id":{
                            "type":"string",
