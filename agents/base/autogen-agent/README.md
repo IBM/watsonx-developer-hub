@@ -32,7 +32,7 @@ autogen-agent
  ┃   ┣ agent.py  
  ┃   ┗ tools.py  
  ┣ schema  
- ┣ ai_service.py 
+ ┣ ai_service.py  
  ┣ config.toml.example  
  ┗ pyproject.toml  
 
