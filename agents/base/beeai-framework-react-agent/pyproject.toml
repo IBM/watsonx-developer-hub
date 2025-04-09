@@ -10,7 +10,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "<4.0,>=3.11"
+python = "<3.13,>=3.11"
 beeai-framework = "^0.1.14"
 
 [tool.poetry.group.dev]

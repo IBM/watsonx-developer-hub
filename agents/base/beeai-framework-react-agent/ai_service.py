@@ -68,10 +68,13 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
         await agent.memory.add(system_message)
 
         payload = context.get_json()
-        messages = payload.get("messages", [])
 
+        prompt = ""
+        for message in payload.get("messages", []):
+            prompt += "{}:\n{}\n\n".format(message["role"].upper(), message["content"])
+    
         response = await agent.run(
-             prompt= ''.join(message["content"] for message in messages),
+             prompt,
              execution=AgentExecutionConfig(max_retries_per_step=3, total_max_retries=10, max_iterations=20),
         )
 
