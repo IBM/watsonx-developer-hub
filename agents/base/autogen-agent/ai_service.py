@@ -181,6 +181,9 @@ def deployable_ai_service(context, url=None, space_id=None, model_id=None):
         ]
         was_chunk = False
         async for message in agent().run_stream(task=text_messages):
+            if message in text_messages:
+                continue
+
             if getattr(message, "type", None) is None:  # e.g TaskResult
                 break
 
@@ -198,9 +201,6 @@ def deployable_ai_service(context, url=None, space_id=None, model_id=None):
 
                 if was_chunk:
                     break
-
-            if message.source == "user":
-                continue
 
             yield {"choices": [choice]}
 
