@@ -50,6 +50,7 @@ Designed to help you get started quickly with examples that can be easily custom
 | [LangGraph](./base/langgraph-react-agent/) |
 | [LlamaIndex](./base/llamaindex-websearch-agent/) |
 | [CrewAI](./base/crewai-websearch-agent/) |
+| [AutoGen](./base/autogen-agent/) |
 
 ## Community Templates
 
@@ -57,8 +58,9 @@ Templates published and maintained by the community.
 
 | Template                                            | Framework | Description                                                       |
 | --------------------------------------------------- | --------- | ----------------------------------------------------------------- |
-| [Agentic RAG](./community/langgraph-agentic-rag/) | Langraph  | Agent to improve how information is retrieved from vector store and used. |
+| [Agentic RAG](./community/langgraph-agentic-rag/) | Langraph  | Agent to improve retrieval augmented generation (RAG) scenario. |
 | [arXiv Research Agent](./community/langgraph-arxiv-research/) | Langraph  | Agent to search and summarize research papers published on arXiv. |
+| [Agent with the Tavily search Tool](./community/langgraph-tavily-tool/) | Langraph  | Agent that uses Tavily search tool and IBM Cloud® Secrets Manager.   |
 
 ## Support
 

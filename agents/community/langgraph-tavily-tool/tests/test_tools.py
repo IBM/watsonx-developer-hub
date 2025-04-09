@@ -1,7 +1,7 @@
 from ibm_watsonx_ai import Credentials, APIClient
 
 from utils import load_config
-from langgraph_with_external_tools import tavily_search_watsonx
+from langgraph_tavily_tool import tavily_search_watsonx
 
 config = load_config()
 

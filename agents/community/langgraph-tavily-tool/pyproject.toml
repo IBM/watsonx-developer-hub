@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "langgraph-with-external-tools"
+name = "langgraph-tavily-tool"
 version = "0.1.0"
 description = "A LangGraph-based template for building and deploying LLM applications as AI services on IBM Cloud. This example demonstrates secure integration with external tools via function calling, using credentials managed through IBM Secrets Manager."
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [
-    { include = "langgraph_with_external_tools", from = "src" }
+    { include = "langgraph_tavily_tool", from = "src" }
 ]
 
 [tool.poetry.dependencies]

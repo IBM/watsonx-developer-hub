@@ -6,7 +6,7 @@ from langgraph.graph.graph import CompiledGraph
 from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import MemorySaver
 
-from langgraph_with_external_tools import tavily_search_watsonx
+from langgraph_tavily_tool import tavily_search_watsonx
 
 
 def get_graph_closure(

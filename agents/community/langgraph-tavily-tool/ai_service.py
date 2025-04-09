@@ -3,7 +3,7 @@ def deployable_ai_service(
 ):
     from typing import Generator
 
-    from langgraph_with_external_tools.agent import get_graph_closure
+    from langgraph_tavily_tool.agent import get_graph_closure
     from ibm_watsonx_ai import APIClient, Credentials
     from langchain_core.messages import (
         BaseMessage,
