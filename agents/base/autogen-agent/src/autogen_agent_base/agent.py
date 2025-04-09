@@ -40,6 +40,7 @@ def get_agent_chat(
             tools=TOOLS,
             system_message=system_prompt,
             model_client_stream=True,
+            reflect_on_tool_use=True,
         )
 
     return get_agent

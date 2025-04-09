@@ -26,47 +26,72 @@ def deployable_ai_service(context, url=None, space_id=None, model_id=None):
         target=start_loop, args=(persistent_loop,), daemon=True
     ).start()  # We run a persistent loop in a separate daemon thread
 
-    def get_choice_from_message(message: BaseMessage) -> dict:
+    def get_choice_from_message(
+        message: BaseMessage, is_assistant: bool = False
+    ) -> dict:
         choice = {
             "index": 0,
             "delta": {
                 "role": message.source,
                 "content": message.content,
             },
-            "finish_reason": "tool_calls",
+            "finish_reason": "stop",
         }
 
-        if message.type == "ToolCallSummaryMessage":
-            choice["delta"]["role"] = "assistant"
-            choice["finish_reason"] = "stop"
-        elif message.type == "ToolCallRequestEvent":
+        if message.type == "ToolCallRequestEvent":
             tool_calls = []
             for function_call in message.content:
-                tool = {
-                    "id": function_call.id,
-                    "type": "function",
-                    "function": {
+                if is_assistant:
+                    tool = {
+                        "id": function_call.id,
                         "name": function_call.name,
-                        "arguments": function_call.arguments,
+                        "args": function_call.arguments,
+                    }
+                else:
+                    tool = {
+                        "id": function_call.id,
+                        "type": "function",
+                        "function": {
+                            "name": function_call.name,
+                            "arguments": function_call.arguments,
+                        },
+                    }
+
+                tool_calls.append(tool)
+            if is_assistant:
+                choice["delta"] = {
+                    "role": message.source,
+                    "step_details": {
+                        "type": "tool_calls",
+                        "tool_calls": tool_calls,
                     },
                 }
-                tool_calls.append(tool)
-            choice["delta"] = {
-                "role": message.source,
-                "type": "tool_calls",
-                "tool_calls": tool_calls,
-            }
+            else:
+                choice["delta"] = {
+                    "role": message.source,
+                    "tool_calls": tool_calls,
+                }
 
         elif message.type == "ToolCallExecutionEvent":
             function_call = message.content[0]
-            choice["delta"] = {
-                "role": "tool",
-                "type": "tool_calls",
-                "content": function_call.content,
-                "tool_call_id": function_call.call_id,
-                "name": function_call.name,
-                "is_error": function_call.is_error,
-            }
+            if is_assistant:
+                choice["delta"] = {
+                    "role": "assistant",
+                    "step_details": {
+                        "type": "tool_response",
+                        "id": f"tool_call_id_{function_call.call_id}",
+                        "tool_call_id": function_call.call_id,
+                        "name": function_call.name,
+                        "content": function_call.content,
+                    },
+                }
+            else:
+                choice["delta"] = {
+                    "role": "tool",
+                    "content": function_call.content,
+                    "tool_call_id": function_call.call_id,
+                    "name": function_call.name,
+                }
 
         return choice
 
@@ -139,6 +164,8 @@ def deployable_ai_service(context, url=None, space_id=None, model_id=None):
         agent = get_agent_chat(credentials, model_id, space_id)
 
         payload = context.get_json()
+        headers = context.get_headers()
+        is_assistant = headers.get("X-Ai-Interface") == "assistant"
         messages = payload.get("messages", [])
 
         text_messages = [
@@ -164,10 +191,10 @@ def deployable_ai_service(context, url=None, space_id=None, model_id=None):
                 if message.type == "ModelClientStreamingChunkEvent":
                     was_chunk = True
                 else:
-                    choice = get_choice_from_message(message)
+                    choice = get_choice_from_message(message, is_assistant)
 
             elif isinstance(message, BaseChatMessage):
-                choice = get_choice_from_message(message)
+                choice = get_choice_from_message(message, is_assistant)
 
                 if was_chunk:
                     break

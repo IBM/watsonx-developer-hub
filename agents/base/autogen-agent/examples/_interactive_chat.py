@@ -8,7 +8,7 @@ class InteractiveChat:
     def __init__(
         self,
         ai_service_invoke: Callable,
-        questions: tuple[str] = None,
+        questions: tuple[str] | None = None,
         stream: bool = False,
         verbose: bool = True,
     ) -> None:

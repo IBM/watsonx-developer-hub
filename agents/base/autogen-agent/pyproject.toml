@@ -17,6 +17,7 @@ autogen-agentchat = "^0.4.6"
 autogen-core = "^0.4.6"
 autogen-ext = "^0.4.6"
 autogen_watsonx_client = "^0.0.7"
+nest_asyncio = "^1.6.0"
 
 
 [tool.poetry.group.dev]
@@ -25,7 +26,6 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 
 python-dotenv = "^1.0.1"
-ibm-watsonx-ai = "^1.2.7"
 pytest = "^8.3.3"
 numpy = "<2.0.0"
 
