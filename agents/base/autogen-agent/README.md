@@ -28,7 +28,7 @@ The high level structure of the repository is as follows:
 autogen-agent  
  ┣ src  
  ┃ ┗ autogen_agent_base  
- ┃   ┣ __init__.py 
+ ┃   ┣  \_\_init\_\_.py  
  ┃   ┣ agent.py  
  ┃   ┗ tools.py  
  ┣ schema  
@@ -62,11 +62,11 @@ git sparse-checkout add agents/base/autogen_agent
 Move to the directory with the agent template:
 
 ```sh
-cd agents/base/autogen_agent/
+cd agents/base/autogen-agent/
 ```
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/autogen_agent`  
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/autogen-agent`  
 
 
 ### Step 2: Install poetry  
