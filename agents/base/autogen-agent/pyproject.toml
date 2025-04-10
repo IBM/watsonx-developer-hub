@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "autogen_agent_base"
+version = "0.1.0"
+description = "A template for a Autogen app deployable on IBM Cloud as an ai_service. This particular example focuses on a WatsonX chatbot enhanced with external tools (function calling)."
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "autogen_agent_base", from = "src" }
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+autogen = "^0.8.3"
+autogen-agentchat = "^0.4.6"
+autogen-core = "^0.4.6"
+autogen-ext = "^0.4.6"
+autogen_watsonx_client = "^0.0.7"
+nest_asyncio = "^1.6.0"
+
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+
+python-dotenv = "^1.0.1"
+pytest = "^8.3.3"
+numpy = "<2.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
