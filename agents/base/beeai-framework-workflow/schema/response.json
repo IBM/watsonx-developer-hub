@@ -1,0 +1,57 @@
+{
+   "application/json":{
+      "$schema":"http://json-schema.org/draft-07/schema#",
+      "type":"object",
+      "properties":{
+         "choices":{
+            "title":"A list of chat completion choices",
+            "type":"array",
+            "items":{
+               "type":"object",
+               "properties":{
+                  "index":{
+                     "type":"integer",
+                     "title":"The index of this result."
+                  },
+                  "message":{
+                     "title":"A message result.",
+                     "type":"object",
+                     "properties":{
+                        "role":{
+                           "type":"string",
+                           "enum":["assistant", "tool", "user"]
+                        },
+                        "content":{
+                           "title":"Message content.",
+                           "type":"string"
+                        },
+                        "id":{
+                           "type":"string",
+                           "title":"Unique identifier for the message."
+                        },
+                        "tool_call_id":{
+                           "type":"string",
+                           "title":"Identifier linking to a tool call."
+                        },
+                        "name":{
+                           "type":"string",
+                           "title":"Name associated with the tool or role."
+                        }
+                     },
+                     "required":[
+                        "role"
+                     ]
+                  }
+               },
+               "required":[
+                  "index",
+                  "message"
+               ]
+            }
+         }
+      },
+      "required":[
+         "choices"
+      ]
+   }
+}
