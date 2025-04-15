@@ -1,4 +1,4 @@
-def deployable_ai_service(context, url, model_id, space_id, thread_id, tool_config_projectId, tool_config_vectorIndexId, base_knowledge_description = None):
+def deployable_ai_service(context, url, model_id, space_id, thread_id, tool_config_spaceId, tool_config_vectorIndexId, base_knowledge_description = None):
     from typing import Generator
 
     from langgraph_agentic_rag.agent import get_graph_closure
@@ -19,7 +19,7 @@ def deployable_ai_service(context, url, model_id, space_id, thread_id, tool_conf
         client,
         model_id,
         tool_config={
-            "projectId": tool_config_projectId,
+            "spaceId": tool_config_spaceId,
             "vectorIndexId": tool_config_vectorIndexId,
         },
         base_knowledge_description=base_knowledge_description,

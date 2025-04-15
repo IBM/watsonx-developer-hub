@@ -33,7 +33,7 @@
 
   # RAGQuery Tool configuration
   # Required:
-  tool_config_projectId = ""
+  tool_config_spaceId = ""
   tool_config_vectorIndexId = ""
 
   # Optional:

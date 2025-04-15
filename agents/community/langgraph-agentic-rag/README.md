@@ -25,7 +25,7 @@ The template builds an application with IBM watsonx Utility Agent Tool for addre
 > [!NOTE]
 > The template uses predefined `Vector Index Asset` as a source of base knowledge for RAG. For more details about `Vector Index Asset` see [documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-prompt-data-index-create.html?context=wx&audience=wdp) . 
 > 
-> To run following Agentic RAG app you should set `tool_config_projectId` and `tool_config_vectorIndexId` in section `deployment.online.parameters` in `config.toml`. Moreover, to help the Agent correctly choose whether to use the retriever tool or not, a description of the underlying knowledge contained in the Vector Index Asset can also be provided in field `base_knowledge_description`.
+> To run following Agentic RAG app you should set `tool_config_spaceId` and `tool_config_vectorIndexId` in section `deployment.online.parameters` in `config.toml`. Moreover, to help the Agent correctly choose whether to use the retriever tool or not, a description of the underlying knowledge contained in the Vector Index Asset can also be provided in field `base_knowledge_description`.
 
 
 [^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
