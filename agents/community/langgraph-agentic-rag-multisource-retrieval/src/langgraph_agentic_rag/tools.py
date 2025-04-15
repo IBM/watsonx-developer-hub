@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 def get_secret(api_client, secret_name):
-    service_url = "https://a14f50a6-1721-4bd9-930c-403264d61ec1.au-syd.secrets-manager.appdomain.cloud"
+    service_url = "https://{your_instance_ID}.au-syd.secrets-manager.appdomain.cloud"
     secretsManager = SecretsManagerV2(
         authenticator=BearerTokenAuthenticator(bearer_token=api_client.token),
     )
@@ -136,3 +136,4 @@ def serper_search_tool(
         return serper_search.run(query)
 
     return serper_search_tool
+

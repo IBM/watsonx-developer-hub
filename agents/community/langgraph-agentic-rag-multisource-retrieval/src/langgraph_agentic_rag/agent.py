@@ -13,11 +13,8 @@ from langgraph.graph.graph import CompiledGraph
 from langgraph.graph.message import add_messages
 
 from langgraph.prebuilt import ToolNode, tools_condition
-from langgraph.checkpoint.memory import MemorySaver
 
-from langchain import hub
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.messages import BaseMessage, SystemMessage, AIMessage, HumanMessage
+from langchain_core.messages import BaseMessage, SystemMessage
 
 from langgraph_agentic_rag import retriever_tool_watsonx, sql_retriever_tool_watsonx, websearch_tool_watsonx, serper_search_tool
 
@@ -53,8 +50,6 @@ def get_graph_closure(
         websearch_tool
     ]
 
-    # Initialise memory saver
-    # memory = MemorySaver()
 
     # Define system prompt
     default_system_prompt = (
@@ -102,9 +97,10 @@ def get_graph_closure(
             model = chat.bind_tools(unused_tools)
             print(f"unused tools: {[u.name for u in unused_tools]}")
 
-            system_prompt = SystemMessage(
-                default_system_prompt + "\n" + (instruction_prompt or "")
-            )
+            # system_prompt = SystemMessage(
+            #     default_system_prompt + "\n" + (instruction_prompt or "")
+            # )
+            
             # response = model.invoke([system_prompt] + list(messages))
             response = model.invoke([query])
             # We return a list, because this will get added to the existing list
@@ -125,7 +121,6 @@ def get_graph_closure(
         messages = state["messages"]
 
         # Most recent user query
-        # question = messages[-3].content
         for m in reversed(messages):
             if m.type == "human":
                 question = m.content
@@ -159,7 +154,6 @@ def get_graph_closure(
             str: A decision for whether the documents are relevant or not
         """
 
-        # logger.info("---CHECK RELEVANCE---")
         print("---CHECK RELEVANCE---")
 
         # Data model
@@ -189,6 +183,7 @@ def get_graph_closure(
         messages = state["messages"]
         last_message = messages[-1]
 
+        # find the last question
         msg_cnt = 0
         for m in reversed(messages):
             msg_cnt += 1
@@ -204,7 +199,7 @@ def get_graph_closure(
 
         if msg_cnt > 12:
             score = "yes"
-            print("number of messages",len(messages))
+            print("number of messages since last question:",len(messages))
 
         if score == "yes":
             print("---DECISION: DOCS RELEVANT---")

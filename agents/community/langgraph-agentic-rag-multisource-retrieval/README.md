@@ -1,4 +1,4 @@
-# A Base LangGraph LLM app template with function calling capabilities  
+# A LangGraph Agentic RAG template with multi-source retrieval examples
 
 Table of contents:  
 * [Introduction](#introduction)  
@@ -26,6 +26,23 @@ The template builds an application with IBM watsonx Utility Agent Tool for addre
 > [!NOTE]
 > The template uses predefined `Vector Index Asset` as a source of base knowledge for RAG. For more details about `Vector Index` see https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-prompt-data-index-create.html?context=wx&audience=wdp . To run following Agentic RAG app you should set `tool_config_projectId` and `tool_config_vectorIndexId` in section `deployment.online.parameters` in `config.toml`. Moreover, to help the Agent correctly choose whether or not to use the retriever tool, a description of the underlying knowledge contained in the Vector Index Asset can also be provided in field `base_knowledge_description`.
 
+Traditional RAG has the pain points "I have a lot of data scattered everywhere, I don’t know which data source the answer is in". This pattern allows the retrieval agent to make educated guess which data retrieval tool to use according to the description, and if another data source should be tried if the answer is not relevant.
+
+The three example data sources (made available as tools in `tools.py`) are:
+
+1) A SQL database 
+2) A vector database
+3) Web search
+
+A retrieval flow looks like:
+
+![alt text](multi-source-diagram.png "LangGraph Agentic RAG multi-source")
+
+- Agent select a source to query
+- Check answer relevance
+- If relevant, generate answer
+- If irrelevant, try a different data source for answer until all data sources have been tried
+
 
 ## Directory structure and file descriptions  
 
@@ -41,7 +58,7 @@ langgraph-agentic-rag
  ┣ config.toml.example  
  ┣ pyproject.toml  
 
-- `langgraph-agentic-rag` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
+- `langgraph-agentic-rag-multisource-retrieval` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
 - `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
 - `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic  
 - `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
@@ -62,17 +79,17 @@ In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use
 ```sh
 git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
 cd watsonx-developer-hub
-git sparse-checkout add agents/community/langgraph-agentic-rag
+git sparse-checkout add agents/community/langgraph-agentic-rag-multisource-retrieval
 ```  
 
 Move to the directory with the agent template:
 
 ```sh
-cd agents/community/langgraph-agentic-rag/
+cd agents/community/langgraph-agentic-rag-multisource-retrieval/
 ```
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/langgraph-agentic-rag/`  
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/langgraph-agentic-rag-multisource-retrieval/`  
 
 
 ### Step 2: Install poetry  
