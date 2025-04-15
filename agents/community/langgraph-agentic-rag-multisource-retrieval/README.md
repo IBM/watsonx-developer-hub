@@ -45,11 +45,11 @@ A retrieval flow looks like:
 
 
 ---
-Author: Sherry Yu (shuang.yu@ibm.com)
+Authors: 
+- Sherry Yu (shuang.yu@ibm.com)
+- Mateusz Świtała (mateusz.switala@ibm.com)
 
 Date: 16 April 2025
-
-
 
 
 ## Directory structure and file descriptions  
