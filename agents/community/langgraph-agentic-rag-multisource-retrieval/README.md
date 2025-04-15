@@ -44,6 +44,14 @@ A retrieval flow looks like:
 - If irrelevant, try a different data source for answer until all data sources have been tried
 
 
+---
+Author: Sherry Yu (shuang.yu@ibm.com)
+
+Date: 16 April 2025
+
+
+
+
 ## Directory structure and file descriptions  
 
 The high level structure of the repository is as follows:  
