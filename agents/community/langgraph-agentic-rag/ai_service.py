@@ -1,4 +1,4 @@
-def deployable_ai_service(context, url, model_id, space_id, thread_id, tool_config_spaceId, tool_config_vectorIndexId, base_knowledge_description = None):
+def deployable_ai_service(context, url, model_id, thread_id, tool_config_spaceId, tool_config_vectorIndexId, base_knowledge_description = None):
     from typing import Generator
 
     from langgraph_agentic_rag.agent import get_graph_closure
@@ -12,7 +12,7 @@ def deployable_ai_service(context, url, model_id, space_id, thread_id, tool_conf
 
     client = APIClient(
         credentials=Credentials(url=url, token=context.generate_token()),
-        space_id=space_id,
+        space_id=context.get_space_id(),
     )
 
     graph = get_graph_closure(

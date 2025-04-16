@@ -1,4 +1,4 @@
-def deployable_ai_service(context, url = None, space_id = None, model_id = None, thread_id = None):
+def deployable_ai_service(context, url=None, model_id=None, thread_id=None):
     from typing import Generator
 
     from langgraph_react_agent_base.agent import get_graph_closure
@@ -12,7 +12,7 @@ def deployable_ai_service(context, url = None, space_id = None, model_id = None,
 
     client = APIClient(
         credentials=Credentials(url=url, token=context.generate_token()),
-        space_id=space_id,
+        space_id=context.get_space_id(),
     )
 
     graph = get_graph_closure(client, model_id)

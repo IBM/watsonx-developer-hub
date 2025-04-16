@@ -1,4 +1,4 @@
-def deployable_ai_service(context, url = None, space_id = None, model_id = None):
+def deployable_ai_service(context, url=None, model_id=None):
     import asyncio
     import nest_asyncio
     import threading
@@ -187,7 +187,7 @@ def deployable_ai_service(context, url = None, space_id = None, model_id = None)
         """
         client = APIClient(
             credentials=Credentials(url=url, token=context.get_token()),
-            space_id=space_id,
+            space_id=context.get_space_id(),
         )
         workflow = get_workflow_closure(client, model_id)
 
@@ -226,7 +226,7 @@ def deployable_ai_service(context, url = None, space_id = None, model_id = None)
         """
         client = APIClient(
             credentials=Credentials(url=url, token=context.get_token()),
-            space_id=space_id,
+            space_id=context.get_space_id(),
         )
         workflow = get_workflow_closure(client, model_id)
 

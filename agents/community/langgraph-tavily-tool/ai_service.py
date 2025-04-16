@@ -1,5 +1,5 @@
 def deployable_ai_service(
-    context, url, space_id, model_id, thread_id, service_manager_service_url, secret_id
+    context, url, model_id, thread_id, service_manager_service_url, secret_id
 ):
     from typing import Generator
 
@@ -14,7 +14,7 @@ def deployable_ai_service(
 
     client = APIClient(
         credentials=Credentials(url=url, token=context.generate_token()),
-        space_id=space_id,
+        space_id=context.get_space_id(),
     )
 
     graph = get_graph_closure(client, model_id, service_manager_service_url, secret_id)
