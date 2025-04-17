@@ -2,8 +2,8 @@ from beeai_framework.backend.chat import (
     ChatModel,
 )
 from beeai_framework.workflows.agent import AgentWorkflow
-from beeai_framework.tools.search import DuckDuckGoSearchTool
-from beeai_framework.tools.weather import OpenMeteoTool
+from beeai_framework.tools.search.duckduckgo import DuckDuckGoSearchTool
+from beeai_framework.tools.weather.openmeteo import OpenMeteoTool
 
 def get_beeai_framework_workflow(token: str, url: str, model_id: str, project_id: str) -> AgentWorkflow:
     # Initialise WatsonxChatModel
