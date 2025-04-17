@@ -5,7 +5,7 @@ from ai_service import deployable_ai_service
 from utils import load_config
 from examples._interactive_chat import InteractiveChat
 
-stream = False
+stream = True
 config = load_config()
 dep_config = config["deployment"]
 online_parameters = dep_config["online"]["parameters"]
