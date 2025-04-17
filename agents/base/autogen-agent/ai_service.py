@@ -1,4 +1,4 @@
-def deployable_ai_service(context, url=None, space_id=None, model_id=None):
+def deployable_ai_service(context, url=None, model_id=None):
     import asyncio
     import nest_asyncio
     import threading
@@ -122,7 +122,7 @@ def deployable_ai_service(context, url=None, space_id=None, model_id=None):
 
         credentials = Credentials(url=url, token=context.get_token())
 
-        agent = get_agent_chat(credentials, model_id, space_id)
+        agent = get_agent_chat(credentials, model_id, context.get_space_id())
 
         payload = context.get_json()
         messages = payload.get("messages", [])
@@ -161,7 +161,7 @@ def deployable_ai_service(context, url=None, space_id=None, model_id=None):
         """
         credentials = Credentials(url=url, token=context.get_token())
 
-        agent = get_agent_chat(credentials, model_id, space_id)
+        agent = get_agent_chat(credentials, model_id, context.get_space_id())
 
         payload = context.get_json()
         headers = context.get_headers()
