@@ -186,7 +186,11 @@ def deployable_ai_service(context, url=None, model_id=None):
         Please note that the `system message` MUST be placed first in the list of messages!
         """
         client = APIClient(
-            credentials=Credentials(url=url, token=context.get_token()),
+            credentials=Credentials(
+                url=url,
+                token=context.get_token(),
+                instance_id="openshift" if "cloud.ibm.com" not in url else None,
+            ),
             space_id=context.get_space_id(),
         )
         workflow = get_workflow_closure(client, model_id)
@@ -225,7 +229,11 @@ def deployable_ai_service(context, url=None, model_id=None):
         Please note that the `system message` MUST be placed first in the list of messages!
         """
         client = APIClient(
-            credentials=Credentials(url=url, token=context.get_token()),
+            credentials=Credentials(
+                url=url,
+                token=context.get_token(),
+                instance_id="openshift" if "cloud.ibm.com" not in url else None,
+            ),
             space_id=context.get_space_id(),
         )
         workflow = get_workflow_closure(client, model_id)

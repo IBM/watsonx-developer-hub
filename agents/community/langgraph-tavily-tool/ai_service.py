@@ -13,7 +13,11 @@ def deployable_ai_service(
     )
 
     client = APIClient(
-        credentials=Credentials(url=url, token=context.generate_token()),
+        credentials=Credentials(
+            url=url,
+            token=context.generate_token(),
+            instance_id="openshift" if "cloud.ibm.com" not in url else None,
+        ),
         space_id=context.get_space_id(),
     )
 
