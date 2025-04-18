@@ -3,6 +3,7 @@ def deployable_ai_service(context, url=None, model_id=None):
     import nest_asyncio
     import threading
     import json
+    import urllib
     from typing import Generator, AsyncGenerator
     from ibm_watsonx_ai import APIClient, Credentials
     from llama_index.core.base.llms.types import ChatMessage
@@ -27,6 +28,10 @@ def deployable_ai_service(context, url=None, model_id=None):
     threading.Thread(
         target=start_loop, args=(persistent_loop,), daemon=True
     ).start()  # We run a persistent loop in a separate daemon thread
+
+    hostname = urllib.parse.urlparse(url).hostname or ""
+    is_cloud_url = hostname.lower().endswith("cloud.ibm.com")
+    instance_id = None if is_cloud_url else "openshift"
 
     def get_formatted_message(resp: ChatMessage) -> dict | None:
         role = resp.role
@@ -189,7 +194,7 @@ def deployable_ai_service(context, url=None, model_id=None):
             credentials=Credentials(
                 url=url,
                 token=context.get_token(),
-                instance_id="openshift" if "cloud.ibm.com" not in url else None,
+                instance_id=instance_id,
             ),
             space_id=context.get_space_id(),
         )
@@ -232,7 +237,7 @@ def deployable_ai_service(context, url=None, model_id=None):
             credentials=Credentials(
                 url=url,
                 token=context.get_token(),
-                instance_id="openshift" if "cloud.ibm.com" not in url else None,
+                instance_id=instance_id,
             ),
             space_id=context.get_space_id(),
         )
