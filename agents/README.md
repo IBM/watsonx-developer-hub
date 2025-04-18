@@ -62,6 +62,10 @@ Templates published and maintained by the community.
 | [arXiv Research Agent](./community/langgraph-arxiv-research/) | Langraph  | Agent to search and summarize research papers published on arXiv. |
 | [Agent with the Tavily search Tool](./community/langgraph-tavily-tool/) | Langraph  | Agent that uses Tavily search tool and IBM Cloud® Secrets Manager.   |
 
+## Consuming deployed agents
+
+All of the available templates can be easily consumed in the [React UI App](../apps/nextjs-carbon-react-ui/) that creates local running React application providing users an option to infer agents. To run the app local please follow these [steps](../apps/nextjs-carbon-react-ui/README.md).
+
 ## Support
 
 See the [watsonx Developer Hub](https://ibm.com/watsonx/developer) for quickstarts and documentation. Please reach out to us on [Discord](https://ibm.biz/wx-discord) if you have any questions or want to share feedback. We'd love to hear from you!
