@@ -1,4 +1,5 @@
 def deployable_ai_service(context, url=None, model_id=None, thread_id=None):
+    import urllib
     from typing import Generator
 
     from langgraph_react_agent.agent import get_graph_closure
@@ -10,8 +11,16 @@ def deployable_ai_service(context, url=None, model_id=None, thread_id=None):
         SystemMessage,
     )
 
+    hostname = urllib.parse.urlparse(url).hostname or ""
+    is_cloud_url = hostname.lower().endswith("cloud.ibm.com")
+    instance_id = None if is_cloud_url else "openshift"
+
     client = APIClient(
-        credentials=Credentials(url=url, token=context.generate_token()),
+        credentials=Credentials(
+            url=url,
+            token=context.generate_token(),
+            instance_id=instance_id,
+        ),
         space_id=context.get_space_id(),
     )
 
