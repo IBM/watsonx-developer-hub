@@ -3,6 +3,7 @@
 Examples and guides for building and deploying Gen AI applications using the watsonx APIs.
 
 - [Agents](/agents/README.md)
+- [Apps](/apps/README.md)
 
 ## Getting started
 
