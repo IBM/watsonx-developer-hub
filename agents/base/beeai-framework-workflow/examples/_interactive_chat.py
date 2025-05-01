@@ -50,8 +50,16 @@ class InteractiveChat:
 
             _ = yield q, "location"
 
-    def _print_message(self, message) -> None:
-        print(message)
+    def _print_message(self, message: dict) -> None:
+        header = f" {message['role'].capitalize()} Message ".center(80, "=")
+        if delta := message.get("delta"):
+            if not self._delta_start:
+                print("\n", header)
+                self._delta_start = True
+            print(delta, flush=True, end="")
+        else:
+            print("\n", header)
+            print(f"{message.get('content', message)}")
 
     def run(self) -> None:
         # TODO implement signal handling (especially Ctrl-C)

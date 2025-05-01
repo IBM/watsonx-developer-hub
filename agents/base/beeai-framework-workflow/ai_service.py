@@ -24,6 +24,9 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
         target=start_loop, args=(persistent_loop,), daemon=True
     ).start() # Run a persistent loop in a separate daemon thread
 
+    def get_formatted_message(final_answer: str) -> dict | None:
+        return {"role": "assistant", "content": final_answer}
+
     async def generate_async(context) -> dict:
         """
         The `generate` function handles the REST call to the inference endpoint
@@ -91,10 +94,10 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
             generate_async(context), persistent_loop
         )
         choices = []
-        generated_response = future.result()
 
-        output = generated_response
-        if output is not None:
+        output = get_formatted_message(future.result())
+
+        if output:
             choices.append({"index": 0, "message": output})
         
         return {
