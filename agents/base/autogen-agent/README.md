@@ -143,7 +143,7 @@ Enter the necessary credentials in the `config.toml` file.
 ### Step 2: Run the script for local AI service execution  
 
 ```sh
-python examples/execute_ai_service_locally.py
+poetry run python examples/execute_ai_service_locally.py
 ```  
 
 ### Step 3: Ask the model  

@@ -13,7 +13,8 @@ online_parameters = dep_config["online"]["parameters"]
 client = APIClient(
     credentials=Credentials(
         url=dep_config["watsonx_url"], api_key=dep_config["watsonx_apikey"]
-    )
+    ),
+    space_id=dep_config["space_id"],
 )
 
 context = RuntimeContext(api_client=client)
