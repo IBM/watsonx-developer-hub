@@ -11,7 +11,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "<3.13,>=3.11"
-beeai-framework = "^0.1.19"
+beeai-framework = { version = "^0.1.19", extras = ["duckduckgo"] }
 
 [tool.poetry.group.dev]
 optional = true
