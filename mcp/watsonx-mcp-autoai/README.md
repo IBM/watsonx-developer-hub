@@ -2,8 +2,8 @@
 
 Table of contents:  
 * [Introduction](#introduction)  
-* [AutoAi experiemnt](#autoai_experiemnt)  
-* [Directory structure and file descriptions](#directory-structure-and-file-descriptions)  
+* [AutoAI experiemnt](#autoai_experiemnt)  
+* [Directory structure and files description](#directory-structure-and-files-description)  
 * [Prerequisites](#prerequisites)  
 * [Cloning and setting up the template](#cloning-and-setting-up-the-template)  
 * [Configuring the environment](#configuring-the-environment)  
@@ -16,7 +16,7 @@ This project demonstrates how to build an AI application using IBM watsonx, Lang
 
 It takes free-form text describing a person, uses a foundation model hosted on IBM watsonx to extract structured information, and then invokes an AutoAI deployment that predicts credit risk based on those structured inputs.
 
-## AutoAi experiemnt
+## AutoAI experiemnt
 
 Before starting work with the MCP server, please review the notebook [Use AutoAI and Lale to predict credit risk with ibm-watsonx-ai](https://github.com/IBM/watsonx-ai-samples/blob/master/cloud/notebooks/python_sdk/experiments/autoai/Use%20AutoAI%20and%20Lale%20to%20predict%20credit%20risk.ipynb) to perform the deployment, which will later be used as a tool agent.
 
@@ -28,7 +28,7 @@ This notebook guides you through:
 
 > Once deployed, copy the deployment ID and add it to your .env file — it will be used by the MCP server to make predictions.
 
-## Directory structure and file descriptions
+## Directory structure and files description
 
 watsonx-mcp-autoai
  ┣ mcp_server.py                                                      # Main MCP server with tools (including AutoAI invocation)

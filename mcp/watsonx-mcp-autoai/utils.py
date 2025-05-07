@@ -19,14 +19,11 @@ def prepare_api_client():
 def prepare_chat_watsonx():
     from langchain_ibm import ChatWatsonx
 
-    load_dotenv()
-
     api_client = prepare_api_client()
 
     chat_watsonx = ChatWatsonx(
         model_id=os.getenv("WATSONX_MODEL_ID"),
         watsonx_client=api_client,
-        temperature=1,
     )
     return chat_watsonx
 

@@ -30,7 +30,7 @@ def sub(a: int, b: int) -> int:
 
 # AutoAI tool
 @mcp.tool()
-def invoke_credit_risk_deployemnt(person_information: str) -> str:
+def invoke_credit_risk_deployemnt(person_information: str) -> dict:
     """Invoke deployment about credit risk information based on all information about person"""
     from pydantic import BaseModel
     from langchain_core.prompts import PromptTemplate
