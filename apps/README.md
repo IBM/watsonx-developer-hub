@@ -9,8 +9,42 @@ A catalog of apps that are designed to help users infer with deployed agents.
 
 ## Get started
 
-At the moment the apps can be deployed manually following steps from each README.md file. Proceed by clicking on a choosen app in the table below.
-_Cli support will soon be provided_
+1. **Install** the CLI 
+
+```bash
+pip install ibm-watsonx-ai-cli
+```
+
+2. **Download** the app
+```bash
+watsonx-ai app new
+```
+
+3. **Configure** the app
+
+Go to the [Developer Access](https://dataplatform.cloud.ibm.com/developer-access) to find your environment variables also retrieve deployment url/deployment_id for deployed template from the link provided afer deployment.
+Note that the value of the **WATSONX_BASE_DEPLOYMENT_URL** needs to end with the deployment guid as we will be
+crafting multiple URLs based on that base. Example of **WATSONX_BASE_DEPLOYMENT_URL**:
+`https://us-south.ml.cloud.ibm.com/ml/v4/deployments/{deployment_id}`
+
+```bash
+cd <app_name>
+cp template.env .env
+```
+
+4. **Start** the app
+
+```bash
+watsonx-ai app run
+```
+
+4. **Start** the app in development mode
+
+```bash
+watsonx-ai app run --dev
+```
+This soultion allows user to make changes to the source code while the app is running. Each time changes are saved the app reloads and is working with provided changes.
+
 
 ## Official Apps
 

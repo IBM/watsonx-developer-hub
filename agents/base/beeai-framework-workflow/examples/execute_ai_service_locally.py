@@ -5,7 +5,7 @@ from ai_service import deployable_ai_service
 from utils import load_config
 from examples._interactive_chat import InteractiveChat
 
-stream = True
+stream = False
 config = load_config()
 dep_config = config["deployment"]
 online_parameters = dep_config["online"]["parameters"]
@@ -13,8 +13,7 @@ online_parameters = dep_config["online"]["parameters"]
 client = APIClient(
     credentials=Credentials(
         url=dep_config["watsonx_url"], api_key=dep_config["watsonx_apikey"]
-    ),
-    space_id=dep_config["space_id"],
+    )
 )
 
 context = RuntimeContext(api_client=client)

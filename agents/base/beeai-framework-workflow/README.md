@@ -1,4 +1,4 @@
-# An AutoGen template with function calling capabilities
+# A Base beeai-framework LLM app template with function calling capabilities  
 
 Table of contents:  
 * [Introduction](#introduction)  
@@ -9,42 +9,43 @@ Table of contents:
 * [Running unit tests for the template](#running-unit-tests-for-the-template)  
 * [Running the application locally](#running-the-application-locally)  
 * [Deploying on Cloud](#deploying-on-ibm-cloud)  
-* [Querying the deployment](#querying-the-deployment)  
+* [Inferencing the deployment](#inferencing-the-deployment)  
 
 
 ## Introduction  
 
-This repository provides a basic template for LLM apps built using AutoGen framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
+This repository provides a basic template for LLM apps built using the beeai-framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
 An AI service is a deployable unit of code that captures the logic of your generative AI use case. For and in-depth description of the topic please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).  
 
 [^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
 
-The template builds a simple application with external tool for addressing Dummy Web Search use case.   
+The template builds a simple multi agent workflow use case.
+
+Streaming version coming soon to this template.
 
 ## Directory structure and file descriptions  
 
 The high level structure of the repository is as follows:  
 
-autogen-agent  
+beeai-framework-workflow  
  ┣ src  
- ┃ ┗ autogen_agent_base  
- ┃   ┣  \_\_init\_\_.py  
- ┃   ┣ agent.py  
- ┃   ┗ tools.py  
+ ┃ ┗ beeai_framework_workflow_base  
+ ┃   ┣ workflow.py  
  ┣ schema  
  ┣ ai_service.py  
  ┣ config.toml.example  
- ┗ pyproject.toml  
+ ┣ pyproject.toml  
 
-- `autogen_agent_base` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
+- `beeai_framework_workflow_base` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
 - `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
 - `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic  
-- `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case.
+- `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the config.toml.example file to the config.toml file and fill in the required fields. config.toml file can also be used to tweak the model for your use case.
 
 ## Prerequisites  
 
 - [Poetry](https://python-poetry.org/) package manager,  
 - [Pipx](https://github.com/pypa/pipx) due to Poetry's recommended [installation procedure](https://python-poetry.org/docs/#installation)  
+
 
 ## Cloning and setting up the template locally  
 
@@ -56,17 +57,17 @@ In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use
 ```sh
 git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
 cd watsonx-developer-hub
-git sparse-checkout add agents/base/autogen_agent
+git sparse-checkout add agents/base/beeai-framework-workflow
 ```  
 
 Move to the directory with the agent template:
 
 ```sh
-cd agents/base/autogen-agent/
+cd agents/base/beeai-framework-workflow/
 ```
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/autogen-agent`  
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/beeai-framework-workflow/`  
 
 
 ### Step 2: Install poetry  
@@ -80,7 +81,7 @@ pipx install --python 3.11 poetry
 Running the below commands will install the repository in a separate virtual environment  
 
 ```sh
-poetry install
+poetry install --with dev
 ```
 
 ### Step 4 (OPTIONAL): Activate the virtual environment  
@@ -109,28 +110,14 @@ For detailed description and API please refer to the [IBM watsonx.ai Parameter S
 Sensitive data should not be passed unencrypted, e.g. in the configuration file. The recommended way to handle them is to make use of the [IBM Cloud® Secrets Manager](https://cloud.ibm.com/apidocs/secrets-manager/secrets-manager-v2). The approach to integrating the Secrets Manager's API with the app is for the user to decide on.  
 
 
-The [agent.py](src/autogen_agent_base/agent.py) module defines an app based on a preset agent and exposes a callable function to interact with an assistant agent capable of using tools.
-
-For detailed info on how to modify the agent object please refer to [AutoGen's official docs](https://microsoft.github.io/autogen/stable//index.html)
+The [workflow.py](src/beeai_framework_workflow_base/workflow.py) file creates workflows and prompts.
+For detailed info on how to modify the workflow please refer to [beeai-framework's official documentation](https://github.com/i-am-bee/beeai-framework)  
 
 
 The [ai_service.py](ai_service.py) file encompasses the core logic of the app alongside the way of authenticating the user to the IBM Cloud.  
 For a detailed breakdown of the ai-service's implementation please refer the [IBM Cloud docs](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-create.html?context=wx)  
 
-
-[tools.py](src/autogen_agent_base/tools.py) file stores the definition for tools enhancing the chat model's capabilities.  
-In order to add new tool create a new function and add to the `TOOLS` list in the `extensions` module's [__init__.py](src/autogen_agent_base/__init__.py)
-
-
-## Testing the template  
-
-The `tests/` directory's structure resembles the repository. Adding new tests should follow this convention.  
-For exemplary purposes only the tools and some general utility functions are covered with unit tests.  
-
-Running the below command will run the complete tests suite:
-```sh
-pytest -r 'fEsxX' tests/
-```  
+For more sophisticated use cases, please refer to the [beeai-framework docs](https://github.com/i-am-bee/beeai-framework).  
 
 ## Running the application locally  
 
@@ -143,12 +130,12 @@ Enter the necessary credentials in the `config.toml` file.
 ### Step 2: Run the script for local AI service execution  
 
 ```sh
-poetry run python examples/execute_ai_service_locally.py
+python examples/execute_ai_service_locally.py
 ```  
 
 ### Step 3: Ask the model  
 
-Choose from some pre-defined questions or ask the model your own.
+Choose from some pre-defined location or enter one of your own.
 
 
 ## Deploying on IBM Cloud  

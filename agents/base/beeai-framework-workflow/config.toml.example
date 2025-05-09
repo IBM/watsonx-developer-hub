@@ -1,7 +1,7 @@
 [cli.options]
   # If true, cli `invoke` command is trying to use `ai_service.generate_stream` function for local tests, and `ai_service.generate` otherwise.
-  # Default: true
-  stream = true
+  # Default: false
+  stream = false
 
   # Path to json file with a complete payload that will be send to proper AI service generate function.
   # Note that, the payload file will be only used when no `query` is provided when running `invoke ` command
@@ -23,25 +23,12 @@
   # variable, that is populated with last created deployment_id every time when command `watsonx-ai service new` finish successfully
   deployment_id = ""
 
-  # The following parameters, along with the ones defined above, are supported by IBM watsonx.ai Software.
-  watsonx_password = ""
-  watsonx_username = ""
-  watsonx_instance_id = ""
-
 [deployment.online.parameters]
-  # during creation of deployment additional parameters can be provided inside `ONLINE` object for further referencing
-  # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
-  model_id = "mistralai/mistral-large"  # underlying model of WatsonxChat
-  thread_id = "thread-1" # More info here: https://langchain-ai.github.io/langgraph/how-tos/persistence/
+# during creation of deployment additional parameters can be provided inside `ONLINE` object for further referencing
+# please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
+  model_id = "meta-llama/llama-3-3-70b-instruct"  # underlying model for inferencing
+  project_id = "" # needed for wx inference in litellm
   url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
-
-  # RAGQuery Tool configuration
-  # Required:
-  tool_config_spaceId = ""
-  tool_config_vectorIndexId = ""
-
-  # Optional:
-  base_knowledge_description = ""
 
 [deployment.software_specification]
   # Name for derived software specification. If not provided, default one is used that will be build based on the package name: "{pkg_name}-sw-spec"
