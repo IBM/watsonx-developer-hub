@@ -46,10 +46,10 @@ Notable files:
 
 ## Prerequisites
 
-- Python 3.10+
+- Python 3.10 or higher
 - Access to IBM watsonx.ai
-- AutoAI deployment already created
-- Required packages
+- Existing AutoAI deployment
+- Required Python packages
 
 You can install the dependencies individually:
 ```sh
