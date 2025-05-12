@@ -39,7 +39,7 @@ mcp-autoai-template
  ┗ README.md              # This README
 
 Notable files:
-- `mcp_server.py`: Starts a FastMCP server and defines tools like invoke_credit_risk_deployemnt.
+- `mcp_server.py`: Starts a FastMCP server and defines tools like invoke_credit_risk_deployment.
 - `interact_with_mcp.py`: Sends a sample request to the running MCP server to test tool invocation and validate the server response.
 - `utils.py`: Contains helper functions for setting up watsonx client, formatting payloads, and loading config.
 - `template.env`: Template file with placeholders for environment variables.
