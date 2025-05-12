@@ -51,13 +51,18 @@ Notable files:
 - AutoAI deployment already created
 - Required packages
 
+You can install the dependencies individually:
 ```sh
-%pip install langchain-ibm
-%pip install langchain
-%pip install langgraph
-%pip install python-dotenv
-%pip install mcp
-%pip install langchain_mcp_adapters
+pip install langchain-ibm
+pip install langchain
+pip install langgraph
+pip install python-dotenv
+pip install mcp
+pip install langchain_mcp_adapters
+```
+Alternatively, you can install all dependencies at once using the `requirements.txt` file:
+```sh
+pip install -r requirements.txt
 ```
 
 ## Cloning and setting up the template
