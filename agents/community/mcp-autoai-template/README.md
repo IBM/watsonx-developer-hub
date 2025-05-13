@@ -32,11 +32,11 @@ This notebook guides you through:
 ## Directory structure and files description
 
 mcp-autoai-template
- ┣ mcp_server.py          # Main MCP server with tools (including AutoAI invocation)
- ┣ interact_with_mcp.py   # Script for sending sample queries to the running MCP server for testing purposes
- ┣ utils.py               # Helper functions for authentication, formatting, and client setup
- ┣ template.env           # Template file for environment variable configuration
- ┗ README.md              # This README
+ ┣ mcp_server.py          # Main MCP server with tools (including AutoAI invocation)  
+ ┣ interact_with_mcp.py   # Script for sending sample queries to the running MCP server for testing purposes  
+ ┣ utils.py               # Helper functions for authentication, formatting, and client setup  
+ ┣ template.env           # Template file for environment variable configuration  
+ ┗ README.md              # This README  
 
 Notable files:
 - `mcp_server.py`: Starts a FastMCP server and defines tools like invoke_credit_risk_deployment.
