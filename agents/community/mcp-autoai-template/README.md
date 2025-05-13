@@ -31,7 +31,7 @@ This notebook guides you through:
 
 ## Directory structure and files description
 
-mcp-autoai-template
+mcp-autoai-template  
  ┣ mcp_server.py          # Main MCP server with tools (including AutoAI invocation)  
  ┣ interact_with_mcp.py   # Script for sending sample queries to the running MCP server for testing purposes  
  ┣ utils.py               # Helper functions for authentication, formatting, and client setup  
