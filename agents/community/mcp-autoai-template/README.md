@@ -35,6 +35,7 @@ mcp-autoai-template
  ┣ mcp_server.py  
  ┣ interact_with_mcp.py  
  ┣ utils.py  
+ ┣ template.env  
  ┗ README.md  
 
 Notable files:
