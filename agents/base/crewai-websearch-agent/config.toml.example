@@ -1,4 +1,7 @@
 [cli.options]
+  # True if the template is compatible with the CLI; False if it is not.
+  cli_compatible = true  # DO NOT CHANGE AFTER DOWNLOAD
+  
   # If true, cli `invoke` command is trying to use `ai_service.generate_stream` function for local tests, and `ai_service.generate` otherwise.
   # Default: false
   stream = false
