@@ -10,7 +10,6 @@ from langgraph.graph.graph import CompiledGraph
 from langgraph.graph.message import add_messages
 
 from langgraph.prebuilt import ToolNode, tools_condition
-from langgraph.checkpoint.memory import MemorySaver
 
 from langchain import hub
 from langchain_core.output_parsers import StrOutputParser
@@ -36,9 +35,6 @@ def get_graph_closure(
             tool_config=tool_config,
         )
     ]
-
-    # Initialise memory saver
-    memory = MemorySaver()
 
     # Define system prompt
     default_system_prompt = (
@@ -146,7 +142,7 @@ def get_graph_closure(
         workflow.add_edge("generate", END)
 
         # Compile
-        graph = workflow.compile(checkpointer=memory)
+        graph = workflow.compile()
 
         return graph
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "langgraph-tavily-tool"
-version = "0.1.0"
+version = "0.1.1"
 description = "A LangGraph-based template for building and deploying LLM applications as AI services on IBM Cloud. This example demonstrates secure integration with tavily tool via function calling, using credentials managed through IBM Secrets Manager."
 authors = ["Your Name <you@example.com>"]
 license = "MIT"

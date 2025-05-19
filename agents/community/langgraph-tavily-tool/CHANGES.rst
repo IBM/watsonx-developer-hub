@@ -1,3 +1,7 @@
+Version 0.1.1
+-------------
+
+- Removed MemorySaver from agent
 Version 0.1.0
 -------------
 

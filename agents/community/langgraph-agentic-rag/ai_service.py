@@ -2,7 +2,6 @@ def deployable_ai_service(
     context,
     url,
     model_id,
-    thread_id,
     tool_config_spaceId,
     tool_config_vectorIndexId,
     base_knowledge_description=None,
@@ -147,12 +146,8 @@ def deployable_ai_service(
         else:
             agent = graph()
 
-        config = {
-            "configurable": {"thread_id": thread_id}
-        }  # Checkpointer configuration
-
         # Invoke agent
-        generated_response = agent.invoke({"messages": messages}, config)
+        generated_response = agent.invoke({"messages": messages})
 
         choices = []
         execute_response = {
@@ -206,10 +201,8 @@ def deployable_ai_service(
         else:
             agent = graph()
 
-        # Checkpointer configuration
-        config = {"configurable": {"thread_id": thread_id}}
         response_stream = agent.stream(
-            {"messages": messages}, config, stream_mode=["updates", "messages"]
+            {"messages": messages}, stream_mode=["updates", "messages"]
         )
 
         for chunk_type, data in response_stream:

@@ -1,3 +1,8 @@
+Version 0.1.6
+-------------
+
+- Removed MemorySaver from agent
+
 Version 0.1.5
 -------------
 - Alignment response schema with Chat Open API.
