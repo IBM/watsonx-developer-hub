@@ -67,8 +67,8 @@ langgraph-react-agent/
    cd agents/base/langgraph-react-agent/
    ```
 
-   > [!NOTE]
-   > From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/langgraph-react-agent/`  
+> [!NOTE]
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/langgraph-react-agent/`  
 
 2. **Install Poetry**:
 
