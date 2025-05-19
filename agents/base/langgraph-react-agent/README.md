@@ -11,6 +11,7 @@ Table of contents:
 * [Deploying on Cloud](#deploying-on-ibm-cloud)  
 * [Inferencing the deployment](#inferencing-the-deployment)  
 
+---
 
 ## Introduction  
 
@@ -20,6 +21,8 @@ An AI service is a deployable unit of code that captures the logic of your gener
 [^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
 
 The template builds a simple application with external tool for addressing Web Search Agent use case.  
+
+---
 
 ## Directory structure and file descriptions  
 
@@ -40,11 +43,14 @@ langgraph-react-agent
 - `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic  
 - `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
 
+---
+
 ## Prerequisites  
 
 - [Poetry](https://python-poetry.org/) package manager,  
 - [Pipx](https://github.com/pypa/pipx) due to Poetry's recommended [installation procedure](https://python-poetry.org/docs/#installation)  
 
+---
 
 ## Cloning and setting up the template locally  
 
@@ -96,6 +102,8 @@ Adding working directory to PYTHONPATH is necessary for the next steps. In your 
 export PYTHONPATH=$(pwd):${PYTHONPATH}
 ```
 
+---
+
 ## Modifying and configuring the template  
 
 [config.toml](config.toml) file should be filled in before either deploying the template on IBM Cloud or executing it locally.  
@@ -122,6 +130,8 @@ In order to add new tool create a new function, wrap it with the `@tool` decorat
 
 For more sophisticated use cases (like async tools), please refer to the [langchain docs](https://python.langchain.com/docs/how_to/custom_tools/#creating-tools-from-runnables).  
 
+---
+
 ## Testing the template  
 
 The `tests/` directory's structure resembles the repository. Adding new tests should follow this convention.  
@@ -131,6 +141,8 @@ Running the below command will run the complete tests suite:
 ```sh
 pytest -r 'fEsxX' tests/
 ```  
+
+---
 
 ## Running the application locally  
 
@@ -142,14 +154,33 @@ Enter the necessary credentials in the `config.toml` file.
 
 ### Step 2: Run the script for local AI service execution  
 
-```sh
-python examples/execute_ai_service_locally.py
-```  
+You can test and debug your AI service locally via two alternative flows:
 
-### Step 3: Ask the model  
+#### Flow 1: Using the `ibm-watsonx-ai-cli` package (recommended)
 
-Choose from some pre-defined questions or ask the model your own.
+1. **Install the CLI**  
+    ```sh
+    pip install ibm-watsonx-ai-cli
+    ```
+2. **Run CLI command with provided question**  
+    ```sh
+    watsonx-ai template invoke "<PROMPT>"
+    ```
 
+#### Flow 2: Using the Python example scripts and ask the model (deprecated)
+
+> [!NOTE]  
+> This flow is deprecated and will be removed in a future release. Please migrate to Flow 1 as soon as possible.
+
+1. **Run python script**
+    ```sh
+    python examples/execute_ai_service_locally.py
+    ```  
+
+2. **Ask the model**
+    Choose from some pre-defined questions or ask the model your own.
+
+---
 
 ## Deploying on IBM Cloud  
 
@@ -161,23 +192,63 @@ Enter the necessary credentials in the `config.toml` file.
 
 ### Step 2: Run the deployment script  
 
-```sh
-python scripts/deploy.py
-```  
+You can deploy your AI service to IBM Cloud via two alternative flows:
+
+#### Flow 1: Using the `ibm-watsonx-ai-cli` package (recommended)
+
+1. **Run CLI command**
+    ```sh
+    watsonx-ai service new
+    ```
+
+    Upon successful completion of the deployment process, the `deployment_id` entry in the `config.toml` file will be updated with the correct deployment identifier.
+
+#### Flow 2: Using the Python deployment script (deprecated)
+
+> [!NOTE]  
+> This flow is deprecated and will be removed in a future release. Please migrate to Flow 1 as soon as possible.
+
+1. **Run python script**
+    ```sh
+    python scripts/deploy.py
+    ```  
 
 Successfully completed script will print on stdout the `deployment_id` which is necessary to locally test the deployment. For further info please refer [to the next section](#querying-the-deployment)  
 
+---
+
 ## Querying the deployment  
+
+You can send inference requests to your deployed AI service via two alternative flows:
+
+### Flow 1: Using the `ibm-watsonx-ai-cli` package (recommended)
+
+1. **Run CLI command**
+    ```sh
+    watsonx-ai service invoke --deployment_id "<DEPLOYMENT_ID>" "<PROMPT>"
+    ```
+
+    If the `deployment_id` value in your `config.toml` file is already set (i.e. not None), you may omit the `--deployment-id` option and simply run:
+
+    ```sh
+    watsonx-ai service invoke "<PROMPT>"
+    ```
+
+
+### Flow 2: Using the Python example script (deprecated)
+
+> [!NOTE]  
+> This flow is deprecated and will be removed in a future release. Please migrate to Flow 1 as soon as possible.
 
 Follow these steps to inference your deployment. The [query_existing_deployment.py](examples/query_existing_deployment.py) file shows how to test the existing deployment using `watsonx.ai` library.  
 
-### Step 1: Initialize the deployment ID  
+1. **Initialize the deployment ID**  
 
-Initialize the `deployment_id` variable in the [query_existing_deployment.py](examples/query_existing_deployment.py) file.  
-The _deployment_id_ of your deployment can be obtained from [the previous section](#deploying-on-ibm-cloud) by running [scripts/deploy.sh](scripts/deploy.py)  
+    Initialize the `deployment_id` variable in the [query_existing_deployment.py](examples/query_existing_deployment.py) file.  
+    The _deployment_id_ of your deployment can be obtained from [the previous section](#deploying-on-ibm-cloud) by running [scripts/deploy.sh](scripts/deploy.py)  
 
-### Step 2: Run the script for querying the deployment  
+2. **Run the script for querying the deployment**  
 
-```sh
-python examples/query_existing_deployment.py
-```   
+    ```sh
+    python examples/query_existing_deployment.py
+    ```   
