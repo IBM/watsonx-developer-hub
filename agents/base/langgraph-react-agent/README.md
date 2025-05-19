@@ -1,10 +1,13 @@
-# A Base LangGraph LLM app template with function calling capabilities  
+# A Base LangGraph LLM app template with function calling capabilities 🚀
 
-Table of contents:  
+---
+
+## 📖 Table of Contents
 * [Introduction](#introduction)  
 * [Directory structure and file descriptions](#directory-structure-and-file-descriptions)  
 * [Prerequisites](#prerequisites)  
 * [Cloning and setting up the template](#cloning-and-setting-up-the-template)  
+* [Configuration](#configuration)  
 * [Modifying and configuring the template](#modifying-and-configuring-the-template)  
 * [Running unit tests for the template](#running-unit-tests-for-the-template)  
 * [Running the application locally](#running-the-application-locally)  
@@ -13,98 +16,108 @@ Table of contents:
 
 ---
 
-## Introduction  
+## 🤔 Introduction
 
-This repository provides a basic template for LLM apps built using LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
-An AI service is a deployable unit of code that captures the logic of your generative AI use case. For and in-depth description of the topic please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).  
+This repository provides a basic template for LLM apps built using the LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].
 
-[^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
+An AI service is a deployable unit of code that encapsulates the logic of your generative AI use case. For an in-depth description of AI services, please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).
 
-The template builds a simple application with external tool for addressing Web Search Agent use case.  
+[^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.
+
+**Highlights:**
+
+* 🚀 Easy-to-extend agent and tool modules
+* ⚙️ Configurable via `config.toml`
+* ✅ Built-in testing and CI readiness
+* 🌐 Step-by-step local and cloud deployment
 
 ---
 
-## Directory structure and file descriptions  
+## 🗂 Directory structure and file descriptions
 
 The high level structure of the repository is as follows:  
 
-langgraph-react-agent  
- ┣ src  
- ┃ ┗ langgraph_react_agent_base  
- ┃   ┣ agent.py  
- ┃   ┗ tools.py  
- ┣ schema  
- ┣ ai_service.py  
- ┣ config.toml.example  
- ┣ pyproject.toml  
+```
+langgraph-react-agent/
+├── src/
+│   └── langgraph_react_agent_base/
+│       ├── agent.py      # Core graph and agent logic
+│       └── tools.py      # Custom tool definitions
+├── schema/               # JSON schemas for requests & responses
+├── ai_service.py         # Main AI service entry point
+├── config.toml.example   # Sample settings file
+└── pyproject.toml        # Poetry configuration
+```
 
-- `langgraph-react-agent-base` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
-- `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
-- `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic  
-- `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
+* **`langgraph-react-agent-base`** folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
+* **`schema`** folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
+* **`ai_service.py`** file: Contains the function to be deployed as an AI service defining the application's logic  
+* **`config.toml.example`**: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
 
 ---
 
-## Prerequisites  
+## 🛠 Prerequisites
 
-- [Poetry](https://python-poetry.org/) package manager,  
-- [Pipx](https://github.com/pypa/pipx) due to Poetry's recommended [installation procedure](https://python-poetry.org/docs/#installation)  
-
----
-
-## Cloning and setting up the template locally  
-
-
-### Step 1: Clone the repository  
-
-In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use git's shallow and sparse cloning feature to checkout only the template's directory:  
-
-```sh
-git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
-cd watsonx-developer-hub
-git sparse-checkout add agents/base/langgraph-react-agent
-```  
-
-Move to the directory with the agent template:
-
-```sh
-cd agents/base/langgraph-react-agent/
-```
-
-> [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/langgraph-react-agent/`  
-
-
-### Step 2: Install poetry  
-
-```sh
-pipx install --python 3.11 poetry
-```
-
-### Step 3: Install the template    
-
-Running the below commands will install the repository in a separate virtual environment  
-
-```sh
-poetry install
-```
-
-### Step 4 (OPTIONAL): Activate the virtual environment  
-
-```sh
-source $(poetry -q env use 3.11 && poetry env info --path)/bin/activate
-```
-
-### Step 5: Export PYTHONPATH  
-
-Adding working directory to PYTHONPATH is necessary for the next steps. In your terminal execute:  
-```sh
-export PYTHONPATH=$(pwd):${PYTHONPATH}
-```
+* **Python 3.11**
+* **[Poetry](https://python-poetry.org/)** package manager (install via [pipx](https://github.com/pypa/pipx))
+* IBM Cloud access and permissions
 
 ---
 
-## Modifying and configuring the template  
+## 📥 Cloning and setting up the template
+
+1. **Clone the repo** (sparse checkout):
+
+   In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use git's shallow and sparse cloning feature to checkout only the template's directory:  
+   
+   ```sh
+   git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
+   cd watsonx-developer-hub
+   git sparse-checkout add agents/base/langgraph-react-agent
+   cd agents/base/langgraph-react-agent/
+   ```
+
+   > [!NOTE]
+   > From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/langgraph-react-agent/`  
+
+2. **Install Poetry**:
+
+   ```sh
+   pipx install --python 3.11 poetry
+   ```
+
+3. **Install the template**:
+
+    Running the below commands will install the repository in a separate virtual environment
+   
+   ```sh
+   poetry install
+   ```
+
+4. **(Optional) Activate the virtual environment**:
+
+   ```sh
+   source $(poetry -q env use 3.11 && poetry env info --path)/bin/activate
+   ```
+
+5. **Export PYTHONPATH**:
+
+   Adding working directory to PYTHONPATH is necessary for the next steps.
+
+   ```sh
+   export PYTHONPATH=$(pwd):${PYTHONPATH}
+   ```
+
+---
+
+## ⚙️ Configuration
+
+1. Copy `config.toml.example` → `config.toml`.
+2. Fill in IBM Cloud credentials.
+
+---
+
+## 🎨 Modifying and configuring the template
 
 [config.toml](config.toml) file should be filled in before either deploying the template on IBM Cloud or executing it locally.  
 Possible config parameters are given in the provided file and explained using comments (when necessary).  
@@ -132,7 +145,7 @@ For more sophisticated use cases (like async tools), please refer to the [langch
 
 ---
 
-## Testing the template  
+## 🧪 Testing the template
 
 The `tests/` directory's structure resembles the repository. Adding new tests should follow this convention.  
 For exemplary purposes only the tools and some general utility functions are covered with unit tests.  
@@ -144,111 +157,105 @@ pytest -r 'fEsxX' tests/
 
 ---
 
-## Running the application locally  
+## 💻 Running the application locally
 
-It is possible to run (or even debug) the ai-service locally, however it still requires creating the connection to the IBM Cloud.  
+It is possible to run (or even debug) the ai-service locally, however it still requires creating the connection to the IBM Cloud.
 
-### Step 1: Fill in the `config` file  
-
-Enter the necessary credentials in the `config.toml` file.  
-
-### Step 2: Run the script for local AI service execution  
+Ensure `config.toml` is configured.
 
 You can test and debug your AI service locally via two alternative flows:
 
-#### Flow 1: Using the `ibm-watsonx-ai-cli` package (recommended)
+### Option A: CLI (Recommended)
 
-1. **Install the CLI**  
-    ```sh
-    pip install ibm-watsonx-ai-cli
-    ```
-2. **Run CLI command with provided question**  
-    ```sh
-    watsonx-ai template invoke "<PROMPT>"
-    ```
+1. **Install CLI**:
 
-#### Flow 2: Using the Python example scripts and ask the model (deprecated)
+   ```sh
+   pip install ibm-watsonx-ai-cli
+   ```
+
+2. **Invoke**:
+
+   ```sh
+   watsonx-ai template invoke "<PROMPT>"
+   ```
+
+### Option B: Python Script (Deprecated)
+
+1. **Run Python Script**:
+
+   ```sh
+   python examples/execute_ai_service_locally.py
+   ```
+
+2. **Ask the model**:
+
+   Choose from some pre-defined questions or ask the model your own.
+
 
 > [!WARNING]  
 > This flow is deprecated and will be removed in a future release. Please migrate to Flow 1 as soon as possible.
 
-1. **Run python script**
-    ```sh
-    python examples/execute_ai_service_locally.py
-    ```  
-
-2. **Ask the model**
-    Choose from some pre-defined questions or ask the model your own.
-
 ---
 
-## Deploying on IBM Cloud  
+## ☁️ Deploying on IBM Cloud
 
-Follow these steps to deploy the model on IBM Cloud.  
+Follow these steps to deploy the model on IBM Cloud. 
 
-### Step 1: Fill in the `config` file  
-
-Enter the necessary credentials in the `config.toml` file.  
-
-### Step 2: Run the deployment script  
+Ensure `config.toml` is configured.
 
 You can deploy your AI service to IBM Cloud via two alternative flows:
 
-#### Flow 1: Using the `ibm-watsonx-ai-cli` package (recommended)
+### Option A: CLI (Recommended)
 
-1. **Run CLI command**
-    ```sh
-    watsonx-ai service new
-    ```
+```sh
+watsonx-ai service new
+```
 
-    Upon successful completion of the deployment process, the `deployment_id` entry in the `config.toml` file will be updated with the correct deployment identifier.
+*Config file updates automatically with `deployment_id`.*
 
-#### Flow 2: Using the Python deployment script (deprecated)
+### Option B: Python Script (Deprecated)
+
+```sh
+python scripts/deploy.py
+```
+
+*Script prints `deployment_id`; update `config.toml`.*
 
 > [!WARNING]  
 > This flow is deprecated and will be removed in a future release. Please migrate to Flow 1 as soon as possible.
-
-1. **Run python script**
-    ```sh
-    python scripts/deploy.py
-    ```  
-
-Successfully completed script will print on stdout the `deployment_id` which is necessary to locally test the deployment. For further info please refer [to the next section](#querying-the-deployment)  
 
 ---
 
-## Querying the deployment  
+## 🔍 Querying the deployment
 
 You can send inference requests to your deployed AI service via two alternative flows:
 
-### Flow 1: Using the `ibm-watsonx-ai-cli` package (recommended)
+### Option A: CLI (Recommended)
 
-1. **Run CLI command**
-    ```sh
-    watsonx-ai service invoke --deployment_id "<DEPLOYMENT_ID>" "<PROMPT>"
-    ```
+```sh
+watsonx-ai service invoke --deployment_id "<DEPLOYMENT_ID>" "<PROMPT>"
+```
 
-    If the `deployment_id` value in your `config.toml` file is already set (i.e. not None), you may omit the `--deployment-id` option and simply run:
+*If `deployment_id` is set in `config.toml`, omit the flag.*
 
-    ```sh
-    watsonx-ai service invoke "<PROMPT>"
-    ```
+```sh
+watsonx-ai service invoke "<PROMPT>"
+```
 
+### Option B: Python Script (Deprecated)
 
-### Flow 2: Using the Python example script (deprecated)
+Follow these steps to inference your deployment. The [query_existing_deployment.py](examples/query_existing_deployment.py) file shows how to test the existing deployment using `watsonx.ai` library.
+
+1. **Initialize the deployment ID**:
+
+   Initialize the `deployment_id` variable in the [query_existing_deployment.py](examples/query_existing_deployment.py) file.  
+   The _deployment_id_ of your deployment can be obtained from [the previous section](#deploying-on-ibm-cloud) by running [scripts/deploy.sh](scripts/deploy.py) 
+
+2. **Run the script for querying the deployment**:
+
+   ```sh
+   python examples/query_existing_deployment.py
+   ```
 
 > [!WARNING]  
 > This flow is deprecated and will be removed in a future release. Please migrate to Flow 1 as soon as possible.
-
-Follow these steps to inference your deployment. The [query_existing_deployment.py](examples/query_existing_deployment.py) file shows how to test the existing deployment using `watsonx.ai` library.  
-
-1. **Initialize the deployment ID**  
-
-    Initialize the `deployment_id` variable in the [query_existing_deployment.py](examples/query_existing_deployment.py) file.  
-    The _deployment_id_ of your deployment can be obtained from [the previous section](#deploying-on-ibm-cloud) by running [scripts/deploy.sh](scripts/deploy.py)  
-
-2. **Run the script for querying the deployment**  
-
-    ```sh
-    python examples/query_existing_deployment.py
-    ```   
