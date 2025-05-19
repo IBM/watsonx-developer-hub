@@ -169,7 +169,7 @@ You can test and debug your AI service locally via two alternative flows:
 
 #### Flow 2: Using the Python example scripts and ask the model (deprecated)
 
-> [!NOTE]  
+> [!WARNING]  
 > This flow is deprecated and will be removed in a future release. Please migrate to Flow 1 as soon as possible.
 
 1. **Run python script**
@@ -205,7 +205,7 @@ You can deploy your AI service to IBM Cloud via two alternative flows:
 
 #### Flow 2: Using the Python deployment script (deprecated)
 
-> [!NOTE]  
+> [!WARNING]  
 > This flow is deprecated and will be removed in a future release. Please migrate to Flow 1 as soon as possible.
 
 1. **Run python script**
@@ -237,7 +237,7 @@ You can send inference requests to your deployed AI service via two alternative 
 
 ### Flow 2: Using the Python example script (deprecated)
 
-> [!NOTE]  
+> [!WARNING]  
 > This flow is deprecated and will be removed in a future release. Please migrate to Flow 1 as soon as possible.
 
 Follow these steps to inference your deployment. The [query_existing_deployment.py](examples/query_existing_deployment.py) file shows how to test the existing deployment using `watsonx.ai` library.  
