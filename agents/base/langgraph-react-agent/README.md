@@ -12,8 +12,6 @@
 * [Deploying on Cloud](#deploying-on-ibm-cloud)  
 * [Inferencing the deployment](#inferencing-the-deployment)  
 
----
-
 ## 🤔 Introduction
 
 This repository provides a basic template for LLM apps built using the LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].
@@ -28,8 +26,6 @@ An AI service is a deployable unit of code that encapsulates the logic of your g
 * ⚙️ Configurable via `config.toml`
 * ✅ Built-in testing and CI readiness
 * 🌐 Step-by-step local and cloud deployment
-
----
 
 ## 🗂 Directory structure and file descriptions
 
@@ -52,15 +48,11 @@ langgraph-react-agent/
 * **`ai_service.py`** file: Contains the function to be deployed as an AI service defining the application's logic  
 * **`config.toml.example`**: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
 
----
-
 ## 🛠 Prerequisites
 
 * **Python 3.11**
 * **[Poetry](https://python-poetry.org/)** package manager (install via [pipx](https://github.com/pypa/pipx))
 * IBM Cloud access and permissions
-
----
 
 ## 📥 Cloning and setting up the template
 
@@ -106,14 +98,10 @@ langgraph-react-agent/
    export PYTHONPATH=$(pwd):${PYTHONPATH}
    ```
 
----
-
 ## ⚙️ Configuration
 
 1. Copy `config.toml.example` → `config.toml`.
 2. Fill in IBM Cloud credentials.
-
----
 
 ## 🎨 Modifying and configuring the template
 
@@ -141,8 +129,6 @@ In order to add new tool create a new function, wrap it with the `@tool` decorat
 
 For more sophisticated use cases (like async tools), please refer to the [langchain docs](https://python.langchain.com/docs/how_to/custom_tools/#creating-tools-from-runnables).  
 
----
-
 ## 🧪 Testing the template
 
 The `tests/` directory's structure resembles the repository. Adding new tests should follow this convention.  
@@ -151,9 +137,7 @@ For exemplary purposes only the tools and some general utility functions are cov
 Running the below command will run the complete tests suite:
 ```sh
 pytest -r 'fEsxX' tests/
-```  
-
----
+```
 
 ## 💻 Running the application locally
 
@@ -193,8 +177,6 @@ You can test and debug your AI service locally via two alternative flows:
 > [!WARNING]  
 > This flow is deprecated and will be removed in a future release. Please migrate to Flow 1 as soon as possible.
 
----
-
 ## ☁️ Deploying on IBM Cloud
 
 Follow these steps to deploy the model on IBM Cloud. 
@@ -221,8 +203,6 @@ python scripts/deploy.py
 
 > [!WARNING]  
 > This flow is deprecated and will be removed in a future release. Please migrate to Flow 1 as soon as possible.
-
----
 
 ## 🔍 Querying the deployment
 
