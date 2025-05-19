@@ -1,7 +1,5 @@
 # A Base LangGraph LLM app template with function calling capabilities 🚀
 
----
-
 ## 📖 Table of Contents
 * [Introduction](#introduction)  
 * [Directory structure and file descriptions](#directory-structure-and-file-descriptions)  
