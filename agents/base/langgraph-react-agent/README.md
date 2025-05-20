@@ -13,7 +13,6 @@
 * [Querying the deployment](#-querying-the-deployment)  
 * [Cloning and setting up the template (Optional)](#-cloning-and-setting-up-the-template-optional)  
 
-
 ## 🤔 Introduction
 
 This repository provides a basic template for LLM apps built using the LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].
@@ -144,7 +143,6 @@ You can test and debug your AI service locally via two alternative flows:
 2. **Ask the model**:
 
    Choose from some pre-defined questions or ask the model your own.
-
 
 > [!WARNING]  
 > This flow is deprecated and will be removed in a future release. Please migrate to Option A as soon as possible.

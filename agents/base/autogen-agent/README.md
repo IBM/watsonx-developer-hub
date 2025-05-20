@@ -13,7 +13,6 @@
 * [Querying the deployment](#-querying-the-deployment)  
 * [Cloning and setting up the template (Optional)](#-cloning-and-setting-up-the-template-optional)   
 
-
 ## 🤔 Introduction
 
 This repository provides a basic template for LLM apps built using AutoGen framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].
