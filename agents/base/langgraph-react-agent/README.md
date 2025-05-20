@@ -5,11 +5,11 @@
 * [Directory structure and file descriptions](#-directory-structure-and-file-descriptions)  
 * [Prerequisites](#-prerequisites)  
 * [Installation](#-installation)
-* [Configuration](#-configuration)  
+* [Configuration](#%EF%B8%8F-configuration)  
 * [Modifying and configuring the template](#-modifying-and-configuring-the-template)  
 * [Testing the template](#-testing-the-template)  
 * [Running the application locally](#-running-the-application-locally)  
-* [Deploying on IBM Cloud](#-deploying-on-ibm-cloud)  
+* [Deploying on IBM Cloud](#%EF%B8%8F-deploying-on-ibm-cloud)  
 * [Querying the deployment](#-querying-the-deployment)  
 * [Cloning and setting up the template (Optional)](#-cloning-and-setting-up-the-template-optional)  
 
@@ -199,7 +199,7 @@ Follow these steps to inference your deployment. The [query_existing_deployment.
 1. **Initialize the deployment ID**:
 
    Initialize the `deployment_id` variable in the [query_existing_deployment.py](examples/query_existing_deployment.py) file.  
-   The _deployment_id_ of your deployment can be obtained from [the previous section](#deploying-on-ibm-cloud) by running [scripts/deploy.sh](scripts/deploy.py) 
+   The _deployment_id_ of your deployment can be obtained from [the previous section](#%EF%B8%8F-deploying-on-ibm-cloud) by running [scripts/deploy.sh](scripts/deploy.py) 
 
 2. **Run the script for querying the deployment**:
 
