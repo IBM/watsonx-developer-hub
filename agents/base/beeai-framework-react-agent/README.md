@@ -11,7 +11,7 @@
 * [Running the application locally](#-running-the-application-locally)  
 * [Deploying on IBM Cloud](#%EF%B8%8F-deploying-on-ibm-cloud)  
 * [Querying the deployment](#-querying-the-deployment)  
-* [Cloning and setting up the template (Optional)](#-cloning-and-setting-up-the-template-optional)  
+* [Cloning template (Optional)](#-cloning-template-optional)  
 
 ## 🤔 Introduction
 
@@ -62,16 +62,49 @@ beeai-framework-react-agent/
 
 To begin working with this template using the Command Line Interface (CLI), please ensure that the IBM watsonx AI CLI tool is installed on your system. You can install or upgrade it using the following command:
 
-```sh
-pip install -U ibm-watsonx-ai-cli
-```
+1. **Install CLI**:
 
-> [!WARNING]
-> The `ibm_watsonx_ai_cli` package requires `poetry` to be installed.
-> To install Poetry, follow the instructions on the [Poetry installation page](https://python-poetry.org/docs/#installation).
+   ```sh
+   pip install -U ibm-watsonx-ai-cli
+   ```
+
+2. **Download template**:
+   ```sh
+   watsonx-ai template new "base/beeai-framework-react-agent"
+   ```
+
+   Upon executing the above command, a prompt will appear requesting the user to specify the target directory for downloading the template. Once the template has been successfully downloaded, navigate to the designated template folder to proceed.
 
 > [!NOTE]
-> Alternatively, it is possible to set up the template using a different method. For detailed instructions, please refer to the section "[Cloning and setting up the template (Optional)](#-cloning-and-setting-up-the-template-optional)".
+> Alternatively, it is possible to set up the template using a different method. For detailed instructions, please refer to the section "[Cloning template (Optional)](#-cloning-template-optional)".
+
+3. **Install Poetry**:
+
+   ```sh
+   pipx install --python 3.11 poetry
+   ```
+
+4. **Install the template**:
+
+    Running the below commands will install the repository in a separate virtual environment
+   
+   ```sh
+   poetry install
+   ```
+
+5. **(Optional) Activate the virtual environment**:
+
+   ```sh
+   source $(poetry -q env use 3.11 && poetry env info --path)/bin/activate
+   ```
+
+6. **Export PYTHONPATH**:
+
+   Adding working directory to PYTHONPATH is necessary for the next steps.
+
+   ```sh
+   export PYTHONPATH=$(pwd):${PYTHONPATH}
+   ```
 
 ## ⚙️ Configuration
 
@@ -122,21 +155,13 @@ Ensure `config.toml` is configured.
 
 You can test and debug your AI service locally via two alternative flows:
 
-### Option A: CLI (<span style="color: #28a745">Recommended</span>)
+### ✅ Recommended flow: CLI
 
-1. **Install CLI**:
+```sh
+watsonx-ai template invoke "<PROMPT>"
+```
 
-   ```sh
-   pip install ibm-watsonx-ai-cli
-   ```
-
-2. **Invoke**:
-
-   ```sh
-   watsonx-ai template invoke "<PROMPT>"
-   ```
-
-### Option B: Python Script (<span style="color: #dc3545">Deprecated</span>)
+### ⚠️ Alternative flow: Python Script (Deprecated)
 
 1. **Run Python Script**:
 
@@ -149,7 +174,7 @@ You can test and debug your AI service locally via two alternative flows:
    Choose from some pre-defined questions or ask the model your own.
 
 > [!WARNING]  
-> This flow is deprecated and will be removed in a future release. Please migrate to Option A as soon as possible.
+> This flow is deprecated and will be removed in a future release. Please migrate to recommended flow as soon as possible.
 
 ## ☁️ Deploying on IBM Cloud
 
@@ -159,7 +184,7 @@ Ensure `config.toml` is configured.
 
 You can deploy your AI service to IBM Cloud via two alternative flows:
 
-### Option A: CLI (<span style="color: #28a745">Recommended</span>)
+### ✅ Recommended flow: CLI
 
 ```sh
 watsonx-ai service new
@@ -167,7 +192,7 @@ watsonx-ai service new
 
 *Config file updates automatically with `deployment_id`.*
 
-### Option B: Python Script (<span style="color: #dc3545">Deprecated</span>)
+### ⚠️ Alternative flow: Python Script (Deprecated)
 
 ```sh
 python scripts/deploy.py
@@ -176,13 +201,13 @@ python scripts/deploy.py
 *Script prints `deployment_id`; update `config.toml`.*
 
 > [!WARNING]  
-> This flow is deprecated and will be removed in a future release. Please migrate to Option A as soon as possible.
+> This flow is deprecated and will be removed in a future release. Please migrate to recommended flow as soon as possible.
 
 ## 🔍 Querying the deployment
 
 You can send inference requests to your deployed AI service via two alternative flows:
 
-### Option A: CLI (<span style="color: #28a745">Recommended</span>)
+### ✅ Recommended flow: CLI
 
 ```sh
 watsonx-ai service invoke --deployment_id "<DEPLOYMENT_ID>" "<PROMPT>"
@@ -194,7 +219,7 @@ watsonx-ai service invoke --deployment_id "<DEPLOYMENT_ID>" "<PROMPT>"
 watsonx-ai service invoke "<PROMPT>"
 ```
 
-### Option B: Python Script (<span style="color: #dc3545">Deprecated</span>)
+### ⚠️ Alternative flow: Python Script (Deprecated)
 
 Follow these steps to inference your deployment. The [query_existing_deployment.py](examples/query_existing_deployment.py) file shows how to test the existing deployment using `watsonx.ai` library.
 
@@ -210,7 +235,7 @@ Follow these steps to inference your deployment. The [query_existing_deployment.
    ```
 
 > [!WARNING]  
-> This flow is deprecated and will be removed in a future release. Please migrate to Option A as soon as possible.
+> This flow is deprecated and will be removed in a future release. Please migrate to recommended flow as soon as possible.
 
 ---
 
@@ -218,7 +243,7 @@ Follow these steps to inference your deployment. The [query_existing_deployment.
 
 ---
 
-## 💾 Cloning and setting up the template (Optional)
+## 💾 Cloning template (Optional)
 
 1. **Clone the repo** (sparse checkout):
 
@@ -233,31 +258,3 @@ Follow these steps to inference your deployment. The [query_existing_deployment.
 
 > [!NOTE]
 > From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/beeai-framework-react-agent/`  
-
-2. **Install Poetry**:
-
-   ```sh
-   pipx install --python 3.11 poetry
-   ```
-
-3. **Install the template**:
-
-    Running the below commands will install the repository in a separate virtual environment
-   
-   ```sh
-   poetry install
-   ```
-
-4. **(Optional) Activate the virtual environment**:
-
-   ```sh
-   source $(poetry -q env use 3.11 && poetry env info --path)/bin/activate
-   ```
-
-5. **Export PYTHONPATH**:
-
-   Adding working directory to PYTHONPATH is necessary for the next steps.
-
-   ```sh
-   export PYTHONPATH=$(pwd):${PYTHONPATH}
-   ```
