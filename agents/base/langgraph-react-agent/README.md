@@ -1,16 +1,18 @@
 # A Base LangGraph LLM app template with function calling capabilities 🚀
 
 ## 📖 Table of Contents
-* [Introduction](#introduction)  
-* [Directory structure and file descriptions](#directory-structure-and-file-descriptions)  
-* [Prerequisites](#prerequisites)  
-* [Cloning and setting up the template](#cloning-and-setting-up-the-template)  
-* [Configuration](#configuration)  
-* [Modifying and configuring the template](#modifying-and-configuring-the-template)  
-* [Running unit tests for the template](#running-unit-tests-for-the-template)  
-* [Running the application locally](#running-the-application-locally)  
-* [Deploying on Cloud](#deploying-on-ibm-cloud)  
-* [Inferencing the deployment](#inferencing-the-deployment)  
+* [Introduction](#-introduction)  
+* [Directory structure and file descriptions](#-directory-structure-and-file-descriptions)  
+* [Prerequisites](#-prerequisites)  
+* [Installation](#-installation)
+* [Configuration](#-configuration)  
+* [Modifying and configuring the template](#-modifying-and-configuring-the-template)  
+* [Testing the template](#-testing-the-template)  
+* [Running the application locally](#-running-the-application-locally)  
+* [Deploying on IBM Cloud](#-deploying-on-ibm-cloud)  
+* [Querying the deployment](#-querying-the-deployment)  
+* [Cloning and setting up the template (Optional)](#-cloning-and-setting-up-the-template-optional)  
+
 
 ## 🤔 Introduction
 
@@ -66,7 +68,7 @@ pip install -U ibm-watsonx-ai-cli
 > To install Poetry, follow the instructions on the [Poetry installation page](https://python-poetry.org/docs/#installation).
 
 > [!NOTE]
-> Alternatively, it is possible to set up the template using a different method. For detailed instructions, please refer to the section "[Cloning and setting up the template (Optional)](#cloning-and-setting-up-the-template-optional)".
+> Alternatively, it is possible to set up the template using a different method. For detailed instructions, please refer to the section "[Cloning and setting up the template (Optional)](#-cloning-and-setting-up-the-template-optional)".
 
 ## ⚙️ Configuration
 
