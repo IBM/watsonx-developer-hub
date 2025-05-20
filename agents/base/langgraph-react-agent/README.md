@@ -212,7 +212,7 @@ Follow these steps to inference your deployment. The [query_existing_deployment.
 
 ---
 
-##  **Enjoy your coding! 🚀**
+**Enjoy your coding! 🚀**
 
 ---
 
