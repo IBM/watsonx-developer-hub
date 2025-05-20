@@ -36,12 +36,12 @@ The high level structure of the repository is as follows:
 langgraph-react-agent/
 ├── src/
 │   └── langgraph_react_agent_base/
-│       ├── agent.py      # Core graph and agent logic
-│       └── tools.py      # Custom tool definitions
-├── schema/               # JSON schemas for requests & responses
-├── ai_service.py         # Main AI service entry point
-├── config.toml.example   # Sample settings file
-└── pyproject.toml        # Poetry configuration
+│       ├── agent.py
+│       └── tools.py
+├── schema/
+├── ai_service.py
+├── config.toml.example
+└── pyproject.toml
 ```
 
 * **`langgraph-react-agent-base`** folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
