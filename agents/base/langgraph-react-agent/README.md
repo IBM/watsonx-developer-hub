@@ -24,7 +24,6 @@ An AI service is a deployable unit of code that encapsulates the logic of your g
 
 * 🚀 Easy-to-extend agent and tool modules
 * ⚙️ Configurable via `config.toml`
-* ✅ Built-in testing and CI readiness
 * 🌐 Step-by-step local and cloud deployment
 
 ## 🗂 Directory structure and file descriptions
@@ -54,49 +53,20 @@ langgraph-react-agent/
 * **[Poetry](https://python-poetry.org/)** package manager (install via [pipx](https://github.com/pypa/pipx))
 * IBM Cloud access and permissions
 
-## 📥 Cloning and setting up the template
+## 📥 Installation
 
-1. **Clone the repo** (sparse checkout):
+To begin working with this template using the Command Line Interface (CLI), please ensure that the IBM watsonx AI CLI tool is installed on your system. You can install or upgrade it using the following command:
 
-   In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use git's shallow and sparse cloning feature to checkout only the template's directory:  
-   
-   ```sh
-   git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
-   cd watsonx-developer-hub
-   git sparse-checkout add agents/base/langgraph-react-agent
-   cd agents/base/langgraph-react-agent/
-   ```
+```sh
+pip install -U ibm-watsonx-ai-cli
+```
+
+> [!WARNING]
+> The `ibm_watsonx_ai_cli` package requires `poetry` to be installed.
+> To install Poetry, follow the instructions on the [Poetry installation page](https://python-poetry.org/docs/#installation).
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/langgraph-react-agent/`  
-
-2. **Install Poetry**:
-
-   ```sh
-   pipx install --python 3.11 poetry
-   ```
-
-3. **Install the template**:
-
-    Running the below commands will install the repository in a separate virtual environment
-   
-   ```sh
-   poetry install
-   ```
-
-4. **(Optional) Activate the virtual environment**:
-
-   ```sh
-   source $(poetry -q env use 3.11 && poetry env info --path)/bin/activate
-   ```
-
-5. **Export PYTHONPATH**:
-
-   Adding working directory to PYTHONPATH is necessary for the next steps.
-
-   ```sh
-   export PYTHONPATH=$(pwd):${PYTHONPATH}
-   ```
+> Alternatively, it is possible to set up the template using a different method. For detailed instructions, please refer to the section "[Cloning and setting up the template (Optional)](#cloning-and-setting-up-the-template-optional)".
 
 ## ⚙️ Configuration
 
@@ -237,3 +207,53 @@ Follow these steps to inference your deployment. The [query_existing_deployment.
 
 > [!WARNING]  
 > This flow is deprecated and will be removed in a future release. Please migrate to Option A as soon as possible.
+
+---
+
+**Enjoy your coding! 🚀**
+
+---
+
+## 💾 Cloning and setting up the template (Optional)
+
+1. **Clone the repo** (sparse checkout):
+
+   In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use git's shallow and sparse cloning feature to checkout only the template's directory:  
+   
+   ```sh
+   git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
+   cd watsonx-developer-hub
+   git sparse-checkout add agents/base/langgraph-react-agent
+   cd agents/base/langgraph-react-agent/
+   ```
+
+> [!NOTE]
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/langgraph-react-agent/`  
+
+2. **Install Poetry**:
+
+   ```sh
+   pipx install --python 3.11 poetry
+   ```
+
+3. **Install the template**:
+
+    Running the below commands will install the repository in a separate virtual environment
+   
+   ```sh
+   poetry install
+   ```
+
+4. **(Optional) Activate the virtual environment**:
+
+   ```sh
+   source $(poetry -q env use 3.11 && poetry env info --path)/bin/activate
+   ```
+
+5. **Export PYTHONPATH**:
+
+   Adding working directory to PYTHONPATH is necessary for the next steps.
+
+   ```sh
+   export PYTHONPATH=$(pwd):${PYTHONPATH}
+   ```
