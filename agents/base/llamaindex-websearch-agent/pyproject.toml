@@ -17,7 +17,7 @@ llama-index = "0.12.15"
 llama-index-core = "0.12.15"
 llama-index-utils-workflow = "^0.3.0"
 python-dotenv = "^1.0.1"
-ibm-watsonx-ai = { version = ">=1.2.6", python = ">=3.11,<3.13" }
+ibm-watsonx-ai = { version = ">=1.3.5", python = ">=3.11,<3.13" }
 numpy = "<2"
 pytest = "^8.3.3"
 
