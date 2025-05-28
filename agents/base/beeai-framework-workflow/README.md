@@ -221,6 +221,41 @@ Follow these steps to inference your deployment. The [query_existing_deployment.
 > [!WARNING]  
 > This flow is deprecated and will be removed in a future release. Please migrate to recommended flow as soon as possible.
 
+## Running the Graphical App Locally
+
+### 1. Download the app
+
+```bash
+watsonx-ai app new
+```
+
+### 2. Configure the app
+
+Go to the [Developer Access](https://dataplatform.cloud.ibm.com/developer-access) to find your environment variables also retrieve deployment url/deployment_id for deployed template from the link provided afer deployment.
+Note that the value of the **WATSONX_BASE_DEPLOYMENT_URL** needs to end with the deployment guid as we will be
+crafting multiple URLs based on that base.
+Example of **WATSONX_BASE_DEPLOYMENT_URL**:
+`https://us-south.ml.cloud.ibm.com/ml/v4/deployments/{deployment_id}`
+
+
+```bash
+cd <app_name>
+cp template.env .env
+```
+
+### 3. Start the app
+
+```bash
+watsonx-ai app run
+```
+
+### 3. Start the app in development mode
+
+```bash
+watsonx-ai app run --dev
+```
+This soultion allows user to make changes to the source code while the app is running. Each time changes are saved the app reloads and is working with provided changes.
+
 ---
 
 **Enjoy your coding! 🚀**
