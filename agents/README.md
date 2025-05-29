@@ -82,11 +82,19 @@ The CLI must automatically detect, list, and initialize the template without man
 * `watsonx-ai template list`
 * `watsonx-ai template new`
 
+> **Note:** Templates will only appear in the `listing` commands once they have been merged into the `main` branch.
+
 **Repository Placement**
 The template directory must exist on the `main` branch under one of the following folders:
 
 * `agents/base/<template-name>/`
 * `agents/community/<template-name>/`
+
+**Template Categories**
+
+* **Base templates:** Curated and maintained by IBM developers, these provide a foundational starting point for building more advanced applications. They are stable, well-documented, and cover common use cases.
+
+* **Community templates:** Contributed by the wider community, these showcase more advanced agents and include integrations with external tools—such as web search, retrieval-augmented generation (RAG), or custom toolkits—to solve specialized problems.
 
 > **Naming:** Use kebab-case (e.g., `my-new-agent`).  
 > **Uniqueness:** No duplicate `<template-name>` values across **base** and **community** folders.
@@ -99,7 +107,7 @@ The CLI validation logic will confirm the presence of:
 
 * **ai_service.py** - File contains the function to be deployed as an AI service defining the application's logic.
 * **pyproject.toml** - Defines package metadata and dependency declarations.
-* **src/** - Folder contains the Python package.
+* **src/** - Folder contains the Python package with Agent source code.
 * **config.toml.example** - A configuration file with placeholders that stores the deployment metadata.
 * **schema/** - Folder contains request and response schemas for the `/ai_service` endpoint queries.
 * **README.md** - Provides user guidance
