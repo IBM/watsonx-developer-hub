@@ -92,7 +92,7 @@ The template directory must exist on the `main` branch under one of the followin
 
 **Template Categories**
 
-* **Base templates:** Curated and maintained by IBM developers, these provide a foundational starting point for building more advanced applications. They are stable, well-documented, and cover common use cases.
+* **Base templates:** Curated and maintained by IBM developers, these provide a foundational starting point for building more advanced applications.
 
 * **Community templates:** Contributed by the wider community, these showcase more advanced agents and include integrations with external tools—such as web search, retrieval-augmented generation (RAG), or custom toolkits—to solve specialized problems.
 
