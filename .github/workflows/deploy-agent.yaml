@@ -1,0 +1,85 @@
+name: Test and deploy the agent
+
+on:
+  push:
+    branches: [main]
+
+env:
+  PYTHON_VERSION: ${{ vars.PYTHON_VERSION }}
+  AGENT_WORKDIR: ${{ vars.AGENT_WORKDIR }}
+
+jobs:
+  test-tools:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout latest update
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Set up template test
+      run: python scripts/setup-template-test.py
+    - name: Test the tools
+      run: cd "${AGENT_WORKDIR}" && poetry run pytest -r 'fEsxX' tests/
+
+  invoke-local:
+    runs-on: ubuntu-latest
+    needs: test-tools
+    steps:
+    - name: Checkout latest update
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Set up template invoke
+      run: python scripts/setup-template-test.py
+    - name: Invoke agent template
+      run: cd "${AGENT_WORKDIR}" && poetry run watsonx-ai template invoke "Hello"
+
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: [test-tools, invoke-local]
+    outputs:
+      deployment_id: ${{ steps.deploy.outputs.deployment_id }}
+    steps:
+    - name: Checkout latest update
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Set up deployment config
+      env:
+        WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
+        WATSONX_URL: ${{ secrets.WATSONX_URL }}
+        WATSONX_SPACE_ID: ${{ secrets.WATSONX_SPACE_ID_DEV }}
+      run: python scripts/setup-agent-deployment.py
+    - name: Deploy agent to dev space
+      id: deploy
+      run: cd "${AGENT_WORKDIR}" && watsonx-ai service new | grep -o "deployment_id='[^']*'" >> "$GITHUB_OUTPUT"
+
+  invoke-dev:
+    runs-on: ubuntu-latest
+    needs: deploy-dev
+    steps:
+    - name: Checkout latest update
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Set up deployment config
+      env:
+        WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
+        WATSONX_URL: ${{ secrets.WATSONX_URL }}
+        WATSONX_SPACE_ID: ${{ secrets.WATSONX_SPACE_ID_DEV }}
+        DEPLOYMENT_ID: ${{ needs.deploy-dev.outputs.deployment_id }}
+      run: python scripts/setup-agent-deployment.py
+    - name: Invoke agent deployment
+      run: cd "${AGENT_WORKDIR}" && watsonx-ai service invoke "Hello"
