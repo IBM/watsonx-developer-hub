@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "langgraph_react_with_database_memory"
+version = "0.1.0"
+description = "A template for a LangGraph LLM app deployable on IBM Cloud as an ai_service. This particular example focues on storing messages history in a database"
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "langgraph_react_with_database_memory", from = "src" }
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+langchain-ibm = "^0.3.7"
+langgraph = ">0.2,<0.3"
+langgraph-checkpoint-postgres = "^2.0.21"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+python-dotenv = "^1.0.1"
+ibm-watsonx-ai = { version = ">=1.3.5", python = ">=3.11,<3.13" }
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
