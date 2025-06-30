@@ -11,17 +11,18 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "<3.13,>=3.11"
-beeai-framework = "^0.1.14"
+beeai-framework = "^0.1.26"
+pydantic = "^2.11.7"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-python-dotenv = "^1.0.1"
 ibm-watsonx-ai = { version = ">=1.1.22", python = ">=3.11,<3.13" }
+nest-asyncio = "^1.6.0"
 pytest = "^8.3.3"
 pytest-asyncio = "^0.25.3"
-nest-asyncio = "^1.6.0"
+python-dotenv = "^1.0.1"
 
 [build-system]
 requires = ["poetry-core"]
