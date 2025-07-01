@@ -203,21 +203,21 @@ tests-mypy = ["mypy (>=1.11.1) ; platform_python_implementation == \"CPython\" a
 
 [[package]]
 name = "beeai-framework"
-version = "0.1.26"
+version = "0.1.27"
 description = ""
 optional = false
 python-versions = "<4.0,>=3.11"
 groups = ["main"]
 files = [
-    {file = "beeai_framework-0.1.26-py3-none-any.whl", hash = "sha256:728dd0acc555f450e1ca93325fef9d28c392c5436ce499d9947704d6a8fc09c3"},
-    {file = "beeai_framework-0.1.26.tar.gz", hash = "sha256:26dae9e794aa7b1dc30a141f31f948d9a9b94c2943fd65a6bf7ec70d964f54fd"},
+    {file = "beeai_framework-0.1.27-py3-none-any.whl", hash = "sha256:c0b3aed5b05c0e6be6b43ecdf87d7948a2affdc52a13e6eb83299b8bc73ec5f1"},
+    {file = "beeai_framework-0.1.27.tar.gz", hash = "sha256:cce083f8b382f21fa6df6b75576be6cba4da1c795bbd5e72b9ef49d87b61046d"},
 ]
 
 [package.dependencies]
 aiofiles = ">=24.1.0,<25.0.0"
 cachetools = ">=5.5.2,<6.0.0"
 chevron = ">=0.14.0,<0.15.0"
-duckduckgo-search = {version = ">=8.0.4,<9.0.0", optional = true, markers = "extra == \"search\" or extra == \"duckduckgo\""}
+duckduckgo-search = {version = ">=8.0.4,<9.0.0", optional = true, markers = "extra == \"search\" or extra == \"duckduckgo\" or extra == \"all\""}
 json-repair = ">=0.39.0,<0.40.0"
 jsonref = ">=1.1.0,<2.0.0"
 litellm = ">=1.69.3,<2.0.0"
@@ -228,12 +228,13 @@ requests = ">=2.32,<3.0"
 [package.extras]
 a2a = ["a2a-sdk (>=0.2.4,<0.3.0)", "uvicorn (>=0.34.2,<0.35.0)"]
 acp = ["acp-sdk (>=0.12.2,<0.13.0)", "uvicorn (>=0.34.2,<0.35.0)"]
-all = ["mcp (>=1.2.0,<2.0.0)"]
+all = ["a2a-sdk (>=0.2.4,<0.3.0)", "acp-sdk (>=0.12.2,<0.13.0)", "duckduckgo-search (>=8.0.4,<9.0.0)", "fastapi (>=0.115.0,<0.116.0)", "langchain-community (>=0.3.19,<0.4.0)", "langchain-core (>=0.3.41,<0.4.0)", "langchain-ollama (>=0.3.1,<0.4.0)", "langgraph (>=0.3.27,<0.4.0)", "mcp (>=1.2.0,<2.0.0)", "uvicorn (>=0.34.2,<0.35.0)", "wikipedia-api (>=0.8.1,<0.9.0)"]
 beeai-platform = ["acp-sdk (>=0.12.2,<0.13.0)", "uvicorn (>=0.34.2,<0.35.0)"]
 duckduckgo = ["duckduckgo-search (>=8.0.4,<9.0.0)"]
 langchain = ["langchain-community (>=0.3.19,<0.4.0)", "langchain-core (>=0.3.41,<0.4.0)", "langchain-ollama (>=0.3.1,<0.4.0)", "langgraph (>=0.3.27,<0.4.0)"]
 mcp = ["mcp (>=1.2.0,<2.0.0)"]
 search = ["duckduckgo-search (>=8.0.4,<9.0.0)", "wikipedia-api (>=0.8.1,<0.9.0)"]
+watsonx-orchestrate = ["fastapi (>=0.115.0,<0.116.0)", "uvicorn (>=0.34.2,<0.35.0)"]
 wikipedia = ["wikipedia-api (>=0.8.1,<0.9.0)"]
 
 [[package]]
@@ -2635,4 +2636,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "<3.13,>=3.11"
-content-hash = "72b41ecb57c4bb5264d9b4fc0caaf1204039166c2edc786368593b108066e938"
+content-hash = "80ab505b72b7b21a378105d573c50e9c253d7fc90061c8232ce30ce97b859bfc"
