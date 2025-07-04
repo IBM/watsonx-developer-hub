@@ -12,7 +12,7 @@ def get_graph_closure(client: APIClient, model_id: str) -> Callable:
     """Graph generator closure."""
 
     # Initialise ChatWatsonx
-    chat = ChatWatsonx(model_id=model_id, watsonx_client=client)
+    chat = ChatWatsonx(model_id=model_id, watsonx_client=client, params={"temperature": 0.01})
 
     # Define system prompt
     default_system_prompt = "You are a helpful AI assistant, please respond to the user's query to the best of your ability!"

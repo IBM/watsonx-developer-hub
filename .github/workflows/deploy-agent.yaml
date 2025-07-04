@@ -1,0 +1,149 @@
+name: Test and deploy the agent
+
+on:
+  push:
+    branches: [main]
+
+env:
+  # Python version to use for the project
+  PYTHON_VERSION: ${{ vars.PYTHON_VERSION }}
+  # Working directory for the agent
+  AGENT_WORKDIR: ${{ vars.AGENT_WORKDIR }}
+
+jobs:
+  test:
+    # Run on the latest Ubuntu
+    runs-on: ubuntu-latest
+    # Default working directory for the job
+    defaults:
+      run:
+        working-directory: ${{ env.AGENT_WORKDIR }}
+    # Environment variables for Poetry
+    env:
+      POETRY_VENV_DIR: .venv
+    steps:
+      - name: Checkout latest update
+        uses: actions/checkout@v4 # Checkout the latest code changes
+      - name: Set up Python
+        uses: actions/setup-python@v5 # Setup Python environment
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Cache Poetry dependencies and venv
+        uses: actions/cache@v4 # Cache Poetry dependencies and virtual environment
+        with:
+          path: |
+            ~/.cache/pypoetry
+            .venv
+          key: poetry-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            poetry-${{ runner.os }}-
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 - # Install Poetry
+          echo "$HOME/.local/bin" >> $GITHUB_PATH # Add Poetry to PATH
+      - name: Install template with Poetry
+        run: poetry install --with dev # Install the project dependencies
+      - name: Test the tools
+        run: poetry run pytest -r 'fEsxX' tests/ # Run tests with pytest
+      - name: Set up template config
+        env:
+          WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
+          WATSONX_URL: ${{ secrets.WATSONX_URL }}
+          WATSONX_SPACE_ID: ${{ secrets.WATSONX_SPACE_ID_DEV }}
+        run: poetry run python scripts/setup-config.py # Set up configuration for testing
+      - name: Invoke agent template locally
+        run: poetry run watsonx-ai template invoke "Hello, how can you help me?" # Invoke the agent locally
+
+  validate:
+    # Run on the latest Ubuntu
+    runs-on: ubuntu-latest
+    # Wait for the 'test' job to complete
+    needs: [test]
+    # Default working directory for the job
+    defaults:
+      run:
+        working-directory: ${{ env.AGENT_WORKDIR }}
+    # Environment variables for Poetry
+    env:
+      POETRY_VENV_DIR: .venv
+    steps:
+      - name: Checkout latest update
+        uses: actions/checkout@v4 # Checkout the latest code changes
+      - name: Set up Python
+        uses: actions/setup-python@v5 # Setup Python environment
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Restore Poetry dependencies and venv cache to speed-up installation
+        uses: actions/cache@v4 # Restore cached Poetry dependencies and venv
+        with:
+          path: |
+            ~/.cache/pypoetry
+            .venv
+          key: poetry-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            poetry-${{ runner.os }}-
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 - # Install Poetry
+          echo "$HOME/.local/bin" >> $GITHUB_PATH # Add Poetry to PATH
+      - name: Install template with Poetry
+        run: poetry install --with eval # Install the project dependencies
+      - name: Set up deployment config
+        env:
+          WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
+          WATSONX_URL: ${{ secrets.WATSONX_URL }}
+          WATSONX_SPACE_ID: ${{ secrets.WATSONX_SPACE_ID_DEV }}
+        run: poetry run python scripts/setup-config.py # Set up configuration for deployment
+      - name: Deploy agent to deployment space
+        run: poetry run watsonx-ai service new # Create a new service in the deployment space
+      - name: Invoke agent deployment
+        run: poetry run watsonx-ai service invoke "Hello, how can you help me?" # Invoke the deployed agent
+      - name: Quality validation
+        run: poetry run python scripts/quality-check.py # Run quality checks
+      - name: Remove deployment and associated asset
+        run: yes | poetry run watsonx-ai service delete $(python -c "from utils import load_config; print(load_config('deployment')['deployment_id'])") # Delete the deployed service
+
+  deploy:
+    # Run on the latest Ubuntu
+    runs-on: ubuntu-latest
+    # Wait for the 'validate' job to complete
+    needs: [validate]
+    # Default working directory for the job
+    defaults:
+      run:
+        working-directory: ${{ env.AGENT_WORKDIR }}
+    # Environment variables for Poetry
+    env:
+      POETRY_VENV_DIR: .venv
+    steps:
+      - name: Checkout latest update
+        uses: actions/checkout@v4 # Checkout the latest code changes
+      - name: Set up Python
+        uses: actions/setup-python@v5 # Setup Python environment
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Restore Poetry dependencies and venv cache to speed-up installation
+        uses: actions/cache@v4 # Restore cached Poetry dependencies and venv
+        with:
+          path: |
+            ~/.cache/pypoetry
+            .venv
+          key: poetry-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            poetry-${{ runner.os }}-
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 - # Install Poetry
+          echo "$HOME/.local/bin" >> $GITHUB_PATH # Add Poetry to PATH
+      - name: Install template with Poetry
+        run: poetry install # Install the project dependencies
+      - name: Set up deployment config
+        env:
+          WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
+          WATSONX_URL: ${{ secrets.WATSONX_URL }}
+          WATSONX_SPACE_ID: ${{ secrets.WATSONX_SPACE_ID_PROD }}
+        run: poetry run python scripts/setup-config.py # Set up configuration for production deployment
+      - name: Deploy agent to deployment space
+        run: poetry run watsonx-ai service new # Create a new service in the production space
+      - name: Invoke agent deployment
+        run: poetry run watsonx-ai service invoke "Hello, how can you help me?" # Invoke the deployed agent in production
