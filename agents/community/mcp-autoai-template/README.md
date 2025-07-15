@@ -72,17 +72,17 @@ In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use
 ```sh
 git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
 cd watsonx-developer-hub
-git sparse-checkout add community/mcp-autoai-template
+git sparse-checkout add agents/community/mcp-autoai-template
 ```  
 
 Move to the directory with the mcp autoai template:
 
 ```sh
-cd community/mcp-autoai-template
+cd agents/community/mcp-autoai-template
 ```
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/community/mcp-autoai-template/` 
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/mcp-autoai-template/` 
 
 ## Configuring the environment
 
