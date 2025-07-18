@@ -6,9 +6,6 @@ import os
 def load_dotenv_with_current_path() -> None:
     """
     Load environment variables from a `.env` file in the current working directory.
-
-    Raises:
-        typer.Exit: Exits with code 1 if the `.env` file is not found or fails to load.
     """
     dotenv_path = Path.cwd() / ".env"
 
