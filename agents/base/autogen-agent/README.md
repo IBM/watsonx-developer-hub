@@ -43,7 +43,7 @@ autogen-agent/
 ├── schema/
 ├── ai_service.py
 ├── config.toml.example
-├── template.en
+├── template.env
 └── pyproject.toml
 ```
 
