@@ -12,7 +12,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
-crewai = "^0.102"
+crewai = "^0.148"
 
 [tool.poetry.group.dev]
 optional = true
@@ -23,6 +23,7 @@ python-dotenv = "^1.0.1"
 ibm-watsonx-ai = "^1.2.7"
 pytest = "^8.3.3"
 numpy = "<2.0.0"
+ibm-watsonx-ai-cli = ">=0.1.8"
 
 
 [build-system]
