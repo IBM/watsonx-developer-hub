@@ -12,7 +12,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
-crewai = "^0.148"
+crewai = "^0.150"
 
 [tool.poetry.group.dev]
 optional = true
