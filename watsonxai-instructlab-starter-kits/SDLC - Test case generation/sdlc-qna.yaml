@@ -1,0 +1,200 @@
+task_description: Teach the model how to generate test cases for a python code
+created_by: Your GitHub ID
+seed_examples:
+- context: |
+    def add(a, b):
+      return a + b
+  question: Generate test case for the given code snippet.
+  answer: |
+    import unittest
+
+    class TestAddFunction(unittest.TestCase):
+      def test_add_positive_numbers(self):
+          self.assertEqual(add(1, 2), 3)
+      def test_add_negative_numbers(self):
+          self.assertEqual(add(-1, -2), -3)
+      def test_add_mixed_numbers(self):
+          self.assertEqual(add(1, -2), -1)
+          self.assertEqual(add(-1, 2), 1)
+    
+    if __name__ == "__main__":
+        unittest.main()
+- context: |
+    def sub(a, b):
+      return a - b
+  question: Generate test case for the given code snippet.
+  answer: |
+    import unittest
+
+    class TestSubFunction(unittest.TestCase):
+    def test_sub_positive_numbers(self):
+        self.assertEqual(sub(2, 1), 1)
+    def test_sub_negative_numbers(self):
+        self.assertEqual(sub(-1, -2), -3)
+    def test_sub_mixed_numbers(self):
+        self.assertEqual(sub(-2, 1), -3)
+        self.assertEqual(sub(-1, 5), -6)
+    
+    if __name__ == "__main__":
+        unittest.main()
+- context: |
+    def is_prime(n):
+        if n <= 1:
+            return False
+        if n <= 3:
+            return True
+        if n % 2 == 0 or n % 3 == 0:
+            return False
+        i = 5
+        while i * i <= n:
+            if n % i == 0 or n % (i + 2) == 0:
+                return False
+            i += 6
+        return True
+  question: Generate test case for the given code snippet
+  answer: | 
+    import unittest
+
+    class TestPrime(unittest.TestCase):
+        def test_prime_numbers(self):
+            self.assertTrue(is_prime(2))
+            self.assertTrue(is_prime(3))
+            self.assertTrue(is_prime(5))
+            self.assertTrue(is_prime(7))
+            self.assertTrue(is_prime(11))
+            self.assertTrue(is_prime(13))
+            self.assertTrue(is_prime(17))
+            self.assertTrue(is_prime(19))
+            self.assertTrue(is_prime(23))
+            self.assertTrue(is_prime(29))
+
+        def test_non_prime_numbers(self):
+            self.assertFalse(is_prime(0))
+            self.assertFalse(is_prime(1))
+            self.assertFalse(is_prime(4))
+            self.assertFalse(is_prime(6))
+            self.assertFalse(is_prime(8))
+            self.assertFalse(is_prime(9))
+            self.assertFalse(is_prime(10))
+            self.assertFalse(is_prime(12))
+            self.assertFalse(is_prime(15))
+            self.assertFalse(is_prime(18))
+
+        def test_edge_cases(self):
+            self.assertFalse(is_prime(-1))
+            self.assertFalse(is_prime(-10))
+
+        def test_large_prime_numbers(self):
+            self.assertTrue(is_prime(101))
+            self.assertTrue(is_prime(103))
+            self.assertTrue(is_prime(1009))
+            self.assertTrue(is_prime(7919))
+
+        def test_large_non_prime_numbers(self):
+            self.assertFalse(is_prime(102))
+            self.assertFalse(is_prime(104))
+            self.assertFalse(is_prime(1000))
+            self.assertFalse(is_prime(7920))
+
+    if __name__ == "__main__":
+        unittest.main()
+- context: |
+    def int_to_roman(num):
+        val = [
+            1000, 900, 500, 400,
+            100, 90, 50, 40,
+            10, 9, 5, 4,
+            1
+        ]
+        syms = [
+            "M", "CM", "D", "CD",
+            "C", "XC", "L", "XL",
+            "X", "IX", "V", "IV",
+            "I"
+        ]
+        roman_num = ''
+        i = 0
+        while num > 0:
+            for _ in range(num // val[i]):
+                roman_num += syms[i]
+                num -= val[i]
+            i += 1
+        return roman_num
+  question: Generate test case for the given code snippet
+  answer: |
+    import unittest
+
+    class TestIntToRoman(unittest.TestCase):
+        def test_typical_numbers(self):
+            self.assertEqual(int_to_roman(1), "I")
+            self.assertEqual(int_to_roman(4), "IV")
+            self.assertEqual(int_to_roman(9), "IX")
+            self.assertEqual(int_to_roman(13), "XIII")
+            self.assertEqual(int_to_roman(44), "XLIV")
+            self.assertEqual(int_to_roman(58), "LVIII")
+            self.assertEqual(int_to_roman(199), "CXCIX")
+            self.assertEqual(int_to_roman(2023), "MMXXIII")
+        
+        def test_boundary_numbers(self):
+            self.assertEqual(int_to_roman(0), "")  # Traditional Roman numerals do not have a representation for 0
+            self.assertEqual(int_to_roman(3999), "MMMCMXCIX")
+        
+        def test_edge_cases(self):
+            self.assertEqual(int_to_roman(399), "CCCXCIX")
+            self.assertEqual(int_to_roman(400), "CD")
+            self.assertEqual(int_to_roman(500), "D")
+            self.assertEqual(int_to_roman(1000), "M")
+            self.assertEqual(int_to_roman(1987), "MCMLXXXVII")
+
+    if __name__ == "__main__":
+        unittest.main()
+- context: |
+    def roman_to_int(s):
+        roman_to_int_map = {
+            'I': 1, 'V': 5, 'X': 10, 'L': 50,
+            'C': 100, 'D': 500, 'M': 1000
+        }
+        total = 0
+        prev_value = 0
+        for char in reversed(s):
+            current_value = roman_to_int_map[char]
+            if current_value < prev_value:
+                total -= current_value
+            else:
+                total += current_value
+            prev_value = current_value
+        return total
+  question: Generate test case for the given code snippet
+  answer: | 
+    import unittest
+
+    class TestRomanToInt(unittest.TestCase):
+        def test_typical_roman_numerals(self):
+            self.assertEqual(roman_to_int("I"), 1)
+            self.assertEqual(roman_to_int("IV"), 4)
+            self.assertEqual(roman_to_int("IX"), 9)
+            self.assertEqual(roman_to_int("XIII"), 13)
+            self.assertEqual(roman_to_int("XLIV"), 44)
+            self.assertEqual(roman_to_int("LVIII"), 58)
+            self.assertEqual(roman_to_int("CXCIX"), 199)
+            self.assertEqual(roman_to_int("MMXXIII"), 2023)
+        
+        def test_boundary_roman_numerals(self):
+            self.assertEqual(roman_to_int("MMMCMXCIX"), 3999)
+        
+        def test_edge_cases(self):
+            self.assertEqual(roman_to_int("III"), 3)
+            self.assertEqual(roman_to_int("VIII"), 8)
+            self.assertEqual(roman_to_int("LXXX"), 80)
+            self.assertEqual(roman_to_int("CDXLIV"), 444)
+            self.assertEqual(roman_to_int("CMXC"), 990)
+            self.assertEqual(roman_to_int("MCMXCIV"), 1994)
+        
+        def test_invalid_cases(self):
+            self.assertEqual(roman_to_int(""), 0)  # Assuming empty string should return 0
+            self.assertEqual(roman_to_int("IIII"), 0)  # Invalid repeated characters
+            self.assertEqual(roman_to_int("IC"), 0)  # Invalid subtractive combination
+            self.assertEqual(roman_to_int("VX"), 0)  # Invalid subtractive combination
+
+    if __name__ == "__main__":
+        unittest.main()
