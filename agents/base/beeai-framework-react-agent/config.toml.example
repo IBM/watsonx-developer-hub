@@ -8,6 +8,21 @@
   # Default: None
   payload_path = ""
 
+[deployment]
+  # One of the below is required.
+  # To determine your `api_key`, refer to `IBM Cloud console API keys <https://cloud.ibm.com/iam/apikeys>`_.
+  watsonx_apikey = ""
+  watsonx_token = ""
+
+  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
+  watsonx_url = ""
+
+  # Deployment space id is required to create deployment with AI service content.
+  space_id = "PLACEHOLDER_FOR_YOUR_SPACE_ID"
+
+  # variable, that is populated with last created deployment_id every time when command `watsonx-ai service new` finish successfully
+  deployment_id = ""
+
 [deployment.online.parameters]
 # during creation of deployment additional parameters can be provided inside `ONLINE` object for further referencing
 # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create

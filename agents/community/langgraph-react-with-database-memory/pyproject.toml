@@ -21,7 +21,7 @@ psycopg = {extras = ["binary", "pool"], version = "^3.2.9"}
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 python-dotenv = "^1.0.1"
-ibm-watsonx-ai-cli = "^0.1.7"
+ibm-watsonx-ai-cli = "^0.2.0"
 
 [build-system]
 requires = ["poetry-core"]
