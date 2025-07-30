@@ -47,7 +47,6 @@ langgraph-react-with-database-memory
  ┣ schema  
  ┣ ai_service.py  
  ┣ config.toml.example  
- ┣ template.env  
  ┣ pyproject.toml  
 ```
 
@@ -55,7 +54,6 @@ langgraph-react-with-database-memory
 * **`schema`** folder: Contains request and response schemas for the `/ai_service` endpoint queries. Compared to the other templates, a new field `thread_id` has been added to `request.json`. When sending a request to the model, this field should be populated with the ID of the conversation thread. If the `thread_id` is not provided, only the content of the `messages` field will be passed to the model.  
 * **`ai_service.py`** file: Contains the function to be deployed as an AI service defining the application's logic  
 * **`config.toml.example`** file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
-* **`template.env`**: A file with placeholder for necessary credential required to use an agent. Copy the contents of the `template.env` file to the `.env` file and fill the required fields.
 
 ## 🛠 Prerequisites  
 
@@ -115,12 +113,11 @@ To begin working with this template using the Command Line Interface (CLI), plea
 ## ⚙️ Configuration
 
 1. Copy `config.toml.example` → `config.toml`.
-2. Copy `config.toml.example` → `config.toml`.
-3. Fill in IBM Cloud credentials.
+2. Fill in IBM Cloud credentials.
 
 ## 🎨 Modifying and configuring the template
 
-[config.toml](config.toml) and [.env](.env) files should be filled in before either deploying the template on IBM Cloud or executing it locally.  
+[config.toml](config.toml) file should be filled in before either deploying the template on IBM Cloud or executing it locally.  
 Possible config parameters are given in the provided file and explained using comments (when necessary).  
 
 
@@ -319,29 +316,6 @@ You can also run the graphical application locally using the deployed model. All
 
    This soultion allows user to make changes to the source code while the app is running. Each time changes are saved the app reloads and is working with provided changes.
 
-## 📊 Evaluating agent
-If you want to evaluate your agent, you can do so using the following command.
-
-```bash
-$ watsonx-ai template eval --tests test.jsonl --metrics answer_similarity,answer_relevance --evaluator llm_as_judge
-```
-
-The `eval` command supports several options
-
-__Options:__
- - `--tests`: [Required] one or more input data files (in jsonl format) for evaluation
- - `--metrics`: [Required] one or more evaluation metric
- - `--evaluator`: [Optional]  Only `llm_as_judge` is allowed. If not provided, metrics are computed using the method 'token_recall'.
-
-__Supported Evaluation Metrics__:
-- `answer_similarity` _(can be evaluated with `llm_as_judge`)_
-- `answer_relevance` _(can be evaluated with `llm_as_judge`)_
-- `text_reading_ease`
-- `unsuccessful_request_metric`
-- `text_grade_level`
-
-> [!WARNING]  
-> The `eval` command requires Python version 3.10 or 3.11
 ---
 
 **Enjoy your coding! 🚀**
