@@ -6,7 +6,7 @@
   # Path to json file with a complete payload that will be send to proper AI service generate function.
   # Note that, the payload file will be only used when no `query` is provided when running `invoke ` command
   # Default: None
-  payload_path = "example_payload.json"
+  payload_path = ""
 
 [deployment]
   # One of the below is required.
@@ -14,7 +14,7 @@
   watsonx_apikey = ""
   watsonx_token = ""
 
-  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
+  # Should follow the format: `https://{REGION}.ml.cloud.ibm.com`
   watsonx_url = ""
 
   # Deployment space id is required to create deployment with AI service content.
@@ -23,17 +23,11 @@
   # variable, that is populated with last created deployment_id every time when command `watsonx-ai service new` finish successfully
   deployment_id = ""
 
-  # The following parameters, along with the ones defined above, are supported by IBM watsonx.ai Software.
-  watsonx_password = ""
-  watsonx_username = ""
-  watsonx_instance_id = ""
-
 [deployment.online.parameters]
 # during creation of deployment additional parameters can be provided inside `ONLINE` object for further referencing
 # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
-  model_id = "mistralai/mistral-large"  # underlying model of WatsonxChat
+  model = "mistralai/mistral-large"  # model used by Model Gateway (can also be an alias)
   url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
-  postgres_db_conenction_id = "" # Postgres database ID
 
 [deployment.software_specification]
   # Name for derived software specification. If not provided, default one is used that will be build based on the package name: "{pkg_name}-sw-spec"

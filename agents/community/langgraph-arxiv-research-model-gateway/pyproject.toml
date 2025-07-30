@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "langgraph_react_agent_model_gateway"
+version = "0.1.0"
+description = "A template for a LangGraph LLM app deployable on IBM Cloud as an ai_service. This particular example focuses on a Model Gateway chatbot enhanced with external tools (function calling)."
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "langgraph_react_agent_model_gateway", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+langchain-ibm = "^0.3.14"
+python-dotenv = "^1.0.1"
+ibm-watsonx-ai = { version = ">=1.3.28", python = ">=3.11,<3.13" }
+langgraph = ">0.2.68,<0.3"
+pytest = "^8.3.3"
+langchain-community = "^0.3.17"
+duckduckgo-search = "^8.1.1"
+markdownify = "^1.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
