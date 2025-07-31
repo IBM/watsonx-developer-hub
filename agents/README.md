@@ -189,6 +189,14 @@ After downloading the template repository, copy the contents of the `config.toml
 
 * Follow the style of existing [base templates](https://github.com/IBM/watsonx-developer-hub/tree/main/agents/base).
 
+
+## Contribution guidelines
+
+Watsonx developer hub is open-source so we highly encourage you to build you own agent templates
+
+### 1. Before you start
+If you are new to watsonx developer hub, we recommend yoo to read the requirements
+
 ## Consuming deployed agents
 
 All of the available templates can be easily consumed in the [React UI App](../apps/base/nextjs-chat-with-ai-service/) that creates local running React application providing users an option to infer agents. To run the app local please follow these [steps](../apps/base/nextjs-chat-with-ai-service/README.md).
