@@ -21,7 +21,7 @@ jobs:
     # Environment variables for Poetry
     env:
       POETRY_VENV_DIR: .venv
-      _TYPER_STANDARD_TRACEBACK: ${{ env._TYPER_STANDARD_TRACEBACK }} # Do not show rich logs
+      _TYPER_STANDARD_TRACEBACK: 1
     steps:
       - name: Checkout latest update
         uses: actions/checkout@v4 # Checkout the latest code changes
@@ -67,7 +67,7 @@ jobs:
     # Environment variables for Poetry
     env:
       POETRY_VENV_DIR: .venv
-      _TYPER_STANDARD_TRACEBACK: ${{ env._TYPER_STANDARD_TRACEBACK }}
+      _TYPER_STANDARD_TRACEBACK: 1
     steps:
       - name: Checkout latest update
         uses: actions/checkout@v4 # Checkout the latest code changes
@@ -117,7 +117,7 @@ jobs:
     # Environment variables for Poetry
     env:
       POETRY_VENV_DIR: .venv
-      _TYPER_STANDARD_TRACEBACK: ${{ env._TYPER_STANDARD_TRACEBACK }}
+      _TYPER_STANDARD_TRACEBACK: 1
     steps:
       - name: Checkout latest update
         uses: actions/checkout@v4 # Checkout the latest code changes
