@@ -33,7 +33,7 @@
 # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
   model_id = "mistralai/mistral-large"  # underlying model of WatsonxChat
   url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
-  postgres_db_conenction_id = "" # Postgres database ID
+  postgres_db_connection_id = "" # Postgres database ID
 
 [deployment.software_specification]
   # Name for derived software specification. If not provided, default one is used that will be build based on the package name: "{pkg_name}-sw-spec"
