@@ -2,7 +2,6 @@ import urllib
 from langgraph.checkpoint.postgres import PostgresSaver
 from utils import load_config, generate_database_URI
 from ibm_watsonx_ai import APIClient, Credentials
-from ibm_watsonx_ai.deployments import RuntimeContext
 
 thread_id = "PLACEHOLDER FOR YOUR THREAD ID"
 
@@ -18,7 +17,7 @@ instance_id = None if is_cloud_url else "openshift"
 url = dep_config["watsonx_url"]
 api_key = dep_config["watsonx_apikey"]
 space_id = dep_config["space_id"]
-db_connection_id = dep_config["online"]["parameters"]["postgres_db_conenction_id"]
+db_connection_id = dep_config["online"]["parameters"]["postgres_db_connection_id"]
 
 client = APIClient(
     credentials=Credentials(url=url, api_key=api_key, instance_id=instance_id),

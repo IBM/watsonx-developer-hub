@@ -10,8 +10,8 @@ def load_config(section: str | None = None) -> dict:
         return config
 
 
-def generate_database_URI(client: APIClient, postgres_db_conenction_id: str):
-    db_details = client.connections.get_details(postgres_db_conenction_id)
+def generate_database_URI(client: APIClient, postgres_db_connection_id: str):
+    db_details = client.connections.get_details(postgres_db_connection_id)
     db_credentials = db_details["entity"]["properties"]
     db_host = db_credentials["host"]
     db_port = db_credentials["port"]
