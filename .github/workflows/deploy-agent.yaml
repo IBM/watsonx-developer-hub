@@ -2,7 +2,7 @@ name: Test and deploy the agent
 
 on:
   push:
-    branches: [chore_improve_gh_action]
+    branches: [main]
 
 env:
   # Python version to use for the project
@@ -21,7 +21,7 @@ jobs:
     # Environment variables for Poetry
     env:
       POETRY_VENV_DIR: .venv
-      _TYPER_STANDARD_TRACEBACK: 1
+      _TYPER_STANDARD_TRACEBACK: 1 # Do not show rich logs from TYPER
     steps:
       - name: Checkout latest update
         uses: actions/checkout@v4 # Checkout the latest code changes
@@ -67,7 +67,7 @@ jobs:
     # Environment variables for Poetry
     env:
       POETRY_VENV_DIR: .venv
-      _TYPER_STANDARD_TRACEBACK: 1
+      _TYPER_STANDARD_TRACEBACK: 1 # Do not show rich logs from TYPER
     steps:
       - name: Checkout latest update
         uses: actions/checkout@v4 # Checkout the latest code changes
@@ -117,7 +117,7 @@ jobs:
     # Environment variables for Poetry
     env:
       POETRY_VENV_DIR: .venv
-      _TYPER_STANDARD_TRACEBACK: 1
+      _TYPER_STANDARD_TRACEBACK: 1 # Do not show rich logs from TYPER
     steps:
       - name: Checkout latest update
         uses: actions/checkout@v4 # Checkout the latest code changes
