@@ -2,7 +2,7 @@ name: Test and deploy the agent
 
 on:
   push:
-    branches: [main]
+    branches: [chore_improve_gh_action]
 
 env:
   # Python version to use for the project
