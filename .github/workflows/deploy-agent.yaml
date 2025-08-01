@@ -21,6 +21,7 @@ jobs:
     # Environment variables for Poetry
     env:
       POETRY_VENV_DIR: .venv
+      _TYPER_STANDARD_TRACEBACK: ${{ env._TYPER_STANDARD_TRACEBACK }} # Do not show rich logs
     steps:
       - name: Checkout latest update
         uses: actions/checkout@v4 # Checkout the latest code changes
@@ -50,7 +51,6 @@ jobs:
           WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
           WATSONX_URL: ${{ secrets.WATSONX_URL }}
           WATSONX_SPACE_ID: ${{ secrets.WATSONX_SPACE_ID_DEV }}
-          _TYPER_STANDARD_TRACEBACK: ${{ env._TYPER_STANDARD_TRACEBACK }} # Do not show rich logs
         run: poetry run python scripts/setup-config.py # Set up configuration for testing
       - name: Invoke agent template locally
         run: poetry run watsonx-ai template invoke "Hello, how can you help me?" # Invoke the agent locally
@@ -67,6 +67,7 @@ jobs:
     # Environment variables for Poetry
     env:
       POETRY_VENV_DIR: .venv
+      _TYPER_STANDARD_TRACEBACK: ${{ env._TYPER_STANDARD_TRACEBACK }}
     steps:
       - name: Checkout latest update
         uses: actions/checkout@v4 # Checkout the latest code changes
@@ -94,7 +95,6 @@ jobs:
           WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
           WATSONX_URL: ${{ secrets.WATSONX_URL }}
           WATSONX_SPACE_ID: ${{ secrets.WATSONX_SPACE_ID_DEV }}
-          _TYPER_STANDARD_TRACEBACK: ${{ env._TYPER_STANDARD_TRACEBACK }}
         run: poetry run python scripts/setup-config.py # Set up configuration for deployment
       - name: Deploy agent to deployment space
         run: poetry run watsonx-ai service new # Create a new service in the deployment space
@@ -117,6 +117,7 @@ jobs:
     # Environment variables for Poetry
     env:
       POETRY_VENV_DIR: .venv
+      _TYPER_STANDARD_TRACEBACK: ${{ env._TYPER_STANDARD_TRACEBACK }}
     steps:
       - name: Checkout latest update
         uses: actions/checkout@v4 # Checkout the latest code changes
@@ -144,7 +145,6 @@ jobs:
           WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
           WATSONX_URL: ${{ secrets.WATSONX_URL }}
           WATSONX_SPACE_ID: ${{ secrets.WATSONX_SPACE_ID_PROD }}
-          _TYPER_STANDARD_TRACEBACK: ${{ env._TYPER_STANDARD_TRACEBACK }}
         run: poetry run python scripts/setup-config.py # Set up configuration for production deployment
       - name: Deploy agent to deployment space
         run: poetry run watsonx-ai service new # Create a new service in the production space
