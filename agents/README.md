@@ -190,12 +190,26 @@ After downloading the template repository, copy the contents of the `config.toml
 * Follow the style of existing [base templates](https://github.com/IBM/watsonx-developer-hub/tree/main/agents/base).
 
 
-## Contribution guidelines
+## Contributing Guidelines
 
-Watsonx developer hub is open-source so we highly encourage you to build you own agent templates
+We’re really excited that you’re considering contributing to this project! Every contribution, no matter how small, makes a difference – and we’d be truly happy to have you on board. 🚀
 
-### 1. Before you start
-If you are new to watsonx developer hub, we recommend yoo to read the requirements
+### Getting Started
+
+This repository is open to contributions from everyone. Whether you’d like to fix a bug, improve documentation, or add a brand-new template – your input is valuable.
+To keep everything consistent, please make sure your templates follow our guidelines.
+You can find the detailed requirements in the [previous section](#template-requirements) of this README.
+
+### Working on Existing Issues
+
+1. Check the Issues section for open tasks.
+2. If you find an issue related to a specific template that interests you, reach out to us first.
+3. We’ll assign the issue to you, so others know it’s in progress and there’s no overlap.
+
+### Proposing New Ideas
+
+Got a new idea that’s not in the issues list? Awesome!
+We encourage you to share it with us – simply open a discussion or contact us directly. We’ll be glad to review it together and figure out how it fits into the project.
 
 ## Consuming deployed agents
 
