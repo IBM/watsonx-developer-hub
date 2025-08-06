@@ -5,13 +5,13 @@
 * [Directory structure and file descriptions](#-directory-structure-and-file-descriptions)  
 * [Prerequisites](#-prerequisites)  
 * [Installation](#-installation)
-* [Configuration](#%EF%B8%8F-configuration)  
+* [Configuration](#-configuration)  
 * [Modifying and configuring the template](#-modifying-and-configuring-the-template)  
 * [Testing the template](#-testing-the-template)  
 * [Running the application locally](#-running-the-application-locally)  
-* [Deploying on IBM Cloud](#%EF%B8%8F-deploying-on-ibm-cloud)  
+* [Deploying on IBM Cloud](#-deploying-on-ibm-cloud)  
 * [Querying the deployment](#-querying-the-deployment)  
-* [Running the graphical app locally](#%EF%B8%8F-running-the-graphical-app-locally) 
+* [Running the graphical app locally](#-running-the-graphical-app-locally) 
 * [Cloning template (Optional)](#-cloning-template-optional)  
 
 ## 🤔 Introduction
