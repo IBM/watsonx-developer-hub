@@ -28,7 +28,7 @@ An AI service is a deployable unit of code that encapsulates the logic of your g
 * ⚙️ Configurable via `config.toml`
 * 🌐 Step-by-step local and cloud deployment
 
-The template builds a simple application with external tool for addressing Web Search Agent use case.
+The template builds a simple application with external tool for addressing Web Search Agent use case. This template uses a Requirement agent, which allows for declarative customization of the agent's behavior. You can learn more about this concept in the official [BeeAI documentation](https://framework.beeai.dev/experimental/requirement-agent).
 
 Streaming version coming soon to this template.
 
@@ -37,9 +37,9 @@ Streaming version coming soon to this template.
 The high level structure of the repository is as follows:  
 
 ```
-beeai-framework-react-agent/
+beeai-framework-requirement-agent/
 ├── src/
-│   └── beeai_framework_react_agent_base/
+│   └── beeai_framework_requirement_agent_base/
 │       ├── agent.py
 │       └── tools.py
 ├── schema/
@@ -48,7 +48,7 @@ beeai-framework-react-agent/
 └── pyproject.toml
 ```
 
-* **`beeai_framework_react_agent_base`** folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
+* **`beeai_framework_requirement_agent_base`** folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
 * **`schema`** folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
 * **`ai_service.py`** file: Contains the function to be deployed as an AI service defining the application's logic  
 * **`config.toml.example`** file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the config.toml.example file to the config.toml file and fill in the required fields. config.toml file can also be used to tweak the model for your use case.
@@ -71,7 +71,7 @@ To begin working with this template using the Command Line Interface (CLI), plea
 
 2. **Download template**:
    ```sh
-   watsonx-ai template new "base/beeai-framework-react-agent"
+   watsonx-ai template new "base/beeai-framework-requirement-agent"
    ```
 
    Upon executing the above command, a prompt will appear requesting the user to specify the target directory for downloading the template. Once the template has been successfully downloaded, navigate to the designated template folder to proceed.
@@ -125,7 +125,7 @@ For detailed description and API please refer to the [IBM watsonx.ai Parameter S
 Sensitive data should not be passed unencrypted, e.g. in the configuration file. The recommended way to handle them is to make use of the [IBM Cloud® Secrets Manager](https://cloud.ibm.com/apidocs/secrets-manager/secrets-manager-v2). The approach to integrating the Secrets Manager's API with the app is for the user to decide on.  
 
 
-The [agent.py](src/beeai_framework_react_agent_base/agent.py) file creates agents and prompts.
+The [agent.py](src/beeai_framework_requirement_agent_base/agent.py) file creates agents and prompts.
 For detailed info on how to modify the agent please refer to [beeai-framework's official documentation](https://github.com/i-am-bee/beeai-framework)  
 
 
@@ -133,7 +133,7 @@ The [ai_service.py](ai_service.py) file encompasses the core logic of the app al
 For a detailed breakdown of the ai-service's implementation please refer the [IBM Cloud docs](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-create.html?context=wx)  
 
 
-[tools.py](src/beeai_framework_react_agent_base/tools.py) file stores the definition for tools enhancing the chat model's capabilities.
+[tools.py](src/beeai_framework_requirement_agent_base/tools.py) file stores the definition for tools enhancing the chat model's capabilities.
 To add a new tool, create a class that extends the `beeai_framework.tools.tool` class.
 
 For more sophisticated use cases, please refer to the [beeai-framework docs](https://github.com/i-am-bee/beeai-framework).  
@@ -290,9 +290,9 @@ You can also run the graphical application locally using the deployed model. All
    ```sh
    git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
    cd watsonx-developer-hub
-   git sparse-checkout add agents/base/beeai-framework-react-agent
-   cd agents/base/beeai-framework-react-agent/
+   git sparse-checkout add agents/base/beeai-framework-requirement-agent
+   cd agents/base/beeai-framework-requirement-agent/
    ```
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/beeai-framework-react-agent/`  
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/beeai-framework-requirement-agent/`  

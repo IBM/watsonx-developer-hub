@@ -2,7 +2,7 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
     import asyncio
     import nest_asyncio
     import threading
-    from beeai_framework_react_agent_base.agent import get_beeai_framework_agent
+    from beeai_framework_requirement_agent_base.agent import get_beeai_framework_agent
     from beeai_framework.agents.types import AgentExecutionConfig
     from beeai_framework.backend.message import (
         Message,

@@ -1,17 +1,17 @@
 [tool.poetry]
-name = "beeai_framework_react_agent_base"
+name = "beeai_framework_requirement_agent_base"
 version = "0.1.0"
 description = "A template for a beeai-framework LLM app deployable on IBM Cloud as an ai_service."
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [
-    { include = "beeai_framework_react_agent_base", from = "src" }
+    { include = "beeai_framework_requirement_agent_base", from = "src" }
 ]
 
 [tool.poetry.dependencies]
 python = "<3.13,>=3.11"
-beeai-framework = "^0.1.27"
+beeai-framework = "^0.1.35"
 pydantic = "^2.11.7"
 
 [tool.poetry.group.dev]
