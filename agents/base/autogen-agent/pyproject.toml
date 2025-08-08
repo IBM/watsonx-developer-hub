@@ -26,7 +26,6 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 ibm-watsonx-ai-cli = "^0.2.0"
-
 python-dotenv = "^1.0.1"
 pytest = "^8.3.3"
 numpy = "<2.0.0"
