@@ -28,7 +28,7 @@ An AI service is a deployable unit of code that encapsulates the logic of your g
 * ⚙️ Configurable via `config.toml`
 * 🌐 Step-by-step local and cloud deployment
 
-The template builds a simple application with external tool for addressing Web Search Agent use case.
+The template builds a simple application with external tool for addressing Web Search Agent use case. This template uses a Requirement agent, which allows for declarative customization of the agent's behavior. You can learn more about this concept in the official [BeeAI documentation](https://framework.beeai.dev/experimental/requirement-agent).
 
 Streaming version coming soon to this template.
 
