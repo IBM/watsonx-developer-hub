@@ -1,0 +1,3 @@
+{ "id": "1", "input": "Hi! How are you?", "ground_truth": "Hello! I'm doing well, thank you for asking. How can I assist you today?" }
+{ "id": "2", "input": "Search for IBM.", "ground_truth": "Here are the results I found:\n\n- IBM watsonx.ai" }
+{ "id": "3", "input": "What are Granite models?", "ground_truth": "Granite models are a type of large language model developed by IBM. They are designed to understand and generate human-like text based on the input they receive. These models are trained on a large amount of text data and can be used for a variety of tasks, such as answering questions, generating text, and even writing code." }
