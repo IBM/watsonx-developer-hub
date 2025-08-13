@@ -18,7 +18,7 @@ crewai = "^0.150"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-
+ibm-watsonx-ai-cli = "^0.2.0"
 python-dotenv = "^1.0.1"
 ibm-watsonx-ai = "^1.2.7"
 pytest = "^8.3.3"
