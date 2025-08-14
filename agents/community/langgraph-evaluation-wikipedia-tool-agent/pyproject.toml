@@ -23,7 +23,7 @@ requests = "2.32.2"
 
 
 [tool.poetry.group.eval.dependencies]
-setuptools = "80.9.*"
+setuptools = "<80.9.0"
 unitxt = "^1.24.0"
 datasets = "3.6.0"
 nltk = "^3.9.1"
@@ -31,7 +31,7 @@ rouge-score = "^0.1.2"
 
 
 [tool.poetry.group.dev.dependencies]
-ibm-watsonx-ai-cli = "^0.1.8"
+ibm-watsonx-ai-cli = "^0.2.1"
 
 [build-system]
 requires = ["poetry-core"]
