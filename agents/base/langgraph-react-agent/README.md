@@ -50,7 +50,7 @@ langgraph-react-agent/
 * **`schema`** folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
 * **`ai_service.py`** file: Contains the function to be deployed as an AI service defining the application's logic  
 * **`config.toml.example`**: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
-* **`template.env`**: A file with placeholder for necessary credential required to use an agent. Copy the contents of the `template.env` file to the `.env` file and fill the required fields.
+* **`template.env`**: A file with placeholders for necessary credentials that are essential to run some of the `ibm-watsonx-ai-cli` commands and to test agent locally. Copy the contents of the `template.env` file to the `.env` file and fill the required fields.
 
 ## 🛠 Prerequisites
 
@@ -296,8 +296,10 @@ __Supported Evaluation Metrics__:
 - `unsuccessful_request_metric`
 - `text_grade_level`
 
+The metrics are calculated using the **IBM watsonx.governance SDK** library. You can find more details about these metrics in the official documentation [here](https://ibm.github.io/ibm-watsonx-gov/).
+
 > [!WARNING]  
-> The `eval` command requires Python version 3.10 or 3.11
+> The `eval` command requires Python version 3.10 or 3.12
 
 ---
 

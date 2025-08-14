@@ -35,9 +35,6 @@ def load_config(section: str | None = None) -> dict:
             "watsonx_token": get_from_env("WATSONX_TOKEN"),
             "space_id": get_from_env("WATSONX_SPACE_ID"),
             "deployment_id": get_from_env("WATSONX_DEPLOYMENT_ID"),
-            "watsonx_password": get_from_env("WATSONX_PASSWORD"),
-            "watsonx_username": get_from_env("WATSONX_USERNAME"),
-            "watsonx_instance_id": get_from_env("WATSONX_INSTANCE_ID"),
         }
         config["deployment"].update(dotenv_data)
     if section is not None:

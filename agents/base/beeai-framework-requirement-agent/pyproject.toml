@@ -22,8 +22,7 @@ ibm-watsonx-ai = { version = ">=1.1.22", python = ">=3.11,<3.13" }
 nest-asyncio = "^1.6.0"
 pytest = "^8.3.3"
 pytest-asyncio = "^0.25.3"
-python-dotenv = "^1.0.1"
-ibm-watsonx-ai-cli = "^0.2.0"
+ibm-watsonx-ai-cli = "^0.2.1"
 
 [build-system]
 requires = ["poetry-core"]
