@@ -89,7 +89,7 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 - # Install Poetry
           echo "$HOME/.local/bin" >> $GITHUB_PATH # Add Poetry to PATH
       - name: Install template with Poetry
-        run: poetry install --with eval # Install the project dependencies
+        run: poetry install --with eval,dev # Install the project dependencies
       - name: Set up deployment config
         env:
           WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
