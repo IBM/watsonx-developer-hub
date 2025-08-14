@@ -311,7 +311,8 @@ __Supported Evaluation Metrics__:
 The metrics are calculated using the **IBM watsonx.governance SDK** library. You can find more details about these metrics in the official documentation [here](https://ibm.github.io/ibm-watsonx-gov/).
 
 > [!WARNING]  
-> The `eval` command requires Python version 3.10 or 3.12
+> The `eval` command requires Python version >=3.10,<=3.12
+
 ---
 
 **Enjoy your coding! 🚀**
