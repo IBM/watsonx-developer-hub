@@ -2,7 +2,7 @@ name: Test and deploy the agent
 
 on:
   push:
-    branches: [main]
+    branches: [fix_poetry_locks]
 
 env:
   # Python version to use for the project
