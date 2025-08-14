@@ -5,13 +5,14 @@
 * [Directory structure and file descriptions](#-directory-structure-and-file-descriptions)  
 * [Prerequisites](#-prerequisites)  
 * [Installation](#-installation)
-* [Configuration](#%EF%B8%8F-configuration)  
+* [Configuration](#-configuration) 
 * [Modifying and configuring the template](#-modifying-and-configuring-the-template)  
 * [Testing the template](#-testing-the-template)  
 * [Running the application locally](#-running-the-application-locally)  
-* [Deploying on IBM Cloud](#%EF%B8%8F-deploying-on-ibm-cloud)  
+* [Deploying on IBM Cloud](#-deploying-on-ibm-cloud) 
 * [Querying the deployment](#-querying-the-deployment)  
-* [Running the graphical app locally](#%EF%B8%8F-running-the-graphical-app-locally) 
+* [Running the graphical app locally](#-running-the-graphical-app-locally) 
+* [Evaluating agent](#-evaluating-agent)
 * [Cloning template (Optional)](#-cloning-template-optional)  
 
 ## 🤔 Introduction
@@ -41,6 +42,7 @@ langgraph-react-agent/
 ├── schema/
 ├── ai_service.py
 ├── config.toml.example
+├── template.env
 └── pyproject.toml
 ```
 
@@ -48,6 +50,7 @@ langgraph-react-agent/
 * **`schema`** folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
 * **`ai_service.py`** file: Contains the function to be deployed as an AI service defining the application's logic  
 * **`config.toml.example`**: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
+* **`template.env`**: A file with placeholders for necessary credentials that are essential to run some of the `ibm-watsonx-ai-cli` commands and to test agent locally. Copy the contents of the `template.env` file to the `.env` file and fill the required fields.
 
 ## 🛠 Prerequisites
 
@@ -105,12 +108,13 @@ To begin working with this template using the Command Line Interface (CLI), plea
 
 ## ⚙️ Configuration
 
-1. Copy `config.toml.example` → `config.toml`.
-2. Fill in IBM Cloud credentials.
+1. Copy `template.env` → `.env`.
+2. Copy `config.toml.example` → `config.toml`.
+3. Fill in IBM Cloud credentials.
 
 ## 🎨 Modifying and configuring the template
 
-[config.toml](config.toml) file should be filled in before either deploying the template on IBM Cloud or executing it locally.  
+[config.toml](config.toml) and [.env](.env) files should be filled in before either deploying the template on IBM Cloud or executing it locally.  
 Possible config parameters are given in the provided file and explained using comments (when necessary).  
 
 
@@ -271,6 +275,31 @@ You can also run the graphical application locally using the deployed model. All
 
    This soultion allows user to make changes to the source code while the app is running. Each time changes are saved the app reloads and is working with provided changes.
 
+## 📊 Evaluating agent
+If you want to evaluate your agent, you can do so using the following command.
+
+```bash
+$ watsonx-ai template eval --tests test.jsonl --metrics answer_similarity,answer_relevance --evaluator llm_as_judge
+```
+
+The `eval` command supports several options
+
+__Options:__
+ - `--tests`: [Required] one or more input data files (in jsonl format) for evaluation
+ - `--metrics`: [Required] one or more evaluation metric
+ - `--evaluator`: [Optional]  Only `llm_as_judge` is allowed. If not provided, metrics are computed using the method 'token_recall'.
+
+__Supported Evaluation Metrics__:
+- **`answer_similarity`**: Measures how similar the agent’s response is to the ground truth. By default, it uses a `token_recall` method. If the `--evaluator llm_as_judge` flag is set, it switches to an LLM-based evaluation.
+- **`answer_relevance`**: Measures how relevant the response is to the input query. By default, it also uses `token_recall`, but with `--evaluator llm_as_judge`, it uses the LLM to judge relevance.
+- **`text_reading_ease`**: Assesses the readability of the generated text using a rule-based formula. This metric always uses a fixed rule-based method and ignores the `--evaluator` flag.
+- **`unsuccessful_request_metric`**: Checks whether the response indicates a failed or incomplete answer by scanning for predefined failure phrases. This is a rule-based check and does not change even if `--evaluator llm_as_judge` is provided.
+- **`text_grade_level`**: Estimates the U.S. school grade level required to understand the response. Like the others above, this metric is rule-based and ignores the evaluator setting.
+
+The metrics are calculated using the **IBM watsonx.governance SDK** library. You can find more details about these metrics in the official documentation [here](https://ibm.github.io/ibm-watsonx-gov/).
+
+> [!WARNING]  
+> The `eval` command requires Python version 3.10 or 3.12
 
 ---
 
