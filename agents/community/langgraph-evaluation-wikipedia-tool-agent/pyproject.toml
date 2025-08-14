@@ -19,6 +19,7 @@ langgraph = ">0.2,<0.3"
 pytest = "^8.3.3"
 langchain-community = "^0.3.27"
 wikipedia = "^1.4.0"
+requests = "2.32.2"
 
 
 [tool.poetry.group.eval.dependencies]

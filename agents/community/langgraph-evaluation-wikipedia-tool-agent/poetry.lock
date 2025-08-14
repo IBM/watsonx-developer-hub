@@ -979,50 +979,50 @@ typing = ["types-PyYAML", "types-requests", "types-simplejson", "types-toml", "t
 
 [[package]]
 name = "ibm-cos-sdk"
-version = "2.13.5"
+version = "2.14.1"
 description = "IBM SDK for Python"
 optional = false
 python-versions = ">=3.8"
 groups = ["main", "dev"]
 files = [
-    {file = "ibm-cos-sdk-2.13.5.tar.gz", hash = "sha256:1aff7f9863ac9072a3db2f0053bec99478b26f3fb5fa797ce96a15bbb13cd40e"},
+    {file = "ibm_cos_sdk-2.14.1.tar.gz", hash = "sha256:f66caeab0468544fd28f25fad62bd02ec35a63255a4de4c28f47b38b140af59f"},
 ]
 
 [package.dependencies]
-ibm-cos-sdk-core = "2.13.5"
-ibm-cos-sdk-s3transfer = "2.13.5"
+ibm-cos-sdk-core = "2.14.1"
+ibm-cos-sdk-s3transfer = "2.14.1"
 jmespath = ">=0.10.0,<=1.0.1"
 
 [[package]]
 name = "ibm-cos-sdk-core"
-version = "2.13.5"
+version = "2.14.1"
 description = "Low-level, data-driven core of IBM SDK for Python"
 optional = false
 python-versions = ">=3.6"
 groups = ["main", "dev"]
 files = [
-    {file = "ibm-cos-sdk-core-2.13.5.tar.gz", hash = "sha256:d3a99d8b06b3f8c00b1a9501f85538d592463e63ddf8cec32672ab5a0b107b83"},
+    {file = "ibm_cos_sdk_core-2.14.1.tar.gz", hash = "sha256:60efc2ac15ee26bd5fba3bf479046d0477c789065ec0ef856ae926ca64c3cabc"},
 ]
 
 [package.dependencies]
 jmespath = ">=0.10.0,<=1.0.1"
 python-dateutil = ">=2.9.0,<3.0.0"
-requests = ">=2.32.3,<3.0"
-urllib3 = {version = ">=1.26.18,<2.2", markers = "python_version >= \"3.10\""}
+requests = ">=2.32.0,<2.32.3"
+urllib3 = ">=1.26.18,<3"
 
 [[package]]
 name = "ibm-cos-sdk-s3transfer"
-version = "2.13.5"
+version = "2.14.1"
 description = "IBM S3 Transfer Manager"
 optional = false
 python-versions = ">=3.8"
 groups = ["main", "dev"]
 files = [
-    {file = "ibm-cos-sdk-s3transfer-2.13.5.tar.gz", hash = "sha256:9649b1f2201c6de96ff5a6b5a3686de3a809e6ef3b8b12c7c4f2f7ce72da7749"},
+    {file = "ibm_cos_sdk_s3transfer-2.14.1.tar.gz", hash = "sha256:99c4146696695485d348f2981661ae564bbaa3459da00b2fe5b19cfa862b96b1"},
 ]
 
 [package.dependencies]
-ibm-cos-sdk-core = "2.13.5"
+ibm-cos-sdk-core = "2.14.1"
 
 [[package]]
 name = "ibm-watsonx-ai"
@@ -2515,14 +2515,14 @@ files = [
 
 [[package]]
 name = "requests"
-version = "2.32.3"
+version = "2.32.2"
 description = "Python HTTP for Humans."
 optional = false
 python-versions = ">=3.8"
 groups = ["main", "dev", "eval"]
 files = [
-    {file = "requests-2.32.3-py3-none-any.whl", hash = "sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6"},
-    {file = "requests-2.32.3.tar.gz", hash = "sha256:55365417734eb18255590a9ff9eb97e9e1da868d4ccd6402399eaf68af20a760"},
+    {file = "requests-2.32.2-py3-none-any.whl", hash = "sha256:fc06670dd0ed212426dfeb94fc1b983d917c4f9847c863f313c9dfaaffb7c23c"},
+    {file = "requests-2.32.2.tar.gz", hash = "sha256:dd951ff5ecf3e3b3aa26b40703ba77495dab41da839ae72ef3c8e5d8e2433289"},
 ]
 
 [package.dependencies]
@@ -3488,4 +3488,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.13"
-content-hash = "7dd46393e1dda0cd613d7034451f70fed6f803c2106bd4047521e2acd465126a"
+content-hash = "da8f586bdcb6665dca09f1b191faa9fc2d536f407093ff97930054965d0dad51"
