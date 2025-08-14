@@ -103,7 +103,7 @@ jobs:
       - name: Quality validation
         run: poetry run python scripts/quality-check.py # Run quality checks
       - name: Remove deployment and associated asset
-        run: yes | poetry run watsonx-ai service delete $(python -c "from utils import load_config; print(load_config('deployment')['deployment_id'])") # Delete the deployed service
+        run: yes | poetry run watsonx-ai service delete $(poetry run python -c "from utils import load_config; print(load_config('deployment')['deployment_id'])") # Delete the deployed service
 
   deploy:
     # Run on the latest Ubuntu
