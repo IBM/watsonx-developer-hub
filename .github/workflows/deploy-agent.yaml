@@ -89,7 +89,7 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 - # Install Poetry
           echo "$HOME/.local/bin" >> $GITHUB_PATH # Add Poetry to PATH
       - name: Install template with Poetry
-        run: poetry install --with eval # Install the project dependencies
+        run: poetry install --with eval,dev # Install the project dependencies
       - name: Set up deployment config
         env:
           WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
@@ -103,7 +103,7 @@ jobs:
       - name: Quality validation
         run: poetry run python scripts/quality-check.py # Run quality checks
       - name: Remove deployment and associated asset
-        run: yes | poetry run watsonx-ai service delete $(python -c "from utils import load_config; print(load_config('deployment')['deployment_id'])") # Delete the deployed service
+        run: yes | poetry run watsonx-ai service delete $(poetry run python -c "from utils import load_config; print(load_config('deployment')['deployment_id'])") # Delete the deployed service
 
   deploy:
     # Run on the latest Ubuntu
