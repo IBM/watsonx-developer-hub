@@ -2,14 +2,11 @@ def deployable_ai_service(
     context,
     url,
     model_id,
-    tool_config_spaceId,
-    tool_config_vectorIndexId,
-    base_knowledge_description=None,
 ):
     import urllib
     from typing import Generator
 
-    from langgraph_agentic_rag.agent import get_graph_closure
+    from langgraph_graph_rag.agent import get_graph_closure
     from ibm_watsonx_ai import APIClient, Credentials
     from langchain_core.messages import (
         BaseMessage,
@@ -34,11 +31,6 @@ def deployable_ai_service(
     graph = get_graph_closure(
         client,
         model_id,
-        tool_config={
-            "spaceId": tool_config_spaceId,
-            "vectorIndexId": tool_config_vectorIndexId,
-        },
-        base_knowledge_description=base_knowledge_description,
     )
 
     def get_formatted_message(
