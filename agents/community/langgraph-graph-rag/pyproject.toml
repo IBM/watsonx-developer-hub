@@ -21,6 +21,10 @@ pytest = "^8.3.3"
 langchain_neo4j = "^0.4.0"
 
 
+[tool.poetry.group.dev.dependencies]
+langchain-experimental = "^0.3.4"
+langchain-text-splitters = "^0.3.9"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
