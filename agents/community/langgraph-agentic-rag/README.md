@@ -10,7 +10,7 @@ Table of contents:
 - [Running the application locally](#running-the-application-locally)  
 - [Deploying on IBM Cloud](#deploying-on-ibm-cloud)  
 - [Inferencing the deployment](#querying-the-deployment)  
-
+- [Evaluating agent](#evaluating-agent)
 
 ## Introduction  
 
@@ -42,12 +42,14 @@ langgraph-agentic-rag
  ┣ schema  
  ┣ ai_service.py  
  ┣ config.toml.example  
+ ┣ template.env  
  ┣ pyproject.toml  
 
 - `langgraph-agentic-rag` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
 - `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
 - `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic  
 - `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
+- `template.env`: A file with placeholders for necessary credentials that are essential to run some of the `ibm-watsonx-ai-cli` commands and to test agent locally. Copy the contents of the `template.env` file to the `.env` file and fill the required fields.
 
 ## Prerequisites  
 
@@ -107,7 +109,7 @@ export PYTHONPATH=$(pwd):${PYTHONPATH}
 
 ## Modifying and configuring the template  
 
-[config.toml](config.toml) file should be filled in before either deploying the template on IBM Cloud or executing it locally.  
+[config.toml](config.toml) and [.env](.env) files should be filled in before either deploying the template on IBM Cloud or executing it locally.  
 Possible config parameters are given in the provided file and explained using comments (when necessary).  
 
 
@@ -145,13 +147,14 @@ pytest -r 'fEsxX' tests/
 
 It is possible to run (or even debug) the ai-service locally, however it still requires creating the connection to the IBM Cloud.  
 
-### Step 1: Fill in the `config` file  
+### Step 1: Fill in the `config` and `.env` files  
 
-Copy the content of `config.toml.example` to `config.toml` file.
+Copy the contents of `config.toml.example` to the `config.toml` file, and `template.env` to the `.env` file.
 ```sh
 cp config.toml.example config.toml
+cp template.env .env
 ```
-Enter the necessary credentials and parameters in the `config.toml` file.  
+Enter the necessary credentials and parameters in the `config.toml` and `.env` files.  
 
 ### Step 2: Run the script for local AI service execution  
 
@@ -166,7 +169,7 @@ Choose from some pre-defined questions or ask the model your own.
 
 ## Deploying on IBM Cloud  
 
-Follow these steps to deploy the model on IBM Cloud. Please make sure that `config.toml` contains all required data to make deployment successfully.
+Follow these steps to deploy the model on IBM Cloud. Please make sure that `config.toml` and `.env` contains all required data to make deployment successfully.
 
 ### Step 1: Run the deployment script  
 
@@ -190,3 +193,29 @@ The _deployment_id_ of your deployment can be obtained from [the previous sectio
 ```sh
 python examples/query_existing_deployment.py
 ```   
+
+## Evaluating agent
+If you want to evaluate your agent, you can do so using the following command.
+
+```bash
+$ watsonx-ai template eval --tests test.jsonl --metrics answer_similarity,answer_relevance --evaluator llm_as_judge
+```
+
+The `eval` command supports several options
+
+__Options:__
+ - `--tests`: [Required] one or more input data files (in jsonl format) for evaluation
+ - `--metrics`: [Required] one or more evaluation metric
+ - `--evaluator`: [Optional]  Only `llm_as_judge` is allowed. If not provided, metrics are computed using the method 'token_recall'.
+
+__Supported Evaluation Metrics__:
+- `answer_similarity` _(can be evaluated with `llm_as_judge`)_
+- `answer_relevance` _(can be evaluated with `llm_as_judge`)_
+- `text_reading_ease`
+- `unsuccessful_request_metric`
+- `text_grade_level`
+
+The metrics are calculated using the **IBM watsonx.governance SDK** library. You can find more details about these metrics in the official documentation [here](https://ibm.github.io/ibm-watsonx-gov/).
+
+> [!WARNING]  
+> The `eval` command requires Python version >=3.10,<=3.12
