@@ -2,6 +2,7 @@ def deployable_ai_service(
     context,
     url,
     model_id,
+    embedding_model_id,
 ):
     import urllib
     from typing import Generator
@@ -31,6 +32,7 @@ def deployable_ai_service(
     graph = get_graph_closure(
         client,
         model_id,
+        embedding_model_id,
     )
 
     def get_formatted_message(

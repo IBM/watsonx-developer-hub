@@ -56,7 +56,7 @@ def generate_knowledge_graph(graph_documents: list[GraphDocument]) -> Neo4jGraph
     return graph
 
 
-def create_vector_index_from_graph(graph: Neo4jGraph):
+def create_vector_index_from_graph(graph: Neo4jGraph) -> None:
     _ = Neo4jVector.from_existing_graph(
         embedding=embedding_func,
         search_type="hybrid",
@@ -66,6 +66,10 @@ def create_vector_index_from_graph(graph: Neo4jGraph):
         graph=graph,
     )
 
+    graph.query(
+        "CREATE FULLTEXT INDEX entity IF NOT EXISTS FOR (e:__Entity___) ON EACH [e.id]"
+    )
+
 
 if __name__ == "__main__":
     text = """
@@ -73,7 +77,7 @@ if __name__ == "__main__":
     """
 
     documents = [Document(page_content=text)]
-    
+
     chunks = prepare_documents(documents)
 
     graph_documents = convert_documents_to_graph_documents(chunks)
