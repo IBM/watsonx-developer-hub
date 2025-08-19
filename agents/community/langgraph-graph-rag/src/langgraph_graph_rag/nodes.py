@@ -4,9 +4,9 @@ from typing_extensions import TypedDict
 
 from langgraph.graph.message import add_messages
 
-from langchain_ibm import ChatWatsonx
+from langchain_ibm import ChatWatsonx, WatsonxEmbeddings
 
-from langchain_neo4j import GraphCypherQAChain, Neo4jGraph
+from langchain_neo4j import GraphCypherQAChain, Neo4jGraph, Neo4jVector
 
 from langchain_core.messages import BaseMessage
 from ibm_watsonx_ai import APIClient
@@ -28,6 +28,20 @@ class GraphNodes:
         )
         self.graph = Neo4jGraph(url="bolt://localhost:7687", username="", password="")
 
+        embedding_func = WatsonxEmbeddings(
+            model_id=kwargs.get("embedding_model_id"), watsonx_client=api_client
+        )
+
+        self.vector_index = Neo4jVector.from_existing_index(
+            graph=self.graph,
+            embedding=embedding_func,
+            index_name="vector",
+            search_type="hybrid",
+            node_label="Document",
+            embedding_node_property="embedding",
+            text_node_properties=["text"],
+        )
+
     def _get_graph_qa_chain(self) -> GraphCypherQAChain:
         """Create a Neo4j Graph Cypher QA Chain"""
         # prompt = state["question"]
@@ -36,7 +50,7 @@ class GraphNodes:
             self.llm,
             graph=self.graph,
             verbose=True,
-            top_k=2,
+            top_k=5,
             allow_dangerous_requests=True,
         )
         return graph_qa_chain

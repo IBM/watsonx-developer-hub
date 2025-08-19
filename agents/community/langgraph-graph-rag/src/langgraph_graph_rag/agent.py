@@ -12,13 +12,14 @@ from .nodes import AgentState, GraphNodes
 def get_graph_closure(
     client: APIClient,
     model_id: str,
+    embedding_model_id: str
 ) -> Callable:
     """Graph generator closure."""
 
     def get_graph() -> CompiledGraph:
         """Get compiled graph with overwritten system prompt, if provided"""
 
-        graph_nodes = GraphNodes(api_client=client, model_id=model_id)
+        graph_nodes = GraphNodes(api_client=client, model_id=model_id, embedding_model_id=embedding_model_id)
 
         # Define a Graph State
         workflow = StateGraph(AgentState)
