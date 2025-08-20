@@ -170,7 +170,7 @@ pipx install --python 3.11 poetry
 Running the below commands will install the repository in a separate virtual environment  
 
 ```sh
-poetry install
+poetry install --with dev
 ```
 
 ### Step 4 (OPTIONAL): Activate the virtual environment  

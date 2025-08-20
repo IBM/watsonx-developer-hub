@@ -78,7 +78,7 @@ langgraph-arxiv-research
 
     ```sh
     pipx install --python 3.11 poetry # set up the env incl. poetry
-    poetry install # install the dependencies
+    poetry install --with dev # install the dependencies
     source $(poetry -q env use 3.11 && poetry env info --path)/bin/activate # start the environment
     ```
 
@@ -86,7 +86,7 @@ langgraph-arxiv-research
     ```sh
     uv venv --python 3.11 # set up the env
     uv pip install poetry # install poetry
-    poetry install # install the dependencies
+    poetry install --with dev # install the dependencies
     ```
 
   You can use any other tool to run your Python code, make sure to use Python v11 or higher.

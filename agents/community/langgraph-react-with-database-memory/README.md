@@ -96,7 +96,7 @@ To begin working with this template using the Command Line Interface (CLI), plea
     Running the below commands will install the repository in a separate virtual environment
    
    ```sh
-   poetry install
+   poetry install --with dev
    ```
 
 5. **(Optional) Activate the virtual environment**:
