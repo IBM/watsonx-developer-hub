@@ -25,11 +25,13 @@ def get_graph_closure(
         workflow = StateGraph(AgentState)
 
         # Add Nodes to workflow
-        workflow.add_node("graph_qa", graph_nodes.graph_qa)  # agent
+        workflow.add_node("retriever", graph_nodes.retriever)  # agent
+        workflow.add_node("generate", graph_nodes.generate)  # agent
 
-        workflow.add_edge(START, "graph_qa")
+        workflow.add_edge(START, "retriever")
+        workflow.add_edge("retriever", "generate")
 
-        workflow.add_edge("graph_qa", END)
+        workflow.add_edge("generate", END)
 
         # Compile
         graph = workflow.compile()
