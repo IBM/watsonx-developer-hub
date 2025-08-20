@@ -150,7 +150,7 @@ pytest -r 'fEsxX' tests/
 
 It is possible to run (or even debug) the ai-service locally, however it still requires creating the connection to the IBM Cloud.
 
-Ensure `config.toml` is configured.
+Ensure `config.toml` and `.env` are configured.
 
 You can test and debug your AI service locally via two alternative flows:
 
@@ -179,7 +179,7 @@ watsonx-ai template invoke "<PROMPT>"
 
 Follow these steps to deploy the model on IBM Cloud. 
 
-Ensure `config.toml` is configured.
+Ensure `config.toml` and `.env` are configured.
 
 You can deploy your AI service to IBM Cloud via two alternative flows:
 
@@ -212,7 +212,7 @@ You can send inference requests to your deployed AI service via two alternative 
 watsonx-ai service invoke --deployment_id "<DEPLOYMENT_ID>" "<PROMPT>"
 ```
 
-*If `deployment_id` is set in `config.toml`, omit the flag.*
+*If `deployment_id` is set in `.env`, omit the flag.*
 
 ```sh
 watsonx-ai service invoke "<PROMPT>"
@@ -248,7 +248,7 @@ You can also run the graphical application locally using the deployed model. All
 
 2. **Configure the app**:
 
-   All required variables are defined in the config.toml file.
+   All required variables are defined in the `.env` file.
    Here is an example of how to create the **WATSONX_BASE_DEPLOYMENT_URL**:
    `https://{REGION}.ml.cloud.ibm.com/ml/v4/deployments/{deployment_id}`
 
