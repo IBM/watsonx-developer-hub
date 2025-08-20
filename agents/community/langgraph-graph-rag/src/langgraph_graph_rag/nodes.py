@@ -9,7 +9,10 @@ from langchain_ibm import ChatWatsonx, WatsonxEmbeddings
 from langchain_neo4j import GraphCypherQAChain, Neo4jGraph, Neo4jVector
 
 from langchain_core.messages import BaseMessage
+from langchain_core.prompts import ChatPromptTemplate
 from ibm_watsonx_ai import APIClient
+
+from pydantic import BaseModel, Field
 
 
 class AgentState(TypedDict):
@@ -18,6 +21,15 @@ class AgentState(TypedDict):
     question: str
     documents: list[str]
     messages: Annotated[Sequence[BaseMessage], add_messages]
+
+
+class Entities(BaseModel):
+    """List of identified entities."""
+
+    names: list[str] = Field(
+        ...,
+        description="Distinct, individual elements (entities), including people, organizations, or companies that appear in the text.",
+    )
 
 
 class GraphNodes:
@@ -54,6 +66,50 @@ class GraphNodes:
             allow_dangerous_requests=True,
         )
         return graph_qa_chain
+
+    def _retrieve_entities(self, question: str) -> list[str]:
+        chat_prompt = ChatPromptTemplate.from_messages(
+            [
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a helpful assistant who specializes "
+                        "in extracting entities such as people, organizations, or companies from user text. "
+                    ),
+                },
+                {
+                    "role": "user",
+                    "content": "Use a given format to extract information from the user input: {question}",
+                },
+            ]
+        )
+
+        entity_chain = chat_prompt | self.llm.with_structured_output(Entities)
+
+        return entity_chain.invoke({"question": question}).names
+    
+    def graph_search(self, state: AgentState) -> AgentState:
+        question = state["question"]
+
+        entities = self._retrieve_entities(question)
+
+        for entity in entities:
+            self.graph.query(
+            """CALL db.index.fulltext.queryNodes('entity', $query, {limit:2})
+            YIELD node,score
+            CALL {
+              WITH node
+              MATCH (node)-[r:!MENTIONS]->(neighbor)
+              RETURN node.id + ' - ' + type(r) + ' -> ' + neighbor.id AS output
+              UNION ALL
+              WITH node
+              MATCH (node)<-[r:!MENTIONS]-(neighbor)
+              RETURN neighbor.id + ' - ' + type(r) + ' -> ' +  node.id AS output
+            }
+            RETURN output LIMIT 50
+            """,
+            {"query": generate_full_text_query(entity)},
+        )
 
     def graph_qa(self, state: AgentState) -> AgentState:
         """Returns a dictionary of at least one of the GraphState"""
