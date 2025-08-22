@@ -1,8 +1,5 @@
 def deployable_ai_service(
-    context,
-    url,
-    model_id,
-    embedding_model_id,
+    context, url, model_id, embedding_model_id, service_manager_service_url, secret_id
 ):
     import urllib
     from typing import Generator
@@ -33,6 +30,8 @@ def deployable_ai_service(
         client,
         model_id,
         embedding_model_id,
+        service_manager_service_url=service_manager_service_url,
+        secret_id=secret_id,
     )
 
     def get_formatted_message(

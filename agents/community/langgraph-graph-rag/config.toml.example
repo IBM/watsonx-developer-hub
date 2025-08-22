@@ -28,12 +28,18 @@
   watsonx_password = ""
   watsonx_username = ""
   watsonx_instance_id = ""
-
+  
 [deployment.online.parameters]
   # during creation of deployment additional parameters can be provided inside `ONLINE` object for further referencing
   # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
-  model_id = "mistralai/mistral-large"  # underlying model of WatsonxChat
+  model_id = "meta-llama/llama-3-3-70b-instruct"  # underlying model of WatsonxChat
+  embedding_model_id = "ibm/slate-125m-english-rtrvr-v2"
   url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
+
+  # Secret Manager configuration
+  # Required:
+  service_manager_service_url = "<YOUR_SECRETS_MANAGER_SERVICE_URL>"
+  secret_id = "<YOUR_SECRET_ID>"
 
 [deployment.software_specification]
   # Name for derived software specification. If not provided, default one is used that will be build based on the package name: "{pkg_name}-sw-spec"

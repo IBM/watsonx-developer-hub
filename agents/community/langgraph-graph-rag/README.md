@@ -1,113 +1,135 @@
-# The Agentic RAG LangGraph template with watsonx Utility Agent Tool  
+# The Graph RAG template with LangGraph and Neo4j 🚀
 
-Table of contents:  
-- [Introduction](#introduction)  
-- [Directory structure and file descriptions](#directory-structure-and-file-descriptions)  
-- [Prerequisites](#prerequisites)  
-- [Cloning and setting up the template locally](#cloning-and-setting-up-the-template-locally)  
-- [Modifying and configuring the template](#modifying-and-configuring-the-template)  
-- [Running unit tests for the template](#testing-the-template)  
-- [Running the application locally](#running-the-application-locally)  
-- [Deploying on IBM Cloud](#deploying-on-ibm-cloud)  
-- [Inferencing the deployment](#querying-the-deployment)  
+## 📖 Table of Contents
+* [Introduction](#-introduction)  
+* [Directory structure and file descriptions](#-directory-structure-and-file-descriptions)  
+* [Prerequisites](#-prerequisites)  
+* [Installation](#-installation)
+* [Configuration](#%EF%B8%8F-configuration)  
+* [Modifying and configuring the template](#-modifying-and-configuring-the-template)  
+* [Running the application locally](#-running-the-application-locally)  
+* [Deploying on IBM Cloud](#%EF%B8%8F-deploying-on-ibm-cloud)  
+* [Querying the deployment](#-querying-the-deployment)  
+* [Running the graphical app locally](#%EF%B8%8F-running-the-graphical-app-locally) 
+* [Cloning template (Optional)](#-cloning-template-optional)   
 
 
-## Introduction  
+##  🤔 Introduction
 
-This repository provides an Agentic RAG template for LLM apps built using LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
+This repository provides a Graph RAG template for LLM apps built using LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
 An AI service is a deployable unit of code that captures the logic of your generative AI use case. For and in-depth description of the topic please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).  
 
 
-The template builds an application with IBM watsonx Utility Agent Tool for addressing RAG use case. The structure of RAG graph is as follows
+The template includes an application that solves the RAG problem using a hybrid approach, in which the knowledge graph, using the `Neo4j` graph database management system, is enriched with vector similarity search. For more information about the `Neo4j` integration in LangChain, i.e. `langchain_neo4j` library and its components, please refer to the official documentation pages: [Neo4j](https://python.langchain.com/docs/integrations/graphs/neo4j_cypher/) and [Neo4j Vector Index](https://python.langchain.com/docs/integrations/vectorstores/neo4jvector/). Furthermore, please also check the [article](https://blog.langchain.com/enhancing-rag-based-applications-accuracy-by-constructing-and-leveraging-knowledge-graphs/) on LangChain Blog which was the basis for the creation of Graph RAG Agent.
 
-![alt text](agentic_rag.png "LangGraph Agentic RAG")
+The structure of Graph RAG workflow:
 
-> [!NOTE]
-> The template uses predefined `Vector Index Asset` as a source of base knowledge for RAG. For more details about `Vector Index Asset` see [documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-prompt-data-index-create.html?context=wx&audience=wdp) . 
-> 
-> To run following Agentic RAG app you should set `tool_config_spaceId` and `tool_config_vectorIndexId` in section `deployment.online.parameters` in `config.toml`. Moreover, to help the Agent correctly choose whether to use the retriever tool or not, a description of the underlying knowledge contained in the Vector Index Asset can also be provided in field `base_knowledge_description`.
+![alt text](graph_agent_architecture.png "LangGraph Graph RAG")s
 
+> [!NOTE]  
+> One of the prerequisites for running Graph RAG agents is having a running instance of `Neo4j`. For local testing, you can run database using docker container. To start a local docker container with the `Neo4j` database, run the following command.
+>
+>```console
+>$ docker run \
+>    --name neo4j \
+>    -p 7474:7474 -p 7687:7687 \
+>    -d \
+>    -e NEO4J_AUTH=neo4j/password \
+>   -e NEO4J_PLUGINS=\[\"apoc\"\]  \
+>    neo4j:latest
+>```
+ 
 
-[^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
+**Highlights:**
 
-## Directory structure and file descriptions  
+* 🚀 Easy-to-extend agent and tool modules
+* ⚙️ Configurable via `config.toml`
+* 🌐 Step-by-step local and cloud deployment
+
+[^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**. 
+
+## 🗂 Directory structure and file descriptions
 
 The high level structure of the repository is as follows:  
 
-langgraph-agentic-rag  
+langgraph-graph-rag  
  ┣ src  
- ┃ ┗ langgraph_agentic_rag  
- ┃   ┣ agent.py  
- ┃   ┗ tools.py  
+ ┃ ┗ langgraph_graph_rag  
+ ┃  ┣ agent.py  
+ ┃  ┗ nodes.py    
  ┣ schema  
  ┣ ai_service.py  
  ┣ config.toml.example  
- ┣ pyproject.toml  
+ ┗ pyproject.toml  
 
-- `langgraph-agentic-rag` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
+- `langgraph-graph-rag` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
 - `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
 - `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic  
-- `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
+- `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case.  
 
-## Prerequisites  
+## 🛠 Prerequisites
 
-- [Poetry](https://python-poetry.org/) package manager,  
-- [Pipx](https://github.com/pypa/pipx) due to Poetry's recommended [installation procedure](https://python-poetry.org/docs/#installation)  
-
-
-## Cloning and setting up the template locally  
+* **Python 3.11**
+* **[Poetry](https://python-poetry.org/)** package manager (install via [pipx](https://github.com/pypa/pipx))
+* IBM Cloud access and permissions
 
 
-### Step 1: Clone the repository  
+## 📥 Installation
 
-In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use git's shallow and sparse cloning feature to checkout only the template's directory:  
+To begin working with this template using the Command Line Interface (CLI), please ensure that the IBM watsonx AI CLI tool is installed on your system. You can install or upgrade it using the following command:
 
-```sh
-git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
-cd watsonx-developer-hub
-git sparse-checkout add agents/community/langgraph-agentic-rag
-```  
+1. **Install CLI**:
 
-Move to the directory with the agent template:
+   ```sh
+   pip install -U ibm-watsonx-ai-cli
+   ```
 
-```sh
-cd agents/community/langgraph-agentic-rag/
-```
+2. **Download template**:
+   ```sh
+   watsonx-ai template new "community/langgraph-graph-rag"
+   ```
 
-> [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/langgraph-agentic-rag/`  
+   Upon executing the above command, a prompt will appear requesting the user to specify the target directory for downloading the template. Once the template has been successfully downloaded, navigate to the designated template folder to proceed.
 
+    > [!NOTE]
+    > Alternatively, it is possible to set up the template by cloning the template's repository directory. For detailed instructions, please refer to the section "[Cloning template (Optional)](#-cloning-template-optional)".
 
-### Step 2: Install poetry  
+3. **Install Poetry**:
 
-```sh
-pipx install --python 3.11 poetry
-```
+   ```sh
+   pipx install --python 3.11 poetry
+   ```
 
-### Step 3: Install the template    
+4. **Install the template**:
 
-Running the below commands will install the repository in a separate virtual environment  
+    Running the below commands will install the repository in a separate virtual environment
+   
+   ```sh
+   poetry install --with dev
+   ```
 
-```sh
-poetry install
-```
+5. **(Optional) Activate the virtual environment**:
 
-### Step 4 (OPTIONAL): Activate the virtual environment  
+   ```sh
+   source $(poetry -q env use 3.11 && poetry env info --path)/bin/activate
+   ```
 
-```sh
-source $(poetry -q env use 3.11 && poetry env info --path)/bin/activate
-```
+6. **Export PYTHONPATH**:
 
-### Step 5: Export PYTHONPATH  
+   Adding working directory to PYTHONPATH is necessary for the next steps.
 
-Adding working directory to PYTHONPATH is necessary for the next steps. In your terminal execute:  
-```sh
-export PYTHONPATH=$(pwd):${PYTHONPATH}
-```
+   ```sh
+   export PYTHONPATH=$(pwd):${PYTHONPATH}
+   ```
 
-## Modifying and configuring the template  
+## ⚙️ Configuration
 
-[config.toml](config.toml) file should be filled in before either deploying the template on IBM Cloud or executing it locally.  
+1. Copy `config.toml.example` → `config.toml`.
+2. Fill in IBM Cloud credentials and AI service online parameters.
+
+## 🎨 Modifying and configuring the template
+
+[config.toml](config.toml) and [.env](.env) files should be filled in before either deploying the template on IBM Cloud or executing it locally.  
 Possible config parameters are given in the provided file and explained using comments (when necessary).  
 
 
@@ -125,68 +147,109 @@ For detailed info on how to modify the graph object please refer to [LangGraph's
 The [ai_service.py](ai_service.py) file encompasses the core logic of the app alongside the way of authenticating the user to the IBM Cloud.  
 For a detailed breakdown of the ai-service's implementation please refer the [IBM Cloud docs](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-create.html?context=wx)  
 
+## 💻 Running the application locally
 
-[tools.py](src/langgraph_agentic_rag/tools.py) file stores the definition for tools enhancing the chat model's capabilities.  
-In order to add new tool create a new function, wrap it with the `@tool` decorator and add to the `TOOLS` list in the `extensions` module's [__init__.py](src/langgraph_agentic_rag/__init__.py)
+It is possible to run (or even debug) the ai-service locally, however it still requires creating the connection to the IBM Cloud.
 
-For more sophisticated use cases (like async tools), please refer to the [langchain docs](https://python.langchain.com/docs/how_to/custom_tools/#creating-tools-from-runnables).  
+Ensure `config.toml` and `.env` are configured.
 
-## Testing the template  
+You can test and debug your AI service locally via two alternative flows:
 
-The `tests/` directory's structure resembles the repository. Adding new tests should follow this convention.  
-For exemplary purposes only the tools and some general utility functions are covered with unit tests.  
+### ✅ Recommended flow: CLI
 
-Running the below command will run the complete tests suite:
 ```sh
-pytest -r 'fEsxX' tests/
-```  
-
-## Running the application locally  
-
-It is possible to run (or even debug) the ai-service locally, however it still requires creating the connection to the IBM Cloud.  
-
-### Step 1: Fill in the `config` file  
-
-Copy the content of `config.toml.example` to `config.toml` file.
-```sh
-cp config.toml.example config.toml
+watsonx-ai template invoke "<PROMPT>"
 ```
-Enter the necessary credentials and parameters in the `config.toml` file.  
 
-### Step 2: Run the script for local AI service execution  
+## ☁️ Deploying on IBM Cloud
 
-```sh
-python examples/execute_ai_service_locally.py
-```  
+Follow these steps to deploy the model on IBM Cloud. 
 
-### Step 3: Ask the model  
+Ensure `config.toml` and `.env` are configured.
 
-Choose from some pre-defined questions or ask the model your own.
+You can deploy your AI service to IBM Cloud via two alternative flows:
 
-
-## Deploying on IBM Cloud  
-
-Follow these steps to deploy the model on IBM Cloud. Please make sure that `config.toml` contains all required data to make deployment successfully.
-
-### Step 1: Run the deployment script  
+### ✅ Recommended flow: CLI
 
 ```sh
-python scripts/deploy.py
-```  
+watsonx-ai service new
+```
 
-Successfully completed script will print on stdout the `deployment_id` which is necessary to locally test the deployment. For further info please refer [to the next section](#querying-the-deployment)  
+*Config file updates automatically with `deployment_id`.*
 
-## Querying the deployment  
+## 🔍 Querying the deployment
 
-Follow these steps to inference your deployment. The [query_existing_deployment.py](examples/query_existing_deployment.py) file shows how to test the existing deployment using `watsonx.ai` library.  
+You can send inference requests to your deployed AI service via two alternative flows:
 
-### Step 1: Initialize the deployment ID  
-
-Initialize the `deployment_id` variable in the [query_existing_deployment.py](examples/query_existing_deployment.py) file.  
-The _deployment_id_ of your deployment can be obtained from [the previous section](#deploying-on-ibm-cloud) by running [scripts/deploy.sh](scripts/deploy.py)  
-
-### Step 2: Run the script for querying the deployment  
+### ✅ Recommended flow: CLI
 
 ```sh
-python examples/query_existing_deployment.py
-```   
+watsonx-ai service invoke --deployment_id "<DEPLOYMENT_ID>" "<PROMPT>"
+```
+
+*If `deployment_id` is set in `.env`, omit the flag.*
+
+```sh
+watsonx-ai service invoke "<PROMPT>"
+```
+
+## 🖥️ Running the graphical app locally
+
+You can also run the graphical application locally using the deployed model. All you need to do is deploy the model and follow the steps below. Detailed information for each app is available in its README file.
+
+1. **Download the app**:
+
+   ```bash
+   watsonx-ai app new
+   ```
+
+2. **Configure the app**:
+
+   All required variables are defined in the `.env` file.
+   Here is an example of how to create the **WATSONX_BASE_DEPLOYMENT_URL**:
+   `https://{REGION}.ml.cloud.ibm.com/ml/v4/deployments/{deployment_id}`
+
+
+   ```bash
+   cd <app_name>
+   cp template.env .env
+   ```
+
+3. **Start the app**:
+
+   ```bash
+   watsonx-ai app run
+   ```
+
+3. **Start the app in development mode**:
+
+   ```bash
+   watsonx-ai app run --dev
+   ```
+
+   This soultion allows user to make changes to the source code while the app is running. Each time changes are saved the app reloads and is working with provided changes.
+
+---
+
+**Enjoy your coding! 🚀**
+
+---
+
+
+
+
+## 💾 Cloning template (Optional)
+
+1. **Clone the repo** (sparse checkout):
+
+   In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use git's shallow and sparse cloning feature to checkout only the template's directory:  
+   
+   ```sh
+   git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
+   cd watsonx-developer-hub
+   git sparse-checkout add agents/base/langgraph-react-agent
+   cd agents/base/langgraph-react-agent/
+   ```
+
+> [!NOTE]
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/langgraph-react-agent/` 
