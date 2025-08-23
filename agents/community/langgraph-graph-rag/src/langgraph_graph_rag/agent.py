@@ -1,4 +1,5 @@
 from typing import Callable
+from functools import partial
 
 from ibm_watsonx_ai import APIClient
 
@@ -14,6 +15,7 @@ def get_graph_closure(
     client: APIClient,
     model_id: str,
     embedding_model_id: str,
+    knowledge_graph_description: str,
     service_manager_service_url: str,
     secret_id: str,
 ) -> Callable:
@@ -42,12 +44,24 @@ def get_graph_closure(
         workflow = StateGraph(AgentState)
 
         # Add Nodes to workflow
-        workflow.add_node("agent", graph_nodes.agent)  # Graph Search
-        workflow.add_node("graph_search", graph_nodes.graph_search)  # Graph Search
+
+        # Routing
         workflow.add_node(
-            "vector_retriever", graph_nodes.unstructured_retriever
-        )  # Vector Index Retriever
-        workflow.add_node("generate", graph_nodes.generate)  # agent
+            "agent",
+            partial(
+                graph_nodes.agent,
+                knowledge_graph_description=knowledge_graph_description,
+            ),
+        )
+
+        # Graph Search
+        workflow.add_node("graph_search", graph_nodes.graph_search)
+
+        # Vector Index Retriever
+        workflow.add_node("vector_retriever", graph_nodes.unstructured_retriever)
+
+        # Generate final answer
+        workflow.add_node("generate", graph_nodes.generate)
 
         workflow.add_edge(START, "agent")
 
@@ -71,10 +85,6 @@ def get_graph_closure(
 
         # Compile
         graph = workflow.compile()
-
-        graph.get_graph().draw_mermaid_png(
-            output_file_path="graph_agent_architecture.png"
-        )
 
         return graph
 

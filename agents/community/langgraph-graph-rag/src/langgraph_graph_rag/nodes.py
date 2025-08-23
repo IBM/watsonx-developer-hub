@@ -14,7 +14,6 @@ from langchain_core.messages import (
     SystemMessage,
     HumanMessage,
     ToolMessage,
-    AIMessage,
 )
 from langchain_core.prompts import ChatPromptTemplate
 from ibm_watsonx_ai import APIClient
@@ -27,6 +26,7 @@ from ibm_secrets_manager_sdk.secrets_manager_v2 import SecretsManagerV2
 
 class AgentState(TypedDict):
     # The add_messages function defines how an update should be processed
+    question: str
     structured_data: str
     unstructured_data: List[str]
     messages: Annotated[Sequence[BaseMessage], add_messages]
@@ -64,39 +64,38 @@ class GraphNodes:
         )
 
         # Neo4j
-        # authenticator = BearerTokenAuthenticator(api_client.token)
-        # secretsManager = SecretsManagerV2(authenticator=authenticator)
-        # secretsManager.set_service_url(service_url=service_manager_service_url)
-        # response = secretsManager.get_secret(id=secret_id)
+        authenticator = BearerTokenAuthenticator(api_client.token)
+        secretsManager = SecretsManagerV2(authenticator=authenticator)
+        secretsManager.set_service_url(service_url=service_manager_service_url)
+        response = secretsManager.get_secret(id=secret_id)
 
-        # self.graph = Neo4jGraph(
-        #     url=response.result["data"]["neo4j_uri"],
-        #     username=response.result["data"]["neo4j_username"],
-        #     password=response.result["data"]["neo4j_password"],
-        #     database=response.result["data"]["neo4j_database"],
-        # )
-        self.graph = None
+        self.graph = Neo4jGraph(
+            url=response.result["data"]["neo4j_uri"],
+            username=response.result["data"]["neo4j_username"],
+            password=response.result["data"]["neo4j_password"],
+            database=response.result["data"]["neo4j_database"],
+        )
 
-        self.vector_index = None
-        # self.vector_index = Neo4jVector.from_existing_index(
-        #     graph=self.graph,
-        #     embedding=embedding_func,
-        #     index_name="vector",
-        #     keyword_index_name="keyword",
-        #     search_type="hybrid",
-        #     node_label="Document",
-        #     embedding_node_property="embedding",
-        # )
+        self.vector_index = Neo4jVector.from_existing_index(
+            graph=self.graph,
+            embedding=embedding_func,
+            index_name="vector",
+            keyword_index_name="keyword",
+            search_type="hybrid",
+            node_label="Document",
+            embedding_node_property="embedding",
+        )
 
         self.system_message = system_message
 
-    def agent(self, state: AgentState) -> dict:
+    def agent(self, state: AgentState, knowledge_graph_description: str) -> dict:
         """
         Invokes the agent model to generate a response based on the current state. Given
         the question, it will decide to retrieve using the retriever tool, or simply end.
 
         Args:
             state (AgentState): The current Agent state
+            knowledge_graph_description (str): The detailed description of the information contained knowledge graph
 
         Returns:
             dict: The updated state with the route
@@ -114,18 +113,19 @@ class GraphNodes:
         system_message = SystemMessage(
             content=(
                 "You are helpful assistant who specializes in routing the workflow. "
-                "If you need to retrieve information from a knowledge base to answer user query, please respond with 'graph_knowledge_base'. "
+                f"You have access to the knowledge graph database.\n The knowledge graph description: {knowledge_graph_description}."
+                "If the user's question concerns information contained in the knowledge graph "
+                "please respond with 'graph_knowledge_base'. "
                 "Otherwise, respond with 'final_answer'."
             )
         )
-        human_message = HumanMessage(
-            content=f"User query: {state['messages'][-1].content}"
-        )
+        user_query = state["messages"][-1].content
+        human_message = HumanMessage(content=f"User query: {user_query}")
         llm_with_tool = self.llm_no_stream.bind_tools([Router], tool_choice="Router")
         response = llm_with_tool.invoke([system_message, human_message])
         response.response_metadata["finish_reason"] = "tool_calls"
 
-        return {"messages": [response]}
+        return {"messages": [response], "question": user_query}
 
     def _retrieve_entities(self, question: str) -> list[str]:
         chat_prompt = ChatPromptTemplate.from_messages(
@@ -174,37 +174,29 @@ class GraphNodes:
         Returns:
             dict: The updated Agent state with updated structured data
         """
-        question = state["messages"][-1].content
+        question = state["question"]
         entities = self._retrieve_entities(question)
 
         result = ""
         for entity in entities:
-            response = [{"output": "Marie Curie - ORIGIN -> Poland"}]
-            # response = self.graph.query(
-            #     """CALL db.index.fulltext.queryNodes('entity', $query, {limit:2})
-            # YIELD node,score
-            # CALL () {
-            #   MATCH (node)-[r:!MENTIONS]->(neighbor)
-            #   RETURN node.id + ' - ' + type(r) + ' -> ' + neighbor.id AS output
-            #   UNION
-            #   MATCH (node)<-[r:!MENTIONS]-(neighbor)
-            #   RETURN neighbor.id + ' - ' + type(r) + ' -> ' +  node.id AS output
-            # }
-            # RETURN output LIMIT 20
-            # """,
-            #     {"query": self._generate_full_text_query(entity)},
-            # )
-            result += "\n".join([el["output"] for el in response])
+            response = self.graph.query(
+                """CALL db.index.fulltext.queryNodes('entity', $query, {limit:2})
+            YIELD node,score
+            CALL () {
+              MATCH (node)-[r:!MENTIONS]->(neighbor)
+              RETURN node.id + ' - ' + type(r) + ' -> ' + neighbor.id AS output
+              UNION
+              MATCH (node)<-[r:!MENTIONS]-(neighbor)
+              RETURN neighbor.id + ' - ' + type(r) + ' -> ' +  node.id AS output
+            }
+            RETURN output LIMIT 20
+            """,
+                {"query": self._generate_full_text_query(entity)},
+            )
+            result += "\n".join([el["output"] for el in response]) + "\n"
 
         return {
             "structured_data": result,
-            # "messages": [
-            #     ToolMessage(
-            #         content=result,
-            #         name="graph_search",
-            #         tool_call_id="chat_graph_search_tool_id",
-            #     )
-            # ],
         }
 
     def unstructured_retriever(self, state: AgentState) -> dict:
@@ -216,23 +208,31 @@ class GraphNodes:
         Returns:
             dict: The updated Agent state with updated unstructured_data
         """
-        question = state["messages"][-2].content
+        question = state["question"]
+        # unstructured_data = [
+        #     "Marie Curie, born in 1867, was a Polish and naturalised-French physicist and chemist who conducted pioneering research on radioactivity."
+        # ]
         unstructured_data = [
-            "Marie Curie, born in 1867, was a Polish and naturalised-French physicist and chemist who conducted pioneering research on radioactivity."
+            el.page_content for el in self.vector_index.similarity_search(question)
         ]
 
+        unstructured_context = "\n".join(
+            map(
+                lambda doc: "#Document:\n" + doc + "\n",
+                unstructured_data,
+            )
+        )
+        context_prompt = f"""Structured data:
+{state["structured_data"]}
+Unstructured data:\n{unstructured_context}
+"""
         return {
             "unstructured_data": unstructured_data,
             "messages": [
                 ToolMessage(
-                    content="\n".join(
-                        map(
-                            lambda doc: "#Document:\n" + doc + "\n",
-                            unstructured_data,
-                        )
-                    ),
+                    content=context_prompt,
                     name="Router",
-                    tool_call_id="vector_retriever_tool_id",
+                    tool_call_id=state["messages"][-1].tool_calls[0]["id"],
                 )
             ],
         }
@@ -247,23 +247,21 @@ class GraphNodes:
             dict: The updated state with final AI assistant response
         """
         if state.get("structured_data"):
-            # template with data
-            final_data = f"""Structured data:
-{state["structured_data"]}
-Unstructured data:
-{"#Document ".join(state["unstructured_data"])}
-            """
-            user_prompt = f"""Answer the question based only on the following context:
-{final_data}
+            user_prompt = f"""Answer the question based only on the context retrieved from graph knowledge graph.
 
-Question: {state["messages"][-3].content}
+Question: {state["question"]}
     """
         else:
-            user_prompt = state["messages"][-1].content
+            user_prompt = f"""Answer the question based only on the own knowledge.
+
+Question: {state["question"]}
+    """
+            # user_prompt = state["messages"][-2].content
+
         response = self.llm.invoke(
             [
                 self.system_message,
-                *state["messages"][:-1],
+                *state["messages"],
                 HumanMessage(content=user_prompt),
             ]
         )
