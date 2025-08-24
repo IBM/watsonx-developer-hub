@@ -12,17 +12,12 @@ from langchain_ibm import ChatWatsonx, WatsonxEmbeddings
 from ibm_watsonx_ai import APIClient, Credentials
 
 from dotenv import load_dotenv
-from utils import load_config
 
 load_dotenv()
 
-# Load config.toml
-config = load_config()
-dep_config_online_parameters = config["deployment"]["online"]["parameters"]
-
 # Model ids
-WATSONX_MODEL_ID = dep_config_online_parameters["model_id"]
-WATSONX_EMBEDDING_MODEL_ID = dep_config_online_parameters["embedding_model_id"]
+WATSONX_MODEL_ID = os.environ.get("WATSONX_MODEL_ID")
+WATSONX_EMBEDDING_MODEL_ID = os.environ.get("WATSONX_EMBEDDING_MODEL_ID")
 
 # Define APIClient using env variables
 api_client = APIClient(
