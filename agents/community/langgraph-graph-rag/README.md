@@ -7,6 +7,7 @@
 * [Installation](#-installation)
 * [Configuration](#%EF%B8%8F-configuration)  
 * [Modifying and configuring the template](#-modifying-and-configuring-the-template)  
+* [Create a knowledge graph](#create-a-knowledge-graph-optional)
 * [Running the application locally](#-running-the-application-locally)  
 * [Deploying on IBM Cloud](#%EF%B8%8F-deploying-on-ibm-cloud)  
 * [Querying the deployment](#-querying-the-deployment)  
@@ -24,7 +25,7 @@ The template includes an application that solves the RAG problem using a hybrid 
 
 The structure of Graph RAG workflow:
 
-![alt text](graph_agent_architecture.png "LangGraph Graph RAG")s
+![alt text](graph_agent_architecture.png "LangGraph Graph RAG")
 
 > [!NOTE]  
 > One of the prerequisites for running Graph RAG agents is having a running instance of `Neo4j`. For local testing, you can run database using docker container. To start a local docker container with the `Neo4j` database, run the following command.
@@ -38,6 +39,8 @@ The structure of Graph RAG workflow:
 >   -e NEO4J_PLUGINS=\[\"apoc\"\]  \
 >    neo4j:latest
 >```
+>
+> Furthermore, when running the Graph RAG agent, the knowledge agent should already exist. Please refer to the section [Create a knowledge graph](#create-a-knowledge-graph-optional) to see how you can create a knowledge graph from raw text using the `/scripts/create_knowledge_graph.py` script and what indexes are required to search effectively the graph.
  
 
 **Highlights:**
@@ -145,7 +148,17 @@ For detailed info on how to modify the graph object please refer to [LangGraph's
 
 
 The [ai_service.py](ai_service.py) file encompasses the core logic of the app alongside the way of authenticating the user to the IBM Cloud.  
-For a detailed breakdown of the ai-service's implementation please refer the [IBM Cloud docs](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-create.html?context=wx)  
+For a detailed breakdown of the ai-service's implementation please refer the [IBM Cloud docs](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-create.html?context=wx)
+
+## Create a knowledge graph (Optional)
+
+The Graph RAG agent uses a knowledge graph enriched with vectorized text chunks, as a knowledge base for LLM, which is used to provide relevant answers to users' specialized questions. Along with the Graph RAG Agent source code, we prepare a Python script `scripts/create_knowledge_graph.py`, that can be used to create knowledge graph based on raw text. Please copy the `template.env` file as `.env` and fill in the required fields. All secrets needed to connect with `Neo4j` graph database management system and IBM watsonx.ai inference service, are read from `.env` file. Moreover, to generate a knowledge graph, you need to specify the LLM model ID and the embedding model ID, also in `.env`. 
+
+To automatically convert raw text into graph-based documents we use `LLMGraphTransformer` (for more details see [documentation](https://python.langchain.com/api_reference/experimental/graph_transformers/langchain_experimental.graph_transformers.llm.LLMGraphTransformer.html)) from `langchain-experimental`. It enables quick extraction of entities from raw text and then converts them into graph nodes connected by relationships. When a graph-based document is added to the database, a full-text index `entity` is created on entity identifiers for searching the graph. Finally, based on the created knowledge graph, we initialize `Neo4j` Vector Index for source text embedding vectors. 
+
+Knowledge graph for sample text:
+
+![alt text](sample_graph_visualisation.png "Knowledge Graph visualization")
 
 ## 💻 Running the application locally
 
@@ -165,7 +178,7 @@ watsonx-ai template invoke "<PROMPT>"
 
 Follow these steps to deploy the model on IBM Cloud. 
 
-Ensure `config.toml` and `.env` are configured.
+Ensure `config.toml` is configured.
 
 You can deploy your AI service to IBM Cloud via two alternative flows:
 
