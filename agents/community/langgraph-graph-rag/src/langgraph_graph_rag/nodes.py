@@ -30,6 +30,7 @@ class AgentState(TypedDict):
     structured_data: str
     unstructured_data: List[str]
     messages: Annotated[Sequence[BaseMessage], add_messages]
+    route: Literal["graph_knowledge_base", "final_answer"]
 
 
 # Extract entities from text
@@ -123,9 +124,16 @@ class GraphNodes:
         human_message = HumanMessage(content=f"User query: {user_query}")
         llm_with_tool = self.llm_no_stream.bind_tools([Router], tool_choice="Router")
         response = llm_with_tool.invoke([system_message, human_message])
-        response.response_metadata["finish_reason"] = "tool_calls"
 
-        return {"messages": [response], "question": user_query}
+        update_state = {"question": user_query}
+        if response.tool_calls[0]["args"]["route"] == "graph_knowledge_base":
+            response.response_metadata["finish_reason"] = "tool_calls"
+            return update_state | {
+                "messages": [response],
+                "route": "graph_knowledge_base",
+            }
+        else:
+            return update_state | {"route": "final_answer"}
 
     def _retrieve_entities(self, question: str) -> list[str]:
         chat_prompt = ChatPromptTemplate.from_messages(
@@ -209,9 +217,6 @@ class GraphNodes:
             dict: The updated Agent state with updated unstructured_data
         """
         question = state["question"]
-        # unstructured_data = [
-        #     "Marie Curie, born in 1867, was a Polish and naturalised-French physicist and chemist who conducted pioneering research on radioactivity."
-        # ]
         unstructured_data = [
             el.page_content for el in self.vector_index.similarity_search(question)
         ]

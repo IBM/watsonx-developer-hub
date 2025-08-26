@@ -71,7 +71,7 @@ def get_graph_closure(
             # This means these are the edges taken after the `agent` node is called.
             "agent",
             # Next, we pass in the function that will determine which node is called next.
-            lambda state: state["messages"][-1].tool_calls[-1]["args"]["route"],
+            lambda state: state["route"],
             {
                 "graph_knowledge_base": "graph_search",  # If graph knowledge base is in state
                 # Otherwise we finish.

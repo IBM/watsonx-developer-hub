@@ -5,7 +5,7 @@ def deployable_ai_service(
     embedding_model_id,
     knowledge_graph_description,
     service_manager_service_url,
-    secret_id,
+    secret_id
 ):
     import urllib
     from typing import Generator
@@ -210,7 +210,11 @@ def deployable_ai_service(
                 msg_obj = data[0]
             elif chunk_type == "updates":
                 if agent := data.get("agent"):
-                    msg_obj = agent["messages"][0]
+                    messages = agent.get("messages")
+                    if messages is not None:
+                        msg_obj = messages[0]
+                    else:
+                        continue
                     if msg_obj.response_metadata.get("finish_reason") == "stop":
                         continue
                 elif tool := data.get("tools"):
