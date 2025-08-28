@@ -293,7 +293,7 @@ The `eval` command supports several options
 - `--tests`: **[Required]** one or more input data files (in JSONL format) for evaluation. If more than one evaluation file is provided, they must be separated by a comma.  
  The required fields in the files are described in the section below.
 - `--metrics`: **[Optional]** one or more evaluation metrics. If multiple metrics are specified, they must be separated by a comma. If not specified all possible metrics will be used (answer_similarity, answer_relevance, text_reading_ease, unsuccessful_request_metric,text_grade_level)
-- `--evaluator`: **[Optional]** a model name for evaluation, or `llm_as_judge` can be used for a predefined choice (`meta-llama/llama-3-3-70b-instruct`, or `mistralai/mistral-small-3-1-24b-instruct-2503 if former is not available` if former is not available). 
+- `--evaluator`: **[Optional]** a model name for evaluation, or `llm_as_judge` can be used for a predefined choice (`meta-llama/llama-3-3-70b-instruct`, or `mistralai/mistral-small-3-1-24b-instruct-2503` if former is not available). 
   - If not provided, metrics are computed using the `token_recall` method.  
   - If provided, two metrics **answer similarity** and **answer relevance** are calculated using llm as judge method.  
     The remaining metrics are still calculated using the rule-based method.
