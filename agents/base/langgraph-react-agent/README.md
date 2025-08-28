@@ -273,30 +273,143 @@ You can also run the graphical application locally using the deployed model. All
    watsonx-ai app run --dev
    ```
 
-   This soultion allows user to make changes to the source code while the app is running. Each time changes are saved the app reloads and is working with provided changes.
+   This solution allows user to make changes to the source code while the app is running. Each time changes are saved the app reloads and is working with provided changes.
 
 ## 📊 Evaluating agent
-If you want to evaluate your agent, you can do so using the following command.
+
+`IBM watsonx.ai CLI` allows you to evaluate agent responses using your own datasets prepared in JSONL format. It supports using multiple metrics for comprehensive evaluation. The metrics are calculated using the **IBM watsonx.governance SDK** library. You can find more details about these metrics in the official documentation [here](https://ibm.github.io/ibm-watsonx-gov/). If you want to evaluate your agent, you can do so using the following command.
+
+**Example usage:**
 
 ```bash
-$ watsonx-ai template eval --tests test.jsonl --metrics answer_similarity,answer_relevance --evaluator llm_as_judge
+$ watsonx-ai template eval --tests test1.jsonl,test2.jsonl --metrics answer_similarity,answer_relevance --evaluator llm_as_judge
 ```
 
 The `eval` command supports several options
 
-__Options:__
- - `--tests`: [Required] one or more input data files (in jsonl format) for evaluation
- - `--metrics`: [Required] one or more evaluation metric
- - `--evaluator`: [Optional]  Only `llm_as_judge` is allowed. If not provided, metrics are computed using the method 'token_recall'.
+### Available options and arguments
 
-__Supported Evaluation Metrics__:
-- `answer_similarity` _(can be evaluated with `llm_as_judge`)_
-- `answer_relevance` _(can be evaluated with `llm_as_judge`)_
-- `text_reading_ease`
-- `unsuccessful_request_metric`
-- `text_grade_level`
+- `--help`: Show this message and exit.
+- `--tests`: **[Required]** one or more input data files (in JSONL format) for evaluation. If more than one evaluation file is provided, they must be separated by a comma.  
+ The required fields in the files are described in the section below.
+- `--metrics`: **[Optional]** one or more evaluation metrics. If multiple metrics are specified, they must be separated by a comma. If not specified all possible metrics will be used (answer_similarity, answer_relevance, text_reading_ease, unsuccessful_request_metric, text_grade_level)
+- `--evaluator`: **[Optional]** a model name for evaluation, or `llm_as_judge` can be used for a predefined choice (`meta-llama/llama-3-3-70b-instruct`, or `mistralai/mistral-small-3-1-24b-instruct-2503` if former is not available). 
+  - If not provided, metrics are computed using the `token_recall` method.  
+  - If provided, two metrics **answer similarity** and **answer relevance** are calculated using llm as judge method.  
+    The remaining metrics are still calculated using the rule-based method.
 
-The metrics are calculated using the **IBM watsonx.governance SDK** library. You can find more details about these metrics in the official documentation [here](https://ibm.github.io/ibm-watsonx-gov/).
+### Requirements
+
+* **IBM watsonx.ai for IBM Cloud**: Add your API key to the environment variables.
+* **IBM Cloud Pak® for Data**: Add either a username and password, or a username and API key, to the environment variables.
+
+
+All variables can be defined in a .env file.
+When selecting a specific model as the evaluation judge, ensure that the model is available in your space. By default, the evaluation uses:
+
+* `meta-llama/llama-3-3-70b-instruct`
+* `mistralai/mistral-small-3-1-24b-instruct-2503` (fallback if the first model is unavailable)
+
+If no evaluation model is specified, at least one of the above must be available in your space.
+
+### Evaluation data format
+
+For each file, metrics are calculated separately.  
+The data must be in JSONL format. Each row should contain two fields:  
+- `input`: a string representing the input.  
+- `ground_truth`: a list of strings representing the correct answers.  
+
+During evaluation, answers are generated based on the `input` and compared to the `ground_truth` only for metrics that require it.
+
+### Available types of metrics
+
+The evaluation supports the following metric types:
+
+- **answer_similarity**  
+  Measures how similar the agent’s response is to the `ground_truth`.  
+  By default, it uses the `token_recall` method. If the `--evaluator` flag is set, it switches to an LLM-based evaluation.
+
+- **answer_relevance**  
+  Measures how relevant the response is to the input query.  
+  By default, it also uses `token_recall`, but with `--evaluator`, it uses the LLM to judge relevance.
+
+- **text_reading_ease**  
+  Assesses the readability of the generated text using the Flesch Reading Ease formula.  
+  This metric always uses a fixed rule-based method and ignores the `--evaluator` flag.
+
+- **unsuccessful_request_metric**  
+  Checks whether the response indicates a failed or incomplete answer by scanning for predefined failure phrases.  
+  This is a rule-based check and does not change even if `--evaluator` is provided.
+
+- **text_grade_level**  
+  Estimates the U.S. school grade level required to understand the response using the Flesch–Kincaid Grade formula.  
+  This metric is rule-based and ignores the `--evaluator` setting.
+
+### Evaluation results
+
+* Metrics are calculated per test file.
+* Results are displayed in JSON format for each file and metric.
+* The output begins with summary information for the file and metrics, followed by row-level details.
+
+**Example: Single result for one metric**
+
+```JSON
+{
+  "name": "answer_similarity",
+  "method": "llm_as_judge",
+  "provider": "unitxt",
+  "value": 0.0,
+  "errors": null,
+  "additional_info": null,
+  "group": "answer_quality",
+  "thresholds": [
+    {
+      "type": "lower_limit",
+      "value": 0.7
+    }
+  ],
+  "min": 0.0,
+  "max": 0.0,
+  "mean": 0.0,
+  "total_records": 3,
+  "record_level_metrics": [
+    {
+      "name": "answer_similarity",
+      "method": "llm_as_judge",
+      "provider": "unitxt",
+      "value": 0.0,
+      "errors": null,
+      "additional_info": null,
+      "group": "answer_quality",
+      "thresholds": [
+        {
+          "type": "lower_limit",
+          "value": 0.7
+        }
+      ],
+      "record_id": "44e17041-51ac-4f65-8e2f-e9afd082b940",
+      "record_timestamp": null
+    },
+    {
+      "name": "answer_similarity",
+      "method": "llm_as_judge",
+      "provider": "unitxt",
+      "value": 0.0,
+      "errors": null,
+      "additional_info": null,
+      "group": "answer_quality",
+      "thresholds": [
+        {
+          "type": "lower_limit",
+          "value": 0.7
+        }
+      ],
+      "record_id": "67b58b7e-2990-4559-97a9-680e01068e3f",
+      "record_timestamp": null
+    }
+  ]
+}
+```
 
 > [!WARNING]  
 > The `eval` command requires Python version >=3.10,<=3.12
