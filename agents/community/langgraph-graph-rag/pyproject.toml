@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "langgraph_graph_rag"
+name = "langgraph-graph-rag"
 version = "0.1.0"
 description = "A template for a Graph RAG LangGraph app deployable on IBM Cloud as an ai_service."
 authors = ["Your Name <you@example.com>"]
@@ -17,8 +17,7 @@ ibm-watsonx-ai = { version = ">=1.3.5", python = ">=3.11,<3.13" }
 langgraph = ">0.2,<0.3"
 langchain = "^0.3.21"
 langchain_neo4j = "^0.4.0"
-ibm-cloud-sdk-core = "^3.24.2"
-ibm-secrets-manager-sdk = "^2.1.12"
+ibm_secrets_manager_sdk = "^2.1.9"
 neo4j-graphrag = "1.7.0"  # due to the fact that rt24.1 is compiled with numpy<2
 openai = "^1.101.0"  # needed because of bug in neo4j-graphrag
 
@@ -26,7 +25,7 @@ openai = "^1.101.0"  # needed because of bug in neo4j-graphrag
 langchain-experimental = "^0.3.4"
 langchain-text-splitters = "^0.3.9"
 python-dotenv = "^1.0.1"
-ibm-watsonx-ai-cli = "<2.0"
+ibm-watsonx-ai-cli = "^0.2.1"
 
 [build-system]
 requires = ["poetry-core"]
