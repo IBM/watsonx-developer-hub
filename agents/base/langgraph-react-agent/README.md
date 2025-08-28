@@ -276,9 +276,11 @@ You can also run the graphical application locally using the deployed model. All
    This solution allows user to make changes to the source code while the app is running. Each time changes are saved the app reloads and is working with provided changes.
 
 ## 📊 Evaluating agent
+
 `IBM watsonx.ai CLI` allows you to evaluate agent responses using your own datasets prepared in JSONL format. It supports using multiple metrics for comprehensive evaluation. The metrics are calculated using the **IBM watsonx.governance SDK** library. You can find more details about these metrics in the official documentation [here](https://ibm.github.io/ibm-watsonx-gov/). If you want to evaluate your agent, you can do so using the following command.
 
 **Example usage:**
+
 ```bash
 $ watsonx-ai template eval --tests test1.jsonl,test2.jsonl --metrics answer_similarity,answer_relevance --evaluator llm_as_judge
 ```
@@ -286,6 +288,7 @@ $ watsonx-ai template eval --tests test1.jsonl,test2.jsonl --metrics answer_simi
 The `eval` command supports several options
 
 ### Available options and arguments
+
 - `--help`: Show this message and exit.
 - `--tests`: **[Required]** one or more input data files (in JSONL format) for evaluation. If more than one evaluation file is provided, they must be separated by a comma.  
  The required fields in the files are described in the section below.
@@ -310,6 +313,7 @@ When selecting a specific model as the evaluation judge, ensure that the model i
 If no evaluation model is specified, at least one of the above must be available in your space.
 
 ### Evaluation data format
+
 For each file, metrics are calculated separately.  
 The data must be in JSONL format. Each row should contain two fields:  
 - `input`: a string representing the input.  
@@ -318,6 +322,7 @@ The data must be in JSONL format. Each row should contain two fields:
 During evaluation, answers are generated based on the `input` and compared to the `ground_truth` only for metrics that require it.
 
 ### Available types of metrics
+
 The evaluation supports the following metric types:
 
 - **answer_similarity**  
@@ -340,11 +345,7 @@ The evaluation supports the following metric types:
   Estimates the U.S. school grade level required to understand the response using the Flesch–Kincaid Grade formula.  
   This metric is rule-based and ignores the `--evaluator` setting.
 
-### Evaluation result
-Metrics are calculated for each test file separately, so also the output is displayed for each file. For each file and metric it is displayed in JSON style. 
-In the begging are summary information about results for metric and whole file. Next there are informations for each row in file separately. 
-
-### Evaluation Results
+### Evaluation results
 
 * Metrics are calculated per test file.
 * Results are displayed in JSON format for each file and metric.
