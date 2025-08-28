@@ -55,20 +55,24 @@ The structure of Graph RAG workflow:
 
 The high level structure of the repository is as follows:  
 
-langgraph-graph-rag  
- ┣ src  
- ┃ ┗ langgraph_graph_rag  
- ┃  ┣ agent.py  
- ┃  ┗ nodes.py    
- ┣ schema  
- ┣ ai_service.py  
- ┣ config.toml.example  
- ┗ pyproject.toml  
+```
+langgraph-graph-rag/
+├── src/
+│   └── langgraph_graph-rag/
+│       ├── agent.py
+│       └── nodes.py
+├── schema/
+├── ai_service.py
+├── config.toml.example
+├── template.env
+└── pyproject.toml
+``` 
 
-- `langgraph-graph-rag` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
-- `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
-- `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic  
-- `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case.  
+* **`langgraph-graph-rag`** folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
+* **`schema`** folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
+* **`ai_service.py`** file: Contains the function to be deployed as an AI service defining the application's logic  
+* **`config.toml.example`**: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
+* **`template.env`**: A file with placeholders for necessary credentials that are essential to run some of the `ibm-watsonx-ai-cli` commands and to test agent locally. Copy the contents of the `template.env` file to the `.env` file and fill the required fields.
 
 ## 🛠 Prerequisites
 
@@ -127,7 +131,8 @@ To begin working with this template using the Command Line Interface (CLI), plea
 
 ## ⚙️ Configuration
 
-1. Copy `config.toml.example` → `config.toml`.
+1. Copy `template.env` → `.env`.
+2. Copy `config.toml.example` → `config.toml`.
 2. Fill in IBM Cloud credentials and AI service online parameters.
 
 ## 🎨 Modifying and configuring the template
@@ -265,4 +270,4 @@ You can also run the graphical application locally using the deployed model. All
    ```
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/langgraph-react-agent/` 
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/langgraph-graph-rag/` 
