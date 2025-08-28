@@ -14,6 +14,7 @@ Table of contents:
   - [Deploying on IBM Cloud](#deploying-on-ibm-cloud)
   - [Querying the deployment](#querying-the-deployment)
     - [What's next?](#whats-next)
+  - [Evaluating agent](#evaluating-agent)
 
 ## Introduction
 
@@ -41,6 +42,7 @@ langgraph-arxiv-research-model-gateway
  ┣ schema  
  ┣ ai_service.py  
  ┣ config.toml.example  
+ ┣ template.env 
  ┣ pyproject.toml
 ```
 
@@ -48,6 +50,7 @@ langgraph-arxiv-research-model-gateway
 - `schema` directory: Contains request and response schemas for the `/ai_service` endpoint queries.
 - `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic.
 - `config.toml` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
+- `template.env`: A file with placeholders for necessary credentials that are essential to run some of the `ibm-watsonx-ai-cli` commands and to test agent locally. Copy the contents of the `template.env` file to the `.env` file and fill the required fields.
 
 ## Prerequisites
 
@@ -83,7 +86,7 @@ langgraph-arxiv-research-model-gateway
 
     ```sh
     pipx install --python 3.11 poetry # set up the env incl. poetry
-    poetry install # install the dependencies
+    poetry install --with dev # install the dependencies
     source $(poetry -q env use 3.11 && poetry env info --path)/bin/activate # start the environment
     ```
 
@@ -91,7 +94,7 @@ langgraph-arxiv-research-model-gateway
     ```sh
     uv venv --python 3.11 # set up the env
     uv pip install poetry # install poetry
-    poetry install # install the dependencies
+    poetry install --with dev # install the dependencies
     ```
 
   You can use any other tool to run your Python code, make sure to use Python 3.11 or higher.
@@ -106,7 +109,7 @@ langgraph-arxiv-research-model-gateway
 
 - ## Step 4: Set the enviroment variables
 
-  The [config.toml](config.toml) file should be filled in before either deploying the template on IBM Cloud or executing it locally.
+  The [config.toml](config.toml) and [.env](.env) files should be filled in before either deploying the template on IBM Cloud or executing it locally.
 
   Go to the [Developer Access](https://dataplatform.cloud.ibm.com/developer-access) page to find your environment variables.
 
@@ -154,16 +157,16 @@ poetry run pytest -r 'fEsxX' tests/
 
 Follow these steps to deploy the model on IBM Cloud.
 
-- ### Step 1: Fill in the configuration file
+- ### Step 1: Fill in the configuration files
 
-  Enter the necessary credentials in the `config.toml` file.
+  Enter the necessary credentials in the `config.toml` and `.env` files.
 
 - ### Step 2: Create deployment using `watsonx-ai` CLI
   ```sh
   watsonx-ai service new
   ```
 
-  Successfully completed operation will set the `deployment_id` in `config.toml` to reference the newly created deployment.
+  Successfully completed operation will set the `deployment_id` in `.env` to reference the newly created deployment.
 
 ## Querying the deployment
 
@@ -175,3 +178,29 @@ watsonx-ai service invoke "<your-prompt>"
 ### What's next?
 
 The next step would be to integrate this agent into a web application, for example by building an API endpoint that can be accessed via your watsonx.ai deployment.
+
+## Evaluating agent
+If you want to evaluate your agent, you can do so using the following command.
+
+```bash
+$ watsonx-ai template eval --tests test.jsonl --metrics answer_similarity,answer_relevance --evaluator llm_as_judge
+```
+
+The `eval` command supports several options
+
+__Options:__
+ - `--tests`: [Required] one or more input data files (in jsonl format) for evaluation
+ - `--metrics`: [Required] one or more evaluation metric
+ - `--evaluator`: [Optional]  Only `llm_as_judge` is allowed. If not provided, metrics are computed using the method 'token_recall'.
+
+__Supported Evaluation Metrics__:
+- `answer_similarity` _(can be evaluated with `llm_as_judge`)_
+- `answer_relevance` _(can be evaluated with `llm_as_judge`)_
+- `text_reading_ease`
+- `unsuccessful_request_metric`
+- `text_grade_level`
+
+The metrics are calculated using the **IBM watsonx.governance SDK** library. You can find more details about these metrics in the official documentation [here](https://ibm.github.io/ibm-watsonx-gov/).
+
+> [!WARNING]  
+> The `eval` command requires Python version >=3.10,<=3.12

@@ -5,13 +5,14 @@
 * [Directory structure and file descriptions](#-directory-structure-and-file-descriptions)  
 * [Prerequisites](#-prerequisites)  
 * [Installation](#-installation)
-* [Configuration](#%EF%B8%8F-configuration)  
+* [Configuration](#-configuration)
 * [Modifying and configuring the template](#-modifying-and-configuring-the-template)  
 * [Testing the template](#-testing-the-template)  
 * [Running the application locally](#-running-the-application-locally)  
-* [Deploying on IBM Cloud](#%EF%B8%8F-deploying-on-ibm-cloud)  
+* [Deploying on IBM Cloud](#-deploying-on-ibm-cloud)  
 * [Querying the deployment](#-querying-the-deployment)  
-* [Running the graphical app locally](#%EF%B8%8F-running-the-graphical-app-locally) 
+* [Running the graphical app locally](#-running-the-graphical-app-locally) 
+* [Evaluating agent](#-evaluating-agent)
 * [Cloning template (Optional)](#-cloning-template-optional)  
 
 ## 🤔 Introduction
@@ -28,7 +29,7 @@ An AI service is a deployable unit of code that encapsulates the logic of your g
 * ⚙️ Configurable via `config.toml`
 * 🌐 Step-by-step local and cloud deployment
 
-The template builds a simple application with external tool for addressing Web Search Agent use case.
+The template builds a simple application with external tool for addressing Web Search Agent use case. This template uses a Requirement agent, which allows for declarative customization of the agent's behavior. You can learn more about this concept in the official [BeeAI documentation](https://framework.beeai.dev/experimental/requirement-agent).
 
 Streaming version coming soon to this template.
 
@@ -37,22 +38,23 @@ Streaming version coming soon to this template.
 The high level structure of the repository is as follows:  
 
 ```
-beeai-framework-react-agent/
+beeai-framework-requirement-agent/
 ├── src/
-│   └── beeai_framework_react_agent_base/
+│   └── beeai_framework_requirement_agent_base/
 │       ├── agent.py
 │       └── tools.py
 ├── schema/
 ├── ai_service.py
 ├── config.toml.example
+├── template.env
 └── pyproject.toml
 ```
 
-* **`beeai_framework_react_agent_base`** folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
+* **`beeai_framework_requirement_agent_base`** folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
 * **`schema`** folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
 * **`ai_service.py`** file: Contains the function to be deployed as an AI service defining the application's logic  
 * **`config.toml.example`** file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the config.toml.example file to the config.toml file and fill in the required fields. config.toml file can also be used to tweak the model for your use case.
-
+* **`template.env`**: A file with placeholders for necessary credentials that are essential to run some of the `ibm-watsonx-ai-cli` commands and to test agent locally. Copy the contents of the `template.env` file to the `.env` file and fill the required fields.
 ## 🛠 Prerequisites
 
 * **Python 3.11**
@@ -71,7 +73,7 @@ To begin working with this template using the Command Line Interface (CLI), plea
 
 2. **Download template**:
    ```sh
-   watsonx-ai template new "base/beeai-framework-react-agent"
+   watsonx-ai template new "base/beeai-framework-requirement-agent"
    ```
 
    Upon executing the above command, a prompt will appear requesting the user to specify the target directory for downloading the template. Once the template has been successfully downloaded, navigate to the designated template folder to proceed.
@@ -90,7 +92,7 @@ To begin working with this template using the Command Line Interface (CLI), plea
     Running the below commands will install the repository in a separate virtual environment
    
    ```sh
-   poetry install
+   poetry install --with dev
    ```
 
 5. **(Optional) Activate the virtual environment**:
@@ -109,12 +111,13 @@ To begin working with this template using the Command Line Interface (CLI), plea
 
 ## ⚙️ Configuration
 
-1. Copy `config.toml.example` → `config.toml`.
-2. Fill in IBM Cloud credentials.
+1. Copy `template.env` → `.env`.
+2. Copy `config.toml.example` → `config.toml`.
+3. Fill in IBM Cloud credentials.
 
 ## 🎨 Modifying and configuring the template
 
-[config.toml](config.toml) file should be filled in before either deploying the template on IBM Cloud or executing it locally.  
+[config.toml](config.toml) and [.env](.env) files should be filled in before either deploying the template on IBM Cloud or executing it locally.  
 Possible config parameters are given in the provided file and explained using comments (when necessary).  
 
 
@@ -125,7 +128,7 @@ For detailed description and API please refer to the [IBM watsonx.ai Parameter S
 Sensitive data should not be passed unencrypted, e.g. in the configuration file. The recommended way to handle them is to make use of the [IBM Cloud® Secrets Manager](https://cloud.ibm.com/apidocs/secrets-manager/secrets-manager-v2). The approach to integrating the Secrets Manager's API with the app is for the user to decide on.  
 
 
-The [agent.py](src/beeai_framework_react_agent_base/agent.py) file creates agents and prompts.
+The [agent.py](src/beeai_framework_requirement_agent_base/agent.py) file creates agents and prompts.
 For detailed info on how to modify the agent please refer to [beeai-framework's official documentation](https://github.com/i-am-bee/beeai-framework)  
 
 
@@ -133,7 +136,7 @@ The [ai_service.py](ai_service.py) file encompasses the core logic of the app al
 For a detailed breakdown of the ai-service's implementation please refer the [IBM Cloud docs](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-create.html?context=wx)  
 
 
-[tools.py](src/beeai_framework_react_agent_base/tools.py) file stores the definition for tools enhancing the chat model's capabilities.
+[tools.py](src/beeai_framework_requirement_agent_base/tools.py) file stores the definition for tools enhancing the chat model's capabilities.
 To add a new tool, create a class that extends the `beeai_framework.tools.tool` class.
 
 For more sophisticated use cases, please refer to the [beeai-framework docs](https://github.com/i-am-bee/beeai-framework).  
@@ -152,7 +155,7 @@ pytest -r 'fEsxX' tests/
 
 It is possible to run (or even debug) the ai-service locally, however it still requires creating the connection to the IBM Cloud.
 
-Ensure `config.toml` is configured.
+Ensure `config.toml` and `.env` are configured.
 
 You can test and debug your AI service locally via two alternative flows:
 
@@ -181,7 +184,7 @@ watsonx-ai template invoke "<PROMPT>"
 
 Follow these steps to deploy the model on IBM Cloud. 
 
-Ensure `config.toml` is configured.
+Ensure `config.toml` and `.env` are configured.
 
 You can deploy your AI service to IBM Cloud via two alternative flows:
 
@@ -214,7 +217,7 @@ You can send inference requests to your deployed AI service via two alternative 
 watsonx-ai service invoke --deployment_id "<DEPLOYMENT_ID>" "<PROMPT>"
 ```
 
-*If `deployment_id` is set in `config.toml`, omit the flag.*
+*If `deployment_id` is set in `.env`, omit the flag.*
 
 ```sh
 watsonx-ai service invoke "<PROMPT>"
@@ -250,7 +253,7 @@ You can also run the graphical application locally using the deployed model. All
 
 2. **Configure the app**:
 
-   All required variables are defined in the config.toml file.
+   All required variables are defined in the `.env` file.
    Here is an example of how to create the **WATSONX_BASE_DEPLOYMENT_URL**:
    `https://{REGION}.ml.cloud.ibm.com/ml/v4/deployments/{deployment_id}`
 
@@ -274,6 +277,31 @@ You can also run the graphical application locally using the deployed model. All
 
    This soultion allows user to make changes to the source code while the app is running. Each time changes are saved the app reloads and is working with provided changes.
 
+## 📊 Evaluating agent
+If you want to evaluate your agent, you can do so using the following command.
+
+```bash
+$ watsonx-ai template eval --tests test.jsonl --metrics answer_similarity,answer_relevance --evaluator llm_as_judge
+```
+
+The `eval` command supports several options
+
+__Options:__
+ - `--tests`: [Required] one or more input data files (in jsonl format) for evaluation
+ - `--metrics`: [Required] one or more evaluation metric
+ - `--evaluator`: [Optional]  Only `llm_as_judge` is allowed. If not provided, metrics are computed using the method 'token_recall'.
+
+__Supported Evaluation Metrics__:
+- `answer_similarity` _(can be evaluated with `llm_as_judge`)_
+- `answer_relevance` _(can be evaluated with `llm_as_judge`)_
+- `text_reading_ease`
+- `unsuccessful_request_metric`
+- `text_grade_level`
+
+The metrics are calculated using the **IBM watsonx.governance SDK** library. You can find more details about these metrics in the official documentation [here](https://ibm.github.io/ibm-watsonx-gov/).
+
+> [!WARNING]  
+> The `eval` command requires Python version >=3.10,<=3.12
 
 ---
 
@@ -290,9 +318,9 @@ You can also run the graphical application locally using the deployed model. All
    ```sh
    git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
    cd watsonx-developer-hub
-   git sparse-checkout add agents/base/beeai-framework-react-agent
-   cd agents/base/beeai-framework-react-agent/
+   git sparse-checkout add agents/base/beeai-framework-requirement-agent
+   cd agents/base/beeai-framework-requirement-agent/
    ```
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/beeai-framework-react-agent/`  
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/base/beeai-framework-requirement-agent/`  
