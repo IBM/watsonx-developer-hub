@@ -292,7 +292,7 @@ The `eval` command supports several options
 - `--help`: Show this message and exit.
 - `--tests`: **[Required]** one or more input data files (in JSONL format) for evaluation. If more than one evaluation file is provided, they must be separated by a comma.  
  The required fields in the files are described in the section below.
-- `--metrics`: **[Optional]** one or more evaluation metrics. If multiple metrics are specified, they must be separated by a comma. If not specified all possible metrics will be used (answer_similarity, answer_relevance, text_reading_ease, unsuccessful_request_metric,text_grade_level)
+- `--metrics`: **[Optional]** one or more evaluation metrics. If multiple metrics are specified, they must be separated by a comma. If not specified all possible metrics will be used (answer_similarity, answer_relevance, text_reading_ease, unsuccessful_request_metric, text_grade_level)
 - `--evaluator`: **[Optional]** a model name for evaluation, or `llm_as_judge` can be used for a predefined choice (`meta-llama/llama-3-3-70b-instruct`, or `mistralai/mistral-small-3-1-24b-instruct-2503` if former is not available). 
   - If not provided, metrics are computed using the `token_recall` method.  
   - If provided, two metrics **answer similarity** and **answer relevance** are calculated using llm as judge method.  
@@ -300,8 +300,8 @@ The `eval` command supports several options
 
 ### Requirements
 
-* **IBM Cloud**: Add your API key to the environment variables.
-* **CPD**: Add either a username and password, or a username and API key, to the environment variables.
+* **IBM watsonx.ai for IBM Cloud**: Add your API key to the environment variables.
+* **IBM Cloud Pak® for Data**: Add either a username and password, or a username and API key, to the environment variables.
 
 
 All variables can be defined in a .env file.
