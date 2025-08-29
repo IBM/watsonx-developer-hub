@@ -321,6 +321,8 @@ The data must be in JSONL format. Each row should contain two fields:
 
 During evaluation, answers are generated based on the `input` and compared to the `ground_truth` only for metrics that require it.
 
+You can find an example data file [here](./benchmarking_data/benchmarking_data.jsonl).
+
 ### Available types of metrics
 
 The evaluation supports the following metric types:
