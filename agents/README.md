@@ -51,25 +51,28 @@ watsonx-ai service invoke "Hello"
 
 Designed to help you get started quickly with examples that can be easily customized and extended.
 
-| Template                 | 
-| ------------------------ |
-| [LangGraph](./base/langgraph-react-agent/) |
-| [LlamaIndex](./base/llamaindex-websearch-agent/) |
-| [CrewAI](./base/crewai-websearch-agent/) |
-| [AutoGen](./base/autogen-agent/) |
-| [BeeAI React Agnet](./base/beeai-framework-react-agent/) |
-| [BeeAI Workflow](./base/beeai-framework-workflow/) |
+| Template                                                       | 
+|----------------------------------------------------------------|
+| [LangGraph](./base/langgraph-react-agent/)                     |
+| [LlamaIndex](./base/llamaindex-websearch-agent/)               |
+| [CrewAI](./base/crewai-websearch-agent/)                       |
+| [AutoGen](./base/autogen-agent/)                               |
+| [BeeAI React Agnet](./base/beeai-framework-requirement-agent/) |
+| [BeeAI Workflow](./base/beeai-framework-workflow/)             |
 
 ## Community Templates
 
 Templates published and maintained by the community.
 
-| Template                                            | Framework | Description                                                       | CLI support |
-| --------------------------------------------------- | --------- | ----------------------------------------------------------------- | ----------- |
-| [Agentic RAG](./community/langgraph-agentic-rag/) | Langraph  | Agent to improve retrieval augmented generation (RAG) scenario. | Yes |
-| [arXiv Research Agent](./community/langgraph-arxiv-research/) | Langraph  | Agent to search and summarize research papers published on arXiv. | Yes |
-| [Agent with the Tavily search Tool](./community/langgraph-tavily-tool/) | Langraph  | Agent that uses Tavily search tool and IBM Cloud® Secrets Manager. | Yes | 
-| [Agent with MCP server and AutoAI model](./community/mcp-autoai-template/) | Langraph  | Agent that uses MCP Server to interact with a deployed AutoAI model. | No |
+| Template                                                                                  | Framework | Description                                                              | CLI support |
+|-------------------------------------------------------------------------------------------| --------- |--------------------------------------------------------------------------| ----------- |
+| [Agentic RAG](./community/langgraph-agentic-rag/)                                         | Langraph  | Agent to improve retrieval augmented generation (RAG) scenario.          | Yes |
+| [arXiv Research Agent](./community/langgraph-arxiv-research/)                             | Langraph  | Agent to search and summarize research papers published on arXiv.        | Yes |
+| [arXiv Research Model Gateway Agent](./community/langgraph-arxiv-research-model-gateway ) | Langraph  | Agent to route requests to LLM providers using Model Gateway.  | Yes | 
+| [Graph RAG Agent](./community/langgraph-graph-rag )                                       | Langraph  | Agent to solve RAG tasks by combining Neo4j-powered knowledge graphs with vector similarity search.  | Yes | 
+| [Agent with database memory](./community/langgraph-react-with-database-memory )           | Langraph  | Agent to manage conversation memory using a Postgres database, retaining context from recent messages for LLM interactions.  | Yes | 
+| [Agent with the Tavily search Tool](./community/langgraph-tavily-tool/)                   | Langraph  | Agent that uses Tavily search tool and IBM Cloud® Secrets Manager.       | Yes | 
+| [Agent with MCP server and AutoAI model](./community/mcp-autoai-template/)                | Langraph  | Agent that uses MCP Server to interact with a deployed AutoAI model.     | No |
 
 ## Template Requirements
 
