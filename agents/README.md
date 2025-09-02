@@ -192,6 +192,60 @@ After downloading the template repository, copy the contents of the `config.toml
 
 * Follow the style of existing [base templates](https://github.com/IBM/watsonx-developer-hub/tree/main/agents/base).
 
+
+## Contributing Guidelines
+
+We’re really excited that you’re considering contributing to this project! Every contribution, no matter how small, makes a difference – and we’d be truly happy to have you on board.
+
+### Getting Started
+
+This repository is open to contributions from everyone. Whether you’d like to fix a bug, improve documentation, or add a brand-new template – your input is valuable.
+To keep everything consistent, please make sure your templates follow our guidelines.
+You can find the detailed requirements in the [previous section](#template-requirements) of this README.
+If you are new to watsonx Developer Hub, we recommend reading the [Code of Conduct](../CODE_OF_CONDUCT.md).
+
+### Working on Existing Issues
+
+1. Check the Issues section for open tasks.
+2. If you find an issue related to a specific template that interests you, reach out to us first.
+3. We’ll assign the issue to you, so others know it’s in progress and there’s no overlap.
+
+### Proposing New Ideas
+
+Got a new idea that’s not in the issues list? Awesome!
+We encourage you to share it with us – simply open a discussion or contact us directly. We’ll be glad to review it together and figure out how it fits into the project.
+
+### Issues and pull requests
+
+We use GitHub pull requests to accept contributions.
+
+While not required, it’s a good idea to open a new issue for the bug you’re fixing or the feature you’re working on before submitting a pull request. 
+This helps start a discussion with the community about your work, provides a place to refine the idea and figure out the best way to implement it, and lets others know what you’re working on.
+If you need help, you can also reference the issue when discussing it with community members or the team.
+
+### Developer Certificate of Origin (DCO)
+
+We have tried to make it as easy as possible to make contributions. This applies to how we handle the legal aspects of contribution. We use the [Developer's Certificate of Origin 1.1 (DCO)](https://developercertificate.org/)  to manage code contributions.
+When submitting a patch for review, the developer must include a sign-off statement in the commit message. If you set your user.name and user.email in your git config file, you can sign your commit automatically by using the following command:
+
+```bash
+git commit -s
+```
+
+If a commit has already been created but signoff was missed this can be remedied
+
+```bash
+git commit --amend -s
+```
+
+The following example includes a `Signed-off-by:` line, which indicates that the submitter has accepted the DCO:
+
+```txt
+Signed-off-by: John Doe <john.doe@example.com>
+```
+
+We automatically verify that all commit messages contain a `Signed-off-by:` line with your email address.
+
 ## Consuming deployed agents
 
 All of the available templates can be easily consumed in the [React UI App](../apps/base/nextjs-chat-with-ai-service/) that creates local running React application providing users an option to infer agents. To run the app local please follow these [steps](../apps/base/nextjs-chat-with-ai-service/README.md).
