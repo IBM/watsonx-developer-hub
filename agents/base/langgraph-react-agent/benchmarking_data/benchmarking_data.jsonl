@@ -1,3 +1,3 @@
 { "id": "1", "input": "Hi! How are you?", "ground_truth": "I'm an artificial intelligence and don't have feelings, but I'm here to help you with any information you need. How can I assist you today?" }
-{ "id": "2", "input": "Search for IBM.", "ground_truth": "Here are the results I found:\n\n- IBM watsonx.ai" }
+{ "id": "2", "input": "What is IBM watsonx.ai? Answer briefly", "ground_truth": "IBM watsonx.ai is a platform by IBM that enables users to build and deploy custom artificial intelligence models. It provides tools for data labeling, model building, and model management." }
 { "id": "3", "input": "What are Granite models?", "ground_truth": "According to the web search, Granite models are part of IBM watsonx.ai. They are designed for foundation models, allowing users to customize and deploy them for their specific needs." }
