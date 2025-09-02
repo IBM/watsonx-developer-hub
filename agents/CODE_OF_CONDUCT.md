@@ -2,19 +2,22 @@
 
 ## Our Pledge
 
-We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
-
-We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
+In the interest of fostering an open and welcoming environment, we as
+contributors and maintainers pledge to making participation in our project 
+a harassment-free experience for everyone, regardless of age, body
+size, disability, ethnicity, sex characteristics, gender identity and expression,
+level of experience, education, socio-economic status, nationality, personal
+appearance, race, religion, or sexual identity and orientation.
 
 ## Our Standards
 
-Examples of behavior that contributes to a positive environment for our community include:
+Examples of behavior that contributes to a positive environment include:
 
 * Demonstrating empathy and kindness toward other people
 * Being respectful of differing opinions, viewpoints, and experiences
 * Giving and gracefully accepting constructive feedback
 * Accepting responsibility and apologizing to those affected by our mistakes, and learning from the experience
-* Focusing on what is best not just for us as individuals, but for the overall community
+* Focusing on what is best not just for us as individuals, but for everyone
 
 Examples of unacceptable behavior include:
 
@@ -38,16 +41,15 @@ threatening, offensive, or harmful.
 
 ## Scope
 
-This Code of Conduct applies within all community spaces, and also applies when an individual is officially representing 
-the community in public spaces. Examples of representing our community include using an official e-mail address, posting 
+This Code of Conduct applies within all maintainers spaces, and also applies when an individual is officially representing 
+the project in public spaces. Examples of representing our group include using an official e-mail address, posting 
 via an official social media account, or acting as an appointed representative at an online or offline event.
 
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by contacting code maintainers.
-All complaints will be reviewed and investigated and will result in a response that
-is deemed necessary and appropriate to the circumstances. The project team is
+reported by contacting code maintainers. All complaints will be reviewed and investigated and will result in a response 
+that is deemed necessary and appropriate to the circumstances. The project team is
 obligated to maintain confidentiality with regard to the reporter of an incident.
 Further details of specific enforcement policies may be posted separately.
 
