@@ -199,7 +199,7 @@ We’re really excited that you’re considering contributing to this project! E
 This repository is open to contributions from everyone. Whether you’d like to fix a bug, improve documentation, or add a brand-new template – your input is valuable.
 To keep everything consistent, please make sure your templates follow our guidelines.
 You can find the detailed requirements in the [previous section](#template-requirements) of this README.
-If you are new to watsonx Developer Hub, we recommend reading the [Code of Conduct](CODE_OF_CONDUCT.md).
+If you are new to watsonx Developer Hub, we recommend reading the [Code of Conduct](../CODE_OF_CONDUCT.md).
 
 ### Working on Existing Issues
 
