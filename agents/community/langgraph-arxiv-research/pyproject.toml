@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "langgraph_react_agent"
-version = "0.1.6"
+version = "0.1.7"
 description = "A template for a LangGraph LLM app deployable on IBM Cloud as an ai_service. This particular example focues on a WatsonX chatbot enhanced with external tools (function calling)."
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
@@ -17,7 +17,7 @@ langgraph = ">0.2,<0.3"
 statsmodels = "^0.14.4"
 numpy = "<2"
 langchain-community = "^0.3.17"
-duckduckgo-search = "^7.3.2"
+ddgs = "^9.5.5"
 markdownify = "^1.1.0"
 
 [tool.poetry.group.dev]

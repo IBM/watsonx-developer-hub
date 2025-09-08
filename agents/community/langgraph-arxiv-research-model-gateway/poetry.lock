@@ -515,6 +515,26 @@ torch = ["torch"]
 vision = ["Pillow (>=9.4.0)"]
 
 [[package]]
+name = "ddgs"
+version = "9.5.5"
+description = "Dux Distributed Global Search. A metasearch library that aggregates results from diverse web search services."
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "ddgs-9.5.5-py3-none-any.whl", hash = "sha256:01fc8017a653ad16501bd8ac9fedcd29291f6500b1f8a7e92a916cdad7fc2fa2"},
+    {file = "ddgs-9.5.5.tar.gz", hash = "sha256:9a09aa9ba24173d14321137c8c1bc54040ed0bf3bad956cb2f9feeda77968770"},
+]
+
+[package.dependencies]
+click = ">=8.1.8"
+lxml = ">=6.0.0"
+primp = ">=0.15.0"
+
+[package.extras]
+dev = ["mypy (>=1.17.1)", "pytest (>=8.4.1)", "pytest-dependency (>=0.6.0)", "ruff (>=0.12.9)"]
+
+[[package]]
 name = "dill"
 version = "0.3.8"
 description = "serialize all of Python"
@@ -556,26 +576,6 @@ files = [
     {file = "distro-1.9.0-py3-none-any.whl", hash = "sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2"},
     {file = "distro-1.9.0.tar.gz", hash = "sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed"},
 ]
-
-[[package]]
-name = "duckduckgo-search"
-version = "8.1.1"
-description = "Search for words, documents, images, news, maps and text translation using the DuckDuckGo.com search engine."
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-files = [
-    {file = "duckduckgo_search-8.1.1-py3-none-any.whl", hash = "sha256:f48adbb06626ee05918f7e0cef3a45639e9939805c4fc179e68c48a12f1b5062"},
-    {file = "duckduckgo_search-8.1.1.tar.gz", hash = "sha256:9da91c9eb26a17e016ea1da26235d40404b46b0565ea86d75a9f78cc9441f935"},
-]
-
-[package.dependencies]
-click = ">=8.1.8"
-lxml = ">=5.3.0"
-primp = ">=0.15.0"
-
-[package.extras]
-dev = ["mypy (>=1.14.1)", "pytest (>=8.3.4)", "pytest-dependency (>=0.6.0)", "ruff (>=0.9.2)"]
 
 [[package]]
 name = "evaluate"
@@ -1212,12 +1212,18 @@ files = [
     {file = "ibm_watsonx_gov-1.1.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:ed90f97e26ec6d3f3351ecab5a0feb75245571fbee6e171af192a15c5a45a299"},
     {file = "ibm_watsonx_gov-1.1.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:5061295612a2b923ef1222a975cbc17fa6b7d4ce0e747074d4cb4bad247963e3"},
     {file = "ibm_watsonx_gov-1.1.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3c4226da9018de244183c665d297a80c79804e49f7c5bb69be2ff0d2428deca1"},
+    {file = "ibm_watsonx_gov-1.1.0-cp310-cp310-win32.whl", hash = "sha256:b21c9b106d32e3b32bb544798cfb0111d62010fa64292b0c73614ac68787d580"},
+    {file = "ibm_watsonx_gov-1.1.0-cp310-cp310-win_amd64.whl", hash = "sha256:757dc1c842fa393d441939909188d0cea54546b9aaa2dd24e746506871722528"},
     {file = "ibm_watsonx_gov-1.1.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:636a3fe0906e0be6eadad3a37cc68ef9dfa929874b35e1a8d585a6a9219643f3"},
     {file = "ibm_watsonx_gov-1.1.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:17c6cb2da37e9b0971704e6766eda848a372dec5cf1affd52f04f4b7253fc18d"},
     {file = "ibm_watsonx_gov-1.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:88efc79a737653f78e33c8ae81d5514700662fd70fc3c2189c18f9a74482f045"},
+    {file = "ibm_watsonx_gov-1.1.0-cp311-cp311-win32.whl", hash = "sha256:04376e20babcf20654b58b84333b6c5b01dfc1834dc3f9e058d0d25b35ed418d"},
+    {file = "ibm_watsonx_gov-1.1.0-cp311-cp311-win_amd64.whl", hash = "sha256:bdd216042d06d946377564474db37b73102c4bf85943bfafbc06ba23f47799ec"},
     {file = "ibm_watsonx_gov-1.1.0-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:304cf3dc7a6109674a95d86da627451fd3a4f99f51243c2b5f302cee3dbc6928"},
     {file = "ibm_watsonx_gov-1.1.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:66223be773d24f85d29a342d943a147be79098cad1ae7d1712b4108f21b2653c"},
     {file = "ibm_watsonx_gov-1.1.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:593019752f094c89dc778c2b392a5deae1be3a1528bf1c5799133be3aa16d2b5"},
+    {file = "ibm_watsonx_gov-1.1.0-cp312-cp312-win32.whl", hash = "sha256:8d8057b840f983080932ae7d496a88cb23fa9261a2eeb1e6d1bb36ff62d70d95"},
+    {file = "ibm_watsonx_gov-1.1.0-cp312-cp312-win_amd64.whl", hash = "sha256:63d857fdebd2e27d5f7e87e2c9c8b9b4d4108f7c785e807c9269ac6fddf19bdf"},
 ]
 
 [package.dependencies]
@@ -4644,4 +4650,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11, <3.14"
-content-hash = "58150492db4916294ca31f8db22804b6f87e7f3fe9903bef05fd915fd71f5ce2"
+content-hash = "c5d5fe9a7ed43fc1dd2206b75997308d6f7d29163c5f6b1e41e549a4ce14b43b"
