@@ -11,13 +11,13 @@
 [deployment.online.parameters]
   # during creation of deployment additional parameters can be provided inside `ONLINE` object for further referencing
   # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
-  model_id = "mistralai/mistral-large"  # underlying model of WatsonxChat
+  model_id = "meta-llama/llama-3-3-70b-instruct"  # underlying model of WatsonxChat
   url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
 
   # SQL db connection configuration
   # Required:
   tool_config_connection_id = ""
-  tool_config_model_id = ""
+  tool_config_model_id = "meta-llama/llama-3-3-70b-instruct"
   tool_config_dialect = ""
   tool_config_schema = ""
 
