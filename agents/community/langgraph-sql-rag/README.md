@@ -43,7 +43,7 @@ langgraph-sql-rag
  ┣ ai_service.py  
  ┣ config.toml.example  
  ┣ template.env  
- ┣ pyproject.toml  
+ ┗ pyproject.toml  
 
 - `langgraph-sql-rag` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
 - `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
