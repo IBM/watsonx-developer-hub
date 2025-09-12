@@ -331,12 +331,12 @@ The `eval` command supports several options
 
 __Options:__
  - `--tests`: [Required] one or more input data files (in jsonl format) for evaluation
- - `--metrics`: [Required] one or more evaluation metric
- - `--evaluator`: [Optional]  Only `llm_as_judge` is allowed. If not provided, metrics are computed using the method 'token_recall'.
+ - `--metrics`: [Optional] one or more evaluation metric. If multiple metrics are specified, they must be separated by a comma. If not specified all possible metrics will be used
+ - `--evaluator`: [Optional] a model name for evaluation, or `llm_as_judge` can be used for a predefined choice (`meta-llama/llama-3-3-70b-instruct`, or `mistralai/mistral-small-3-1-24b-instruct-2503` if former is not available). If not provided, metrics are computed using the method `token_recall`.
 
 __Supported Evaluation Metrics__:
-- `answer_similarity` _(can be evaluated with `llm_as_judge`)_
-- `answer_relevance` _(can be evaluated with `llm_as_judge`)_
+- `answer_similarity` _(can be evaluated with `--evaluator`)_
+- `answer_relevance` _(can be evaluated with `--evaluator`)_
 - `text_reading_ease`
 - `unsuccessful_request_metric`
 - `text_grade_level`

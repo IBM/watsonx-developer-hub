@@ -21,7 +21,7 @@ ibm_secrets_manager_sdk = "^2.1.9"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-ibm-watsonx-ai-cli = "^0.2.1"
+ibm-watsonx-ai-cli = ">=0.3.0"
 pytest = "^8.3.3"
 
 [build-system]

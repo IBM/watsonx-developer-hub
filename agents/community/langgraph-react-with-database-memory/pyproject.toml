@@ -23,7 +23,7 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
-ibm-watsonx-ai-cli = "^0.2.1"
+ibm-watsonx-ai-cli = ">=0.3.0"
 
 [build-system]
 requires = ["poetry-core"]

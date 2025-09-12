@@ -12,6 +12,7 @@
 * [Deploying on IBM Cloud](#%EF%B8%8F-deploying-on-ibm-cloud)  
 * [Querying the deployment](#-querying-the-deployment)  
 * [Running the graphical app locally](#%EF%B8%8F-running-the-graphical-app-locally) 
+* [Evaluating agent](#evaluating-agent)
 * [Cloning template (Optional)](#-cloning-template-optional)   
 
 
@@ -246,6 +247,34 @@ You can also run the graphical application locally using the deployed model. All
    ```
 
    This soultion allows user to make changes to the source code while the app is running. Each time changes are saved the app reloads and is working with provided changes.
+
+
+## Evaluating agent
+If you want to evaluate your agent, you can do so using the following command.
+
+```bash
+$ watsonx-ai template eval --tests test.jsonl --metrics answer_similarity,answer_relevance --evaluator llm_as_judge
+```
+
+The `eval` command supports several options
+
+__Options:__
+ - `--tests`: [Required] one or more input data files (in jsonl format) for evaluation
+ - `--metrics`: [Optional] one or more evaluation metric. If multiple metrics are specified, they must be separated by a comma. If not specified all possible metrics will be used
+ - `--evaluator`: [Optional] a model name for evaluation, or `llm_as_judge` can be used for a predefined choice (`meta-llama/llama-3-3-70b-instruct`, or `mistralai/mistral-small-3-1-24b-instruct-2503` if former is not available). If not provided, metrics are computed using the method `token_recall`.
+
+__Supported Evaluation Metrics__:
+- `answer_similarity` _(can be evaluated with `--evaluator`)_
+- `answer_relevance` _(can be evaluated with `--evaluator`)_
+- `text_reading_ease`
+- `unsuccessful_request_metric`
+- `text_grade_level`
+
+The metrics are calculated using the **IBM watsonx.governance SDK** library. You can find more details about these metrics in the official documentation [here](https://ibm.github.io/ibm-watsonx-gov/).
+
+> [!WARNING]  
+> The `eval` command requires Python version >=3.10,<=3.12
+
 
 ---
 
