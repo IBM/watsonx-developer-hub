@@ -77,7 +77,7 @@ cd agents/community/langgraph-sql-rag/
 ```
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/langgraph-agentic-rag/`  
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/langgraph-sql-rag/`  
 
 
 ### Step 2: Install poetry  
