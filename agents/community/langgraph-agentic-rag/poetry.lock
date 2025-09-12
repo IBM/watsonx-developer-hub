@@ -959,50 +959,50 @@ urllib3 = ">=2.1.0,<3.0.0"
 
 [[package]]
 name = "ibm-cos-sdk"
-version = "2.14.1"
+version = "2.14.2"
 description = "IBM SDK for Python"
 optional = false
 python-versions = ">=3.8"
 groups = ["main", "dev"]
 files = [
-    {file = "ibm_cos_sdk-2.14.1.tar.gz", hash = "sha256:f66caeab0468544fd28f25fad62bd02ec35a63255a4de4c28f47b38b140af59f"},
+    {file = "ibm_cos_sdk-2.14.2.tar.gz", hash = "sha256:d859422c1dfd03e52cd66acbb2b45b4c944a390725c3a91d4a8e003f0cfc4e4b"},
 ]
 
 [package.dependencies]
-ibm-cos-sdk-core = "2.14.1"
-ibm-cos-sdk-s3transfer = "2.14.1"
+ibm-cos-sdk-core = "2.14.2"
+ibm-cos-sdk-s3transfer = "2.14.2"
 jmespath = ">=0.10.0,<=1.0.1"
 
 [[package]]
 name = "ibm-cos-sdk-core"
-version = "2.14.1"
+version = "2.14.2"
 description = "Low-level, data-driven core of IBM SDK for Python"
 optional = false
 python-versions = ">=3.6"
 groups = ["main", "dev"]
 files = [
-    {file = "ibm_cos_sdk_core-2.14.1.tar.gz", hash = "sha256:60efc2ac15ee26bd5fba3bf479046d0477c789065ec0ef856ae926ca64c3cabc"},
+    {file = "ibm_cos_sdk_core-2.14.2.tar.gz", hash = "sha256:d594b2af58f70e892aa3b0f6ae4b0fa5d412422c05beeba083d4561b5fad91b4"},
 ]
 
 [package.dependencies]
 jmespath = ">=0.10.0,<=1.0.1"
 python-dateutil = ">=2.9.0,<3.0.0"
-requests = ">=2.32.0,<2.32.3"
+requests = ">=2.32.4,<3.0.0"
 urllib3 = ">=1.26.18,<3"
 
 [[package]]
 name = "ibm-cos-sdk-s3transfer"
-version = "2.14.1"
+version = "2.14.2"
 description = "IBM S3 Transfer Manager"
 optional = false
 python-versions = ">=3.8"
 groups = ["main", "dev"]
 files = [
-    {file = "ibm_cos_sdk_s3transfer-2.14.1.tar.gz", hash = "sha256:99c4146696695485d348f2981661ae564bbaa3459da00b2fe5b19cfa862b96b1"},
+    {file = "ibm_cos_sdk_s3transfer-2.14.2.tar.gz", hash = "sha256:01d1cb14c0decaeef273979da7a13f7a874f1d4c542ff3ae0a186c7b090569bc"},
 ]
 
 [package.dependencies]
-ibm-cos-sdk-core = "2.14.1"
+ibm-cos-sdk-core = "2.14.2"
 
 [[package]]
 name = "ibm-watson-openscale"
@@ -1065,19 +1065,19 @@ rag = ["beautifulsoup4 (==4.12.3)", "grpcio (>=1.54.3)", "langchain (>=0.3,<0.4)
 
 [[package]]
 name = "ibm-watsonx-ai-cli"
-version = "0.2.1"
+version = "0.3.0"
 description = "CLI for deploying AI services with Agents to watsonx.ai."
 optional = false
 python-versions = "<3.14,>=3.10"
 groups = ["dev"]
 files = [
-    {file = "ibm_watsonx_ai_cli-0.2.1-py3-none-any.whl", hash = "sha256:0cc511d51fc716f48e483c23a656fc5820dbf7c6601f715eaadd8c1a0c1a9324"},
-    {file = "ibm_watsonx_ai_cli-0.2.1.tar.gz", hash = "sha256:60991e60cd340d9a79fe26398f48d5b7118bf4a00c893f844b0992245ef3892d"},
+    {file = "ibm_watsonx_ai_cli-0.3.0-py3-none-any.whl", hash = "sha256:d4ea6214e6e77fbe6d23f92f41353664aa1f6d0ae7ba077c8dd9149deb7bc05c"},
+    {file = "ibm_watsonx_ai_cli-0.3.0.tar.gz", hash = "sha256:a01548fd837d1df3cad8f08cd53f894ede1974f1d669de306395202345e5f809"},
 ]
 
 [package.dependencies]
 ibm-watsonx-ai = ">=1.3.18"
-ibm-watsonx-gov = {version = "1.1.0", markers = "python_version < \"3.13\""}
+ibm-watsonx-gov = {version = ">=1.2.0,<1.3.0", markers = "python_version < \"3.13\""}
 jsonschema = {version = ">=4.19.0,<5.0.0", markers = "python_version < \"3.13\""}
 litellm = {version = ">=1.48.0,<2.0.0", markers = "python_version < \"3.13\""}
 nest-asyncio = {version = ">=1.6.0,<2.0.0", markers = "python_version < \"3.13\""}
@@ -1093,37 +1093,44 @@ unitxt = {version = ">=1.22.0,<1.27", markers = "python_version < \"3.13\""}
 
 [[package]]
 name = "ibm-watsonx-gov"
-version = "1.1.0"
+version = "1.2.2"
 description = "IBM watsonx.governance SDK"
 optional = false
 python-versions = "<3.13,>=3.10"
 groups = ["dev"]
 files = [
-    {file = "ibm_watsonx_gov-1.1.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:ed90f97e26ec6d3f3351ecab5a0feb75245571fbee6e171af192a15c5a45a299"},
-    {file = "ibm_watsonx_gov-1.1.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:5061295612a2b923ef1222a975cbc17fa6b7d4ce0e747074d4cb4bad247963e3"},
-    {file = "ibm_watsonx_gov-1.1.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3c4226da9018de244183c665d297a80c79804e49f7c5bb69be2ff0d2428deca1"},
-    {file = "ibm_watsonx_gov-1.1.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:636a3fe0906e0be6eadad3a37cc68ef9dfa929874b35e1a8d585a6a9219643f3"},
-    {file = "ibm_watsonx_gov-1.1.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:17c6cb2da37e9b0971704e6766eda848a372dec5cf1affd52f04f4b7253fc18d"},
-    {file = "ibm_watsonx_gov-1.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:88efc79a737653f78e33c8ae81d5514700662fd70fc3c2189c18f9a74482f045"},
-    {file = "ibm_watsonx_gov-1.1.0-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:304cf3dc7a6109674a95d86da627451fd3a4f99f51243c2b5f302cee3dbc6928"},
-    {file = "ibm_watsonx_gov-1.1.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:66223be773d24f85d29a342d943a147be79098cad1ae7d1712b4108f21b2653c"},
-    {file = "ibm_watsonx_gov-1.1.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:593019752f094c89dc778c2b392a5deae1be3a1528bf1c5799133be3aa16d2b5"},
+    {file = "ibm_watsonx_gov-1.2.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:9b110e6096755d33d53556aba9366a3571dd6c68c7569427c7726cebbab1eb88"},
+    {file = "ibm_watsonx_gov-1.2.2-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:0e0757a5541a6dd2edca90b2a2abe149004ae5c856f3f1dec6074944c439b1e1"},
+    {file = "ibm_watsonx_gov-1.2.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e06867104c64bf9eceb7b84cafc7744d6d8813d8a3358f6bbe41f8590ca45fae"},
+    {file = "ibm_watsonx_gov-1.2.2-cp310-cp310-win32.whl", hash = "sha256:b646f26e695caa5565777b9d690f50a3a28483a89120edf909ad455c3de206f3"},
+    {file = "ibm_watsonx_gov-1.2.2-cp310-cp310-win_amd64.whl", hash = "sha256:a82d0ad557d3aebc92ef46e4ad9b389ee8f84df30c3e10b2670b3bd1f13d3622"},
+    {file = "ibm_watsonx_gov-1.2.2-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:2206127462169469198bd7146ef8b743cd7861c29f55fd245ce81d16958446d8"},
+    {file = "ibm_watsonx_gov-1.2.2-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:2a0961a270f3830baa563717d0e2c56369aa7f7d6a3caf74d8ff2c15ff8f7cd5"},
+    {file = "ibm_watsonx_gov-1.2.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:690c0bafd496f620a6d4c64c1e384d49ca9b82f260c903bd4f5735d3af15b47d"},
+    {file = "ibm_watsonx_gov-1.2.2-cp311-cp311-win32.whl", hash = "sha256:34e806cbdf4215c7424aea3ea233af95cb4e4a16e70ae5e5a042e6a05fb48eb7"},
+    {file = "ibm_watsonx_gov-1.2.2-cp311-cp311-win_amd64.whl", hash = "sha256:a34c60be57f8c6eaa571b2f94f3ffc0cee77bdba4fe88ef9e59f64e0172522bf"},
+    {file = "ibm_watsonx_gov-1.2.2-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:8a45ce081baee2fbb10bc6ca9086f73c9495b342e723de721a3b8b58d86bafde"},
+    {file = "ibm_watsonx_gov-1.2.2-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:91981fcc5ab2cea3a7f905fb4892fa5569fcf18d51e12ac484ebe72fca927eca"},
+    {file = "ibm_watsonx_gov-1.2.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:deb9bc4acafd11e32f134777086268058d6d5460e648eba2065035c12ce7de62"},
+    {file = "ibm_watsonx_gov-1.2.2-cp312-cp312-win32.whl", hash = "sha256:44a853cf0e8579455e480f0c5eb3f7bc8c8d45a15b904a4785bfb4716ffe6c98"},
+    {file = "ibm_watsonx_gov-1.2.2-cp312-cp312-win_amd64.whl", hash = "sha256:7b774bb3e13e2a0fc73770adfc3a3bc1a8859c449c2a41cce99901fd4fcf6c51"},
 ]
 
 [package.dependencies]
+aiohttp = ">=3.12.14,<3.13.0"
 ibm_watson_openscale = "*"
 pandas = ">=2.1.0,<2.2.0"
 pydantic = ">=2.10.3,<3.0.0"
 pyjwt = "<2.10.1"
-requests = "2.32.2"
+requests = ">=2.32.4,<3.0.0"
 typing-extensions = ">=4.12,<5.0"
 wrapt = ">=1.11.0,<1.15"
 
 [package.extras]
 agent-catalog = ["langchain (>=0.3.19,<0.4.0)", "langgraph (>=0.3.34,<0.4.0)"]
-agentic = ["datasets (>=2.19.0,<4.0.0)", "ibm-agent-analytics (>=0.5.4,<0.6.0)", "jsonschema (>=4.19.0,<5.0.0)", "langchain (>=0.3.4,<0.4.0)", "langchain-core (>=0.3.55,<0.3.64)", "langgraph (>=0.3.34,<0.4.0)", "langsmith (>=0.1.125,<0.2.0)", "litellm (>=1.48.0,<1.68.0)", "nest_asyncio (>=1.6.0,<2.0.0)", "numpy (>=1.26.4,<1.27.0)", "opentelemetry-proto (>=1.27.0,<2.0.0)", "scikit-learn (>=1.5.1,<1.8)", "textstat (>=0.7.7,<0.8.0)", "unitxt (>=1.22.0,<1.27)"]
+agentic = ["datasets (>=2.19.0,<4.0.0)", "ibm-agent-analytics (>=0.5.4,<0.6.0)", "jsonpath-ng (>=1.7.0,<2.0.0)", "jsonschema (>=4.19.0,<5.0.0)", "langchain (>=0.3.4,<0.4.0)", "langchain-core (>=0.3.55,<0.4.0)", "langgraph (>=0.3.34,<0.4.0)", "langsmith (>=0.1.125,<0.2.0)", "litellm (>=1.48.0,<1.68.0)", "nbformat (>=5.10.0,<6.0.0)", "nest_asyncio (>=1.6.0,<2.0.0)", "numpy (>=1.26.4,<1.27.0)", "opentelemetry-proto (>=1.27.0,<2.0.0)", "scikit-learn (>=1.5.1,<1.8)", "textstat (>=0.7.7,<0.8.0)", "unitxt (>=1.22.0,<1.27)"]
 llmaj = ["ibm-watsonx-ai (>=1.3.13,<1.4.0)", "langchain-ibm (>=0.3.10,<0.4.0)", "langchain-openai (>=0.3.16,<0.3.20)", "litellm (>=1.48.0,<1.68.0)", "openai (>=1.74.0,<2.0.0)"]
-local-evals = ["bert-score (>=0.3.13,<0.4.0)", "sentence-transformers (>=2.2.2,<3.0.0)", "torch (>=2.1.0,<3.0.0)", "transformers (>=4.37,<4.53)"]
+local-evals = ["bert-score (>=0.3.13,<0.4.0)", "sentence-transformers (>=2.2.2,<3.0.0)", "torch (>=2.6.0,<3.0.0)", "transformers (>=4.37,<4.54.0)"]
 metrics = ["jsonschema (>=4.19.0,<5.0.0)", "litellm (>=1.48.0,<1.68.0)", "numpy (>=1.26.4,<1.27.0)", "scikit-learn (>=1.5.1,<1.8)", "textstat (>=0.7.7,<0.8.0)", "unitxt (>=1.22.0,<1.27)"]
 mre = ["ibm-metrics-plugin[mra] (>=3.0.18,<3.1.0)", "ibm-watsonx-ai (>=1.3.13,<1.4.0)"]
 tools = ["langchain (>=0.3.4,<0.4.0)", "langchain-community (>=0.3.3,<0.4.0)", "langchain-core (>=0.3.55,<0.3.64)"]
@@ -2788,19 +2795,19 @@ files = [
 
 [[package]]
 name = "requests"
-version = "2.32.2"
+version = "2.32.5"
 description = "Python HTTP for Humans."
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main", "dev"]
 files = [
-    {file = "requests-2.32.2-py3-none-any.whl", hash = "sha256:fc06670dd0ed212426dfeb94fc1b983d917c4f9847c863f313c9dfaaffb7c23c"},
-    {file = "requests-2.32.2.tar.gz", hash = "sha256:dd951ff5ecf3e3b3aa26b40703ba77495dab41da839ae72ef3c8e5d8e2433289"},
+    {file = "requests-2.32.5-py3-none-any.whl", hash = "sha256:2462f94637a34fd532264295e186976db0f5d453d1cdd31473c85a6a161affb6"},
+    {file = "requests-2.32.5.tar.gz", hash = "sha256:dbba0bac56e100853db0ea71b82b4dfd5fe2bf6d3754a8893c3af500cec7d7cf"},
 ]
 
 [package.dependencies]
 certifi = ">=2017.4.17"
-charset-normalizer = ">=2,<4"
+charset_normalizer = ">=2,<4"
 idna = ">=2.5,<4"
 urllib3 = ">=1.21.1,<3"
 
@@ -4103,4 +4110,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.13"
-content-hash = "126ac41bb9a0768a74ffc1afc8138c719c7c7464aa33d492d272f247da57ea88"
+content-hash = "969b8eec5f5ef34badac572c10d69dc45e20ad14b6e1b05e74a5ebe5abde9c5b"
