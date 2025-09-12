@@ -1,0 +1,221 @@
+# The Agentic SQL RAG template with `WatsonxSQLDatabaseToolkit`  
+
+Table of contents:  
+- [Introduction](#introduction)  
+- [Directory structure and file descriptions](#directory-structure-and-file-descriptions)  
+- [Prerequisites](#prerequisites)  
+- [Cloning and setting up the template locally](#cloning-and-setting-up-the-template-locally)  
+- [Modifying and configuring the template](#modifying-and-configuring-the-template)  
+- [Running unit tests for the template](#testing-the-template)  
+- [Running the application locally](#running-the-application-locally)  
+- [Deploying on IBM Cloud](#deploying-on-ibm-cloud)  
+- [Inferencing the deployment](#querying-the-deployment)  
+- [Evaluating agent](#evaluating-agent)
+
+## Introduction  
+
+This repository provides an Agentic SQL RAG template for LLM apps built using LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
+An AI service is a deployable unit of code that captures the logic of your generative AI use case. For and in-depth description of the topic please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).  
+
+
+The template builds an application with IBM DB2 (on Cloud) and `WatsonxSQLDatabaseToolkit` for addressing RAG use case. The structure of RAG graph is as follows
+
+
+> [!NOTE]
+> The template uses preloaded DB2 database as a source of base knowledge for RAG. 
+> 
+> To run following Agentic SQL RAG app you should set `tool_config_connection_id`, `tool_config_model_id`, `tool_config_dialect` and `tool_config_schema` in section `deployment.online.parameters` in `config.toml`.
+> Moreover, to help the Agent correctly choose whether to use the SQL retriever tool or not, a description of the underlying knowledge can also be provided in field `base_knowledge_description`.
+
+
+[^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
+
+## Directory structure and file descriptions  
+
+The high level structure of the repository is as follows:  
+
+langgraph-sql-rag  
+ ┣ src  
+ ┃ ┗ langgraph_sql_rag  
+ ┃   ┣ agent.py  
+ ┃   ┗ tools.py  
+ ┣ schema  
+ ┣ ai_service.py  
+ ┣ config.toml.example  
+ ┣ template.env  
+ ┗ pyproject.toml  
+
+- `langgraph-sql-rag` folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
+- `schema` folder: Contains request and response schemas for the `/ai_service` endpoint queries.  
+- `ai_service.py` file: Contains the function to be deployed as an AI service defining the application's logic  
+- `config.toml.example` file: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
+- `template.env`: A file with placeholders for necessary credentials that are essential to run some of the `ibm-watsonx-ai-cli` commands and to test agent locally. Copy the contents of the `template.env` file to the `.env` file and fill the required fields.
+
+## Prerequisites  
+
+- [Poetry](https://python-poetry.org/) package manager,  
+- [Pipx](https://github.com/pypa/pipx) due to Poetry's recommended [installation procedure](https://python-poetry.org/docs/#installation)  
+
+
+## Cloning and setting up the template locally  
+
+
+### Step 1: Clone the repository  
+
+In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use git's shallow and sparse cloning feature to checkout only the template's directory:  
+
+```sh
+git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
+cd watsonx-developer-hub
+git sparse-checkout add agents/community/langgraph-sql-rag
+```  
+
+Move to the directory with the agent template:
+
+```sh
+cd agents/community/langgraph-sql-rag/
+```
+
+> [!NOTE]
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/langgraph-sql-rag/`  
+
+
+### Step 2: Install poetry  
+
+```sh
+pipx install --python 3.11 poetry
+```
+
+### Step 3: Install the template    
+
+Running the below commands will install the repository in a separate virtual environment  
+
+```sh
+poetry install --with dev
+```
+
+### Step 4 (OPTIONAL): Activate the virtual environment  
+
+```sh
+source $(poetry -q env use 3.11 && poetry env info --path)/bin/activate
+```
+
+### Step 5: Export PYTHONPATH  
+
+Adding working directory to PYTHONPATH is necessary for the next steps. In your terminal execute:  
+```sh
+export PYTHONPATH=$(pwd):${PYTHONPATH}
+```
+
+## Modifying and configuring the template  
+
+[config.toml](config.toml) and [.env](.env) files should be filled in before either deploying the template on IBM Cloud or executing it locally.  
+Possible config parameters are given in the provided file and explained using comments (when necessary).  
+
+
+The template can also be extended to provide additional key-value data to the application. Create a special asset from within your deployment space called _Parameter Sets_. Use the _watsonx.ai_ library to instantiate it and later reference it from the code.  
+For detailed description and API please refer to the [IBM watsonx.ai Parameter Set's docs](https://ibm.github.io/watsonx-ai-python-sdk/core_api.html#parameter-sets)  
+
+
+Sensitive data should not be passed unencrypted, e.g. in the configuration file. The recommended way to handle them is to make use of the [IBM Cloud® Secrets Manager](https://cloud.ibm.com/apidocs/secrets-manager/secrets-manager-v2). The approach to integrating the Secrets Manager's API with the app is for the user to decide on.  
+
+
+The [agent.py](src/langgraph/agent.py) file builds app the graph consisting of nodes and edges. The former define the logic for agents while the latter control the logic flow in the whole graph.  
+For detailed info on how to modify the graph object please refer to [LangGraph's official docs](https://langchain-ai.github.io/langgraph/tutorials/multi_agent/multi-agent-collaboration/#create-graph)  
+
+
+The [ai_service.py](ai_service.py) file encompasses the core logic of the app alongside the way of authenticating the user to the IBM Cloud.  
+For a detailed breakdown of the ai-service's implementation please refer the [IBM Cloud docs](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-create.html?context=wx)  
+
+
+[tools.py](src/langgraph_sql_rag/tools.py) file stores the definition for tools enhancing the chat model's capabilities.  
+In order to add new tool create a new function, wrap it with the `@tool` decorator and add to the `TOOLS` list in the `extensions` module's [__init__.py](src/langgraph_sql_rag/__init__.py)
+
+For more sophisticated use cases (like async tools), please refer to the [langchain docs](https://python.langchain.com/docs/how_to/custom_tools/#creating-tools-from-runnables).  
+
+## Testing the template  
+
+The `tests/` directory's structure resembles the repository. Adding new tests should follow this convention.  
+For exemplary purposes only the tools and some general utility functions are covered with unit tests.  
+
+Running the below command will run the complete tests suite:
+```sh
+pytest -r 'fEsxX' tests/
+```  
+
+## Running the application locally  
+
+It is possible to run (or even debug) the ai-service locally, however it still requires creating the connection to the IBM Cloud.  
+
+### Step 1: Fill in the `config` and `.env` files  
+
+Copy the contents of `config.toml.example` to the `config.toml` file, and `template.env` to the `.env` file.
+```sh
+cp config.toml.example config.toml
+cp template.env .env
+```
+Enter the necessary credentials and parameters in the `config.toml` and `.env` files.  
+
+### Step 2: Run the script for local AI service execution  
+
+```sh
+python examples/execute_ai_service_locally.py
+```  
+
+### Step 3: Ask the model  
+
+Choose from some pre-defined questions or ask the model your own.
+
+
+## Deploying on IBM Cloud  
+
+Follow these steps to deploy the model on IBM Cloud. Please make sure that `config.toml` and `.env` contains all required data to make deployment successfully.
+
+### Step 1: Run the deployment script  
+
+```sh
+python scripts/deploy.py
+```  
+
+Successfully completed script will print on stdout the `deployment_id` which is necessary to locally test the deployment. For further info please refer [to the next section](#querying-the-deployment)  
+
+## Querying the deployment  
+
+Follow these steps to inference your deployment. The [query_existing_deployment.py](examples/query_existing_deployment.py) file shows how to test the existing deployment using `watsonx.ai` library.  
+
+### Step 1: Initialize the deployment ID  
+
+Initialize the `deployment_id` variable in the [query_existing_deployment.py](examples/query_existing_deployment.py) file.  
+The _deployment_id_ of your deployment can be obtained from [the previous section](#deploying-on-ibm-cloud) by running [scripts/deploy.sh](scripts/deploy.py)  
+
+### Step 2: Run the script for querying the deployment  
+
+```sh
+python examples/query_existing_deployment.py
+```   
+
+## Evaluating agent
+If you want to evaluate your agent, you can do so using the following command.
+
+```bash
+$ watsonx-ai template eval --tests test.jsonl --metrics answer_similarity,answer_relevance --evaluator llm_as_judge
+```
+
+The `eval` command supports several options
+
+__Options:__
+ - `--tests`: [Required] one or more input data files (in jsonl format) for evaluation
+ - `--metrics`: [Optional] one or more evaluation metric. If multiple metrics are specified, they must be separated by a comma. If not specified all possible metrics will be used
+ - `--evaluator`: [Optional]  a model name for evaluation, or `llm_as_judge` can be used for a predefined choice (`meta-llama/llama-3-3-70b-instruct`, or `mistralai/mistral-small-3-1-24b-instruct-2503` if former is not available). If not provided, metrics are computed using the method `token_recall`.
+
+__Supported Evaluation Metrics__:
+- `answer_similarity` _(can be evaluated with `--evaluator`)_
+- `answer_relevance` _(can be evaluated with `--evaluator`)_
+- `text_reading_ease`
+- `unsuccessful_request_metric`
+- `text_grade_level`
+
+The metrics are calculated using the **IBM watsonx.governance SDK** library. You can find more details about these metrics in the official documentation [here](https://ibm.github.io/ibm-watsonx-gov/).
+
+> [!WARNING]  
+> The `eval` command requires Python version >=3.10,<=3.12
