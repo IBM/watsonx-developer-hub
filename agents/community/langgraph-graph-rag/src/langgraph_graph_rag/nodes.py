@@ -66,7 +66,12 @@ class GraphNodes:
         )
 
         # Neo4j
-        if os.environ.get("NEO4J_USE_IBM_CLOUD_SM") == "True":
+        if os.environ.get("NEO4J_CREDS_FROM_ENV") == "True":
+            url = os.environ.get("NEO4J_URI")
+            username = os.environ.get("NEO4J_USERNAME")
+            password = os.environ.get("NEO4J_PASSWORD")
+            database = os.environ.get("NEO4J_DATABASE")
+        else:
             try:
                 authenticator = BearerTokenAuthenticator(api_client.token)
                 secretsManager = SecretsManagerV2(authenticator=authenticator)
@@ -79,13 +84,7 @@ class GraphNodes:
             username = response.result["data"]["neo4j_username"]
             password = response.result["data"]["neo4j_password"]
             database = response.result["data"]["neo4j_database"]
-
-        else:
-            url = os.environ.get("NEO4J_URI")
-            username = os.environ.get("NEO4J_USERNAME")
-            password = os.environ.get("NEO4J_PASSWORD")
-            database = os.environ.get("NEO4J_DATABASE")
-
+            
         self.graph = Neo4jGraph(
             url=url,
             username=username,
