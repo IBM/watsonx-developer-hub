@@ -1,3 +1,4 @@
+import os
 from typing import Annotated, Sequence, List, Literal
 
 from typing_extensions import TypedDict
@@ -65,16 +66,30 @@ class GraphNodes:
         )
 
         # Neo4j
-        authenticator = BearerTokenAuthenticator(api_client.token)
-        secretsManager = SecretsManagerV2(authenticator=authenticator)
-        secretsManager.set_service_url(service_url=service_manager_service_url)
-        response = secretsManager.get_secret(id=secret_id)
+        if os.environ.get("NEO4J_CREDS_FROM_ENV") == "True":
+            url = os.environ.get("NEO4J_URI")
+            username = os.environ.get("NEO4J_USERNAME")
+            password = os.environ.get("NEO4J_PASSWORD")
+            database = os.environ.get("NEO4J_DATABASE")
+        else:
+            try:
+                authenticator = BearerTokenAuthenticator(api_client.token)
+                secretsManager = SecretsManagerV2(authenticator=authenticator)
+                secretsManager.set_service_url(service_url=service_manager_service_url)
+                response = secretsManager.get_secret(id=secret_id)
+            except Exception as e:
+                raise RuntimeError(f"Make sure that Secret Manager configuration parameters are correct: `service_manager_service_url` and `secret_id`. Reason: {str(e)}") from e
 
+            url = response.result["data"]["neo4j_uri"]
+            username = response.result["data"]["neo4j_username"]
+            password = response.result["data"]["neo4j_password"]
+            database = response.result["data"]["neo4j_database"]
+            
         self.graph = Neo4jGraph(
-            url=response.result["data"]["neo4j_uri"],
-            username=response.result["data"]["neo4j_username"],
-            password=response.result["data"]["neo4j_password"],
-            database=response.result["data"]["neo4j_database"],
+            url=url,
+            username=username,
+            password=password,
+            database=database,
         )
 
         self.vector_index = Neo4jVector.from_existing_index(
