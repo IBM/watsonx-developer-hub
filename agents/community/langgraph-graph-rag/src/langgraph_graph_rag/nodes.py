@@ -66,7 +66,7 @@ class GraphNodes:
         )
 
         # Neo4j
-        if os.environ.get("NEO4J_CREDS_FROM_ENV") == "True":
+        if os.environ.get("NEO4J_CONN_ARGS_FROM_ENV") == "True":
             url = os.environ.get("NEO4J_URI")
             username = os.environ.get("NEO4J_USERNAME")
             password = os.environ.get("NEO4J_PASSWORD")

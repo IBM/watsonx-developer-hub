@@ -1,6 +1,7 @@
 # The Graph RAG template with LangGraph and Neo4j 🚀
 
 ## 📖 Table of Contents
+<!-- no toc -->
 * [Introduction](#-introduction)  
 * [Directory structure and file descriptions](#-directory-structure-and-file-descriptions)  
 * [Prerequisites](#-prerequisites)  
@@ -13,7 +14,7 @@
 * [Querying the deployment](#-querying-the-deployment)  
 * [Running the graphical app locally](#%EF%B8%8F-running-the-graphical-app-locally) 
 * [Evaluating agent](#evaluating-agent)
-* [Cloning template (Optional)](#-cloning-template-optional)   
+* [Cloning template (Optional)](#-cloning-template-optional) 
 
 
 ##  🤔 Introduction
@@ -43,6 +44,10 @@ The structure of Graph RAG workflow:
 >
 > Furthermore, when running the Graph RAG agent, the knowledge agent should already exist. Please refer to the section [Create a knowledge graph](#create-a-knowledge-graph-optional) to see how you can create a knowledge graph from raw text using the `/scripts/create_knowledge_graph.py` script and what indexes are required to search effectively the graph.
  
+For a Quickstart guide, watch the video below that demonstrates how to run the Graph RAG agent locally.
+
+ <video src="graph_rag_quickstart_recording.mov" controls="controls">
+</video>
 
 **Highlights:**
 
@@ -141,12 +146,25 @@ To begin working with this template using the Command Line Interface (CLI), plea
 [config.toml](config.toml) and [.env](.env) files should be filled in before either deploying the template on IBM Cloud or executing it locally.  
 Possible config parameters are given in the provided file and explained using comments (when necessary).  
 
-
 The template can also be extended to provide additional key-value data to the application. Create a special asset from within your deployment space called _Parameter Sets_. Use the _watsonx.ai_ library to instantiate it and later reference it from the code.  
 For detailed description and API please refer to the [IBM watsonx.ai Parameter Set's docs](https://ibm.github.io/watsonx-ai-python-sdk/core_api.html#parameter-sets)  
 
 
-Sensitive data should not be passed unencrypted, e.g. in the configuration file. The recommended way to handle them is to make use of the [IBM Cloud® Secrets Manager](https://cloud.ibm.com/apidocs/secrets-manager/secrets-manager-v2). The approach to integrating the Secrets Manager's API with the app is for the user to decide on.  
+Sensitive data should not be passed unencrypted, e.g. in the configuration file. The recommended way to handle them is to make use of the [IBM Cloud® Secrets Manager](https://cloud.ibm.com/apidocs/secrets-manager/secrets-manager-v2). The approach to integrating the Secrets Manager's API with the app is for the user to decide on. 
+
+> [!IMPORTANT]
+> Primarily, the Graph RAG template is using IBM Cloud® Secrets Manager to store `Neo4j` connection arguments and then retrieve them in the deployment runtime. However, locally, you can set the env variable `NEO4J_CONN_ARGS_FROM_ENV` to `"True"` in `.env` file to read the Neo4j connection arguments from the environment variables.
+>
+> To save Neo4j connection arguments programmatically, check the README file of [IBM Cloud Secrets Manager Python SDK](https://github.com/IBM/secrets-manager-python-sdk). We recommend to set `secret_type` to `"kv"` and `"data"` field should have the following format:
+> ```
+>{
+>    "neo4j_uri": "<uri>",
+>    "neo4j_username": "<username>",
+>    "neo4j_password": "<password>",
+>    "neo4j_database": "<neo4j>"
+>}
+>```
+>  After creating a secret instance, fill in the `service_manager_service_url` and `secret_id` fields in `deployment.online.parameters` section of the `config.toml` file. 
 
 
 The [agent.py](src/langgraph/agent.py) file builds app the graph consisting of nodes and edges. The former define the logic for agents while the latter control the logic flow in the whole graph.  
@@ -156,7 +174,7 @@ For detailed info on how to modify the graph object please refer to [LangGraph's
 The [ai_service.py](ai_service.py) file encompasses the core logic of the app alongside the way of authenticating the user to the IBM Cloud.  
 For a detailed breakdown of the ai-service's implementation please refer the [IBM Cloud docs](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-create.html?context=wx)
 
-## Create a knowledge graph (Optional)
+## Create a knowledge graph
 
 The Graph RAG agent uses a knowledge graph enriched with vectorized text chunks, as a knowledge base for LLM, which is used to provide relevant answers to users' specialized questions. Along with the Graph RAG Agent source code, we prepare a Python script `scripts/create_knowledge_graph.py`, that can be used to create knowledge graph based on raw text. Please copy the `template.env` file as `.env` and fill in the required fields. All secrets needed to connect with `Neo4j` graph database management system and IBM watsonx.ai inference service, are read from `.env` file. Moreover, to generate a knowledge graph, you need to specify the LLM model ID and the embedding model ID, also in `.env`. 
 
