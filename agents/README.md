@@ -77,8 +77,10 @@ Templates published and maintained by the community.
 ## Videos with Quickstart
 
 ### [Graph RAG Agent](./community/langgraph-graph-rag )
- <video src="./videos/graph_rag_quickstart_recording.mov" controls="controls">
-</video>
+
+https://github.com/user-attachments/assets/a8666d3f-cedd-435b-a4de-89da8eae1ccb
+
+
 
 ## Template Requirements
 
