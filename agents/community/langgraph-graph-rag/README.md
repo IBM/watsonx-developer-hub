@@ -44,10 +44,9 @@ The structure of Graph RAG workflow:
 >
 > Furthermore, when running the Graph RAG agent, the knowledge agent should already exist. Please refer to the section [Create a knowledge graph](#create-a-knowledge-graph-optional) to see how you can create a knowledge graph from raw text using the `/scripts/create_knowledge_graph.py` script and what indexes are required to search effectively the graph.
  
-For a Quickstart guide, watch the video below that demonstrates how to run the Graph RAG agent locally.
+For a Quickstart guide, watch the [video](../../README.md#graph-rag-agent) that demonstrates how to run the Graph RAG agent locally.
 
- <video src="graph_rag_quickstart_recording.mov" controls="controls">
-</video>
+
 
 **Highlights:**
 

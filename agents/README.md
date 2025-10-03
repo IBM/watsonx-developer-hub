@@ -74,6 +74,12 @@ Templates published and maintained by the community.
 | [Agent with the Tavily search Tool](./community/langgraph-tavily-tool/)                   | Langraph  | Agent that uses Tavily search tool and IBM Cloud® Secrets Manager.       | Yes | 
 | [Agent with MCP server and AutoAI model](./community/mcp-autoai-template/)                | Langraph  | Agent that uses MCP Server to interact with a deployed AutoAI model.     | No |
 
+## Videos with Quickstart
+
+### [Graph RAG Agent](./community/langgraph-graph-rag )
+ <video src="./videos/graph_rag_quickstart_recording.mov" controls="controls">
+</video>
+
 ## Template Requirements
 
 Ensuring seamless integration and full lifecycle support, all agent templates must comply with the following requirements.
