@@ -150,7 +150,7 @@ The template can also be extended to provide additional key-value data to the ap
 For detailed description and API please refer to the [IBM watsonx.ai Parameter Set's docs](https://ibm.github.io/watsonx-ai-python-sdk/core_api.html#parameter-sets)  
 
 
-Sensitive data should not be passed unencrypted, e.g. in the configuration file. The recommended way to handle them is to make use of the [IBM Cloud® Secrets Manager](https://cloud.ibm.com/apidocs/secrets-manager/secrets-manager-v2). The approach to integrating the Secrets Manager's API with the app is for the user to decide on. 
+Sensitive data should not be passed unencrypted, e.g. in the configuration file. The recommended way to handle them is to make use of the [IBM Cloud® Secrets Manager](https://cloud.ibm.com/apidocs/secrets-manager/secrets-manager-v2). For more information on creating a Secrets Manager instance, see the official [documentation](https://cloud.ibm.com/docs/secrets-manager). The approach to integrating the Secrets Manager's API with the app is for the user to decide on. 
 
 > [!IMPORTANT]
 > Primarily, the Graph RAG template is using IBM Cloud® Secrets Manager to store `Neo4j` connection arguments and then retrieve them in the deployment runtime. However, locally, you can set the env variable `NEO4J_CONN_ARGS_FROM_ENV` to `"True"` in `.env` file to read the Neo4j connection arguments from the environment variables.
