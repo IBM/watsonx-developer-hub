@@ -73,6 +73,7 @@ Templates published and maintained by the community.
 | [Agent with database memory](./community/langgraph-react-with-database-memory )           | Langraph  | Agent to manage conversation memory using a Postgres database, retaining context from recent messages for LLM interactions.  | Yes | 
 | [Agent with the Tavily search Tool](./community/langgraph-tavily-tool/)                   | Langraph  | Agent that uses Tavily search tool and IBM Cloud® Secrets Manager.       | Yes | 
 | [Agent with MCP server and AutoAI model](./community/mcp-autoai-template/)                | Langraph  | Agent that uses MCP Server to interact with a deployed AutoAI model.     | No |
+| [Agent with Human In The Loop architecture](./community/langgraph-human-in-the-loop/)                   | Langraph  | Agent that follows Human In The Loop architecture       | partial | 
 
 ## Videos with Quickstart
 
@@ -80,7 +81,7 @@ Templates published and maintained by the community.
 
 https://github.com/user-attachments/assets/a8666d3f-cedd-435b-a4de-89da8eae1ccb
 
-
+### [Agent with Human In The Loop architecture](./community/langgraph-human-in-the-loop )
 
 ## Template Requirements
 
