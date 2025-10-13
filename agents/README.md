@@ -83,6 +83,9 @@ https://github.com/user-attachments/assets/a8666d3f-cedd-435b-a4de-89da8eae1ccb
 
 ### [Agent with Human In The Loop architecture](./community/langgraph-human-in-the-loop )
 
+https://github.com/user-attachments/assets/89a26ab3-d592-4ede-9acf-2f7f99a8d799
+
+
 ## Template Requirements
 
 Ensuring seamless integration and full lifecycle support, all agent templates must comply with the following requirements.
