@@ -164,7 +164,7 @@ You can test and debug your AI service locally via two alternative flows:
 
 ### ✅ Recommended flow: Python Scripts
 
-Agent with the Human in the Loop structure includes a human approval node that requires a custom request/response schema. When Agent from the first graph node, decides to use Web Search tool, the response object that is send to the user, contains additional field `"thread_id"`:
+Agent with the Human in the Loop structure includes a human approval node that requires a custom request/response schema. When Agent from the first graph node decides to use Web Search tool, the response object that is send to the user contains additional field `"thread_id"`:
 
 ```
 {
