@@ -25,6 +25,8 @@ Structure of Human in the Loop Agent workflow:
 
 ![alt text](graph_human_in_the_loop_with_tool.png "LangGraph Human in the Loop")
 
+For a Quickstart guide, watch the [video](../../README.md#agent-with-human-in-the-loop-architecture) that demonstrates how to run the Human In the Loop LangGraph agent locally.
+
 [^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.
 
 **Highlights:**
