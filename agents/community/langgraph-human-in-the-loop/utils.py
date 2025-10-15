@@ -3,6 +3,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
+
 def load_dotenv_with_current_path() -> None:
     """
     Load environment variables from a `.env` file in the current working directory.
@@ -18,6 +19,7 @@ def load_dotenv_with_current_path() -> None:
 def get_from_env(env_key: str) -> str | None:
     value = os.environ.get(env_key, "").strip()
     return value
+
 
 def load_config(section: str | None = None) -> dict:
     load_dotenv_with_current_path()

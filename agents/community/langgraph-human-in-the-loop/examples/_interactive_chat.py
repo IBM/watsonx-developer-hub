@@ -70,7 +70,6 @@ class InteractiveChat:
             print(f"{choice['message'].get('content', choice['message'])}")
 
     def run(self) -> None:
-        # TODO implement signal handling (especially Ctrl-C)
         while True:
             try:
                 user_loop = self._user_input_loop()
