@@ -3,7 +3,12 @@ import ibm_watsonx_ai
 from utils import load_config
 from examples._interactive_chat import InteractiveChat
 
-deployment_id = "PLACEHOLDER FOR YOUR DEPLOYMENT ID"
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+deployment_id = os.environ["WATSONX_DEPLOYMENT_ID"]
 stream = True
 config = load_config("deployment")
 

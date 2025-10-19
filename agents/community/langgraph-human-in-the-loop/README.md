@@ -15,7 +15,7 @@
 
 ## 🤔 Introduction
 
-This repository provides a Human in the Loop Agent template for LLM apps built using the LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].
+This repository provides a Human in the Loop (HITL) Agent template for LLM apps built using the LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].
 
 An AI service is a deployable unit of code that encapsulates the logic of your generative AI use case. For an in-depth description of AI services, please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).
 
@@ -141,8 +141,7 @@ The [ai_service.py](ai_service.py) file encompasses the core logic of the app al
 For a detailed breakdown of the ai-service's implementation please refer the [IBM Cloud docs](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-create.html?context=wx)  
 
 
-[tools.py](src/langgraph_hitl/tools.py) file stores the definition for tools enhancing the chat model's capabilities.  
-In order to add new tool create a new function, wrap it with the `@tool` decorator and add to the `TOOLS` list in the `extensions` module's [__init__.py](src/langgraph_hitl/__init__.py)
+[tools.py](src/langgraph_hitl/tools.py) file stores the definition for tools enhancing the chat model's capabilities.
 
 For more sophisticated use cases (like async tools), please refer to the [langchain docs](https://python.langchain.com/docs/how_to/custom_tools/#creating-tools-from-runnables).  
 
@@ -162,7 +161,7 @@ It is possible to run (or even debug) the ai-service locally, however it still r
 
 Ensure `config.toml` and `.env` are configured.
 
-You can test and debug your AI service locally via two alternative flows:
+You can test and debug your AI service locally using a prepared Python script that mimics a chat session in the terminal:
 
 ### ✅ Recommended flow: Python Scripts
 
@@ -199,8 +198,9 @@ To approve/reject the tool usage and continue the conversation, one need to send
 Since the AI service with a Human in the Loop agent implemented may return non-standard responses, we recommend using specially prepared scripts to conduct chat sessions with the Human in the Loop agent. 
 
 ```sh
-python ./examples/execute_ai_service_locally.py
-
+$ python ./examples/execute_ai_service_locally.py
+```
+```txt
 The following commands are supported:
   --> help | h : prints this help message
   --> quit | q : exits the prompt and ends the program
@@ -248,19 +248,18 @@ You can deploy your AI service to IBM Cloud via two alternative flows:
 watsonx-ai service new
 ```
 
-*Config file updates automatically with `deployment_id`.*
+*`.env` file updates automatically with `deployment_id`.*
 
 ## 🔍 Querying the deployment
 
-You can send inference requests to your deployed AI service via two alternative flows:
+You can send inference requests to your deployed AI service using a prepared Python script that mimics a chat session in the terminal.
 
 ### ✅ Recommended flow: Python Scripts
 
 Before running the script `query_existing_deployment.py`, please replace `"PLACEHOLDER FOR YOUR DEPLOYMENT ID"` in it with the correct deployment id.
 
 ```sh
-python ./examples/qu
-ery_existing_deployment.py 
+python ./examples/query_existing_deployment.py 
 ```
 
 > [!WARNING]

@@ -61,7 +61,7 @@ def get_graph(
         )
         decision = interrupt({"interruption_text": interruption_text})
 
-        if decision == "approve":
+        if decision.lower() == "approve":
             print("✅ Approved path taken.")
             return Command(goto="web_search", update={"decision": "approved"})
         else:
