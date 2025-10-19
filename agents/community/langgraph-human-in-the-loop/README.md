@@ -25,7 +25,7 @@ Structure of Human in the Loop Agent workflow:
 
 ![alt text](graph_human_in_the_loop_with_tool.png "LangGraph Human in the Loop")
 
-For a Quickstart guide, watch the [video](../../README.md#agent-with-human-in-the-loop-architecture) that demonstrates how to run the Human In the Loop LangGraph agent locally.
+For a Quickstart guide, watch the [video](https://github.com/IBM/watsonx-developer-hub/blob/feat_human_in_the_loop_template/agents/README.md#agent-with-human-in-the-loop-architecture) that demonstrates how to run the Human In the Loop LangGraph agent locally.
 
 [^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.
 
@@ -55,7 +55,7 @@ langgraph-human-in-the-loop/
 
 * **`langgraph-human-in-the-loop`** folder: Contains auxiliary files used by the deployed function. They provide various framework specific definitions and extensions. This folder is packaged and sent to IBM Cloud during deployment as a [package extension](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ml-create-custom-software-spec.html?context=wx&audience=wdp#custom-wml).  
 * **`schema`** folder: Contains request and response schemas for the `/ai_service` endpoint queries.
-* **`examples`** folder: Contains auxiliary scripts for running chat session in the terminal. Aligned with the template request/response schema.  
+* **`examples`** folder: Contains auxiliary scripts for running chat session in the terminal. Aligned with the template `request`/`response` schema.  
 * **`ai_service.py`** file: Contains the function to be deployed as an AI service defining the application's logic  
 * **`config.toml.example`**: A configuration file with placeholders that stores the deployment metadata. After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case. 
 * **`template.env`**: A file with placeholders for necessary credentials that are essential to run some of the `ibm-watsonx-ai-cli` commands and to test agent locally. Copy the contents of the `template.env` file to the `.env` file and fill the required fields.
