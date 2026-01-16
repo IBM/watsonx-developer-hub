@@ -11,7 +11,7 @@
 [deployment.online.parameters]
   # during creation of deployment additional parameters can be provided inside `ONLINE` object for further referencing
   # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
-  model_id = "meta-llama/llama-3-3-70b-instruct"  # underlying model of WatsonxChat
+  model_id = "ibm/granite-4-h-small"  # underlying model of WatsonxChat
   embedding_model_id = "ibm/slate-125m-english-rtrvr-v2"
   knowledge_graph_description=""
   url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
