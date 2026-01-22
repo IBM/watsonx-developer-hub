@@ -1,6 +1,4 @@
-from langgraph_react_agent_base import (
-    dummy_web_search
-)
+from langgraph_react_agent_base import dummy_web_search
 
 
 class TestTools:

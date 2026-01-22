@@ -202,4 +202,6 @@ if __name__ == "__main__":
             metrics=metrics,
         )
         > SCORE_THRESHOLD
-    ), f"Agent does not pass quality check. Used metrics: {metrics}, threshold: {SCORE_THRESHOLD}"
+    ), (
+        f"Agent does not pass quality check. Used metrics: {metrics}, threshold: {SCORE_THRESHOLD}"
+    )
