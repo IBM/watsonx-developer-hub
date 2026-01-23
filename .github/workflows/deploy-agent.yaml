@@ -49,17 +49,20 @@ jobs:
             rm -rf .venv
           fi
       - name: Install template with Poetry
-        run: poetry install --with dev # Install the project dependencies
+        run: poetry install --with dev --sync # Install the project dependencies with sync to ensure clean state
       - name: Debug - Check installed packages
         run: |
           echo "=== Checking langgraph installation ==="
           poetry run python -c "import langgraph; print('langgraph installed'); print('langgraph path:', langgraph.__path__)"
-          echo "=== Checking langgraph-prebuilt ==="
-          poetry show langgraph-prebuilt || echo "langgraph-prebuilt NOT found in poetry show"
+          echo "=== Checking langgraph-prebuilt package location ==="
+          poetry run python -c "import site; import os; print('Site packages:', site.getsitepackages()); [print(f'Checking {sp}/langgraph:', os.listdir(f'{sp}/langgraph') if os.path.exists(f'{sp}/langgraph') else 'NOT FOUND') for sp in site.getsitepackages()]"
           echo "=== Checking if prebuilt module exists ==="
           poetry run python -c "import langgraph.prebuilt; print('langgraph.prebuilt imported successfully')" || echo "FAILED to import langgraph.prebuilt"
-          echo "=== Listing langgraph directory contents ==="
-          poetry run python -c "import langgraph, os; print(os.listdir(langgraph.__path__[0]))"
+          echo "=== Reinstalling langgraph-prebuilt explicitly ==="
+          poetry run pip install --force-reinstall --no-deps langgraph-prebuilt==0.6.5
+          echo "=== Checking again after reinstall ==="
+          poetry run python -c "import langgraph, os; print('langgraph contents:', os.listdir(langgraph.__path__[0]))"
+          poetry run python -c "import langgraph.prebuilt; print('SUCCESS: langgraph.prebuilt imported')"
       - name: Test the tools
         run: poetry run pytest -r 'fEsxX' tests/ # Run tests with pytest
       - name: Set up template config
