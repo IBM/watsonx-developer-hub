@@ -12,6 +12,7 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
 langgraph = "^0.6.11"
+langgraph-prebuilt = "^0.6.0"
 langchain-ibm = "^0.3.20"
 ibm-watsonx-ai = { version = ">=1.3.5", python = ">=3.11,<3.13" }
 pytest = "^8.3.3"
