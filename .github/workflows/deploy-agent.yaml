@@ -35,7 +35,7 @@ jobs:
           path: |
             ~/.cache/pypoetry
             .venv
-          key: poetry-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+          key: poetry-${{ runner.os }}-${{ hashFiles(format('{0}/poetry.lock', env.AGENT_WORKDIR)) }}
           restore-keys: |
             poetry-${{ runner.os }}-
       - name: Install Poetry
@@ -81,7 +81,7 @@ jobs:
           path: |
             ~/.cache/pypoetry
             .venv
-          key: poetry-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+          key: poetry-${{ runner.os }}-${{ hashFiles(format('{0}/poetry.lock', env.AGENT_WORKDIR)) }}
           restore-keys: |
             poetry-${{ runner.os }}-
       - name: Install Poetry
@@ -131,7 +131,7 @@ jobs:
           path: |
             ~/.cache/pypoetry
             .venv
-          key: poetry-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+          key: poetry-${{ runner.os }}-${{ hashFiles(format('{0}/poetry.lock', env.AGENT_WORKDIR)) }}
           restore-keys: |
             poetry-${{ runner.os }}-
       - name: Install Poetry
