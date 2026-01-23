@@ -50,6 +50,16 @@ jobs:
           fi
       - name: Install template with Poetry
         run: poetry install --with dev # Install the project dependencies
+      - name: Debug - Check installed packages
+        run: |
+          echo "=== Checking langgraph installation ==="
+          poetry run python -c "import langgraph; print('langgraph installed'); print('langgraph path:', langgraph.__path__)"
+          echo "=== Checking langgraph-prebuilt ==="
+          poetry show langgraph-prebuilt || echo "langgraph-prebuilt NOT found in poetry show"
+          echo "=== Checking if prebuilt module exists ==="
+          poetry run python -c "import langgraph.prebuilt; print('langgraph.prebuilt imported successfully')" || echo "FAILED to import langgraph.prebuilt"
+          echo "=== Listing langgraph directory contents ==="
+          poetry run python -c "import langgraph, os; print(os.listdir(langgraph.__path__[0]))"
       - name: Test the tools
         run: poetry run pytest -r 'fEsxX' tests/ # Run tests with pytest
       - name: Set up template config
