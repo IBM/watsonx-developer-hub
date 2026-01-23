@@ -53,7 +53,8 @@ jobs:
           WATSONX_SPACE_ID: ${{ secrets.WATSONX_SPACE_ID_DEV }}
         run: poetry run python scripts/setup-config.py # Set up configuration for testing
       - name: Invoke agent template locally
-        run: poetry run watsonx-ai template invoke "Hello, how can you help me?" # Invoke the agent locally
+        run: |
+          PYTHONPATH="" poetry run watsonx-ai template invoke "Hello, how can you help me?" # Invoke the agent locally
 
   validate:
     # Run on the latest Ubuntu
@@ -99,7 +100,8 @@ jobs:
       - name: Deploy agent to deployment space
         run: poetry run watsonx-ai service new # Create a new service in the deployment space
       - name: Invoke agent deployment
-        run: poetry run watsonx-ai service invoke "Hello, how can you help me?" # Invoke the deployed agent
+        run: |
+          PYTHONPATH="" poetry run watsonx-ai service invoke "Hello, how can you help me?" # Invoke the deployed agent
       - name: Quality validation
         run: poetry run python scripts/quality-check.py # Run quality checks
       - name: Remove deployment and associated asset
@@ -149,4 +151,5 @@ jobs:
       - name: Deploy agent to deployment space
         run: poetry run watsonx-ai service new # Create a new service in the production space
       - name: Invoke agent deployment
-        run: poetry run watsonx-ai service invoke "Hello, how can you help me?" # Invoke the deployed agent in production
+        run: |
+          PYTHONPATH="" poetry run watsonx-ai service invoke "Hello, how can you help me?" # Invoke the deployed agent in production
