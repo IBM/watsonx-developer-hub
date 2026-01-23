@@ -1274,14 +1274,14 @@ referencing = ">=0.31.0"
 
 [[package]]
 name = "langchain-core"
-version = "1.2.7"
+version = "0.3.83"
 description = "Building applications with LLMs through composability"
 optional = false
-python-versions = "<4.0.0,>=3.10.0"
+python-versions = "<4.0.0,>=3.9.0"
 groups = ["main"]
 files = [
-    {file = "langchain_core-1.2.7-py3-none-any.whl", hash = "sha256:452f4fef7a3d883357b22600788d37e3d8854ef29da345b7ac7099f33c31828b"},
-    {file = "langchain_core-1.2.7.tar.gz", hash = "sha256:e1460639f96c352b4a41c375f25aeb8d16ffc1769499fb1c20503aad59305ced"},
+    {file = "langchain_core-0.3.83-py3-none-any.whl", hash = "sha256:8c92506f8b53fc1958b1c07447f58c5783eb8833dd3cb6dc75607c80891ab1ae"},
+    {file = "langchain_core-0.3.83.tar.gz", hash = "sha256:a0a4c7b6ea1c446d3b432116f405dc2afa1fe7891c44140d3d5acca221909415"},
 ]
 
 [package.dependencies]
@@ -1289,26 +1289,26 @@ jsonpatch = ">=1.33.0,<2.0.0"
 langsmith = ">=0.3.45,<1.0.0"
 packaging = ">=23.2.0,<26.0.0"
 pydantic = ">=2.7.4,<3.0.0"
-pyyaml = ">=5.3.0,<7.0.0"
+PyYAML = ">=5.3.0,<7.0.0"
 tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10.0.0"
 typing-extensions = ">=4.7.0,<5.0.0"
 uuid-utils = ">=0.12.0,<1.0"
 
 [[package]]
 name = "langchain-ibm"
-version = "1.0.2"
+version = "0.3.20"
 description = "An integration package connecting IBM watsonx.ai and LangChain"
 optional = false
 python-versions = "<3.14,>=3.10"
 groups = ["main"]
 files = [
-    {file = "langchain_ibm-1.0.2-py3-none-any.whl", hash = "sha256:830b8723feb6982bcd29c74979a195cd9e7473c4d27acef3710a2fd3a002901b"},
-    {file = "langchain_ibm-1.0.2.tar.gz", hash = "sha256:c7233e5e53652f76b3e81bb2d6ba29bee867329eed5aa641f4f8f8e1a03cef0a"},
+    {file = "langchain_ibm-0.3.20-py3-none-any.whl", hash = "sha256:6c8f345fe21d62e9d8b5f62ef9504150e5719dc40441bf726e3f272f4386f543"},
+    {file = "langchain_ibm-0.3.20.tar.gz", hash = "sha256:af0a4f715c376d4489f9b5fe8243fa22b9f2b159145e6a321b9a4fe5225a6c7a"},
 ]
 
 [package.dependencies]
 ibm-watsonx-ai = ">=1.3.37,<2.0.0"
-langchain-core = ">=1.0.0,<2.0.0"
+langchain-core = ">=0.3.39,<0.4"
 
 [package.extras]
 sql-toolkit = ["pyarrow (>=3.0.0)"]
@@ -3938,4 +3938,4 @@ cffi = ["cffi (>=1.17) ; python_version >= \"3.13\" and platform_python_implemen
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.13"
-content-hash = "104b369f73d350d5c39d8127dbe23f1719e1b4dec7ba187ccb121ecb9857cccf"
+content-hash = "9f0595a8f8e7da19166d75518760e67483782fe54191f14534c5ef20ca4da1db"
