@@ -52,7 +52,8 @@ jobs:
           echo "Poetry environment: $(poetry env info --path)" # Optional: show venv path
 
       - name: Install template with Poetry
-        run: poetry install --with dev # Install the project dependencies
+        run: |
+          poetry install --with dev --editable ${{ env.AGENT_WORKDIR }}
 
       - name: Test the tools
         run: poetry run pytest -r 'fEsxX' tests/ # Run tests with pytest
