@@ -25,12 +25,10 @@ jobs:
     steps:
       - name: Checkout latest update
         uses: actions/checkout@v4 # Checkout the latest code changes
-
       - name: Set up Python
         uses: actions/setup-python@v5 # Setup Python environment
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-
       - name: Cache Poetry dependencies and venv
         uses: actions/cache@v4 # Cache Poetry dependencies and virtual environment
         with:
@@ -40,31 +38,20 @@ jobs:
           key: poetry-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             poetry-${{ runner.os }}-
-
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 - # Install Poetry
           echo "$HOME/.local/bin" >> $GITHUB_PATH # Add Poetry to PATH
-
-      - name: Select and activate Poetry environment
-        run: |
-          poetry env use ${{ env.PYTHON_VERSION }} # Select Python version for venv
-          echo "Poetry environment: $(poetry env info --path)" # Optional: show venv path
-
       - name: Install template with Poetry
-        run: |
-          poetry install --with dev --editable ${{ env.AGENT_WORKDIR }}
-
+        run: poetry install --with dev # Install the project dependencies
       - name: Test the tools
         run: poetry run pytest -r 'fEsxX' tests/ # Run tests with pytest
-
       - name: Set up template config
         env:
           WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
           WATSONX_URL: ${{ secrets.WATSONX_URL }}
           WATSONX_SPACE_ID: ${{ secrets.WATSONX_SPACE_ID_DEV }}
         run: poetry run python scripts/setup-config.py # Set up configuration for testing
-
       - name: Invoke agent template locally
         run: poetry run watsonx-ai template invoke "Hello, how can you help me?" # Invoke the agent locally
 
@@ -84,12 +71,10 @@ jobs:
     steps:
       - name: Checkout latest update
         uses: actions/checkout@v4 # Checkout the latest code changes
-
       - name: Set up Python
         uses: actions/setup-python@v5 # Setup Python environment
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-
       - name: Restore Poetry dependencies and venv cache to speed-up installation
         uses: actions/cache@v4 # Restore cached Poetry dependencies and venv
         with:
@@ -99,31 +84,24 @@ jobs:
           key: poetry-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             poetry-${{ runner.os }}-
-
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 - # Install Poetry
           echo "$HOME/.local/bin" >> $GITHUB_PATH # Add Poetry to PATH
-
       - name: Install template with Poetry
         run: poetry install --with eval,dev # Install the project dependencies
-
       - name: Set up deployment config
         env:
           WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
           WATSONX_URL: ${{ secrets.WATSONX_URL }}
           WATSONX_SPACE_ID: ${{ secrets.WATSONX_SPACE_ID_DEV }}
         run: poetry run python scripts/setup-config.py # Set up configuration for deployment
-
       - name: Deploy agent to deployment space
         run: poetry run watsonx-ai service new # Create a new service in the deployment space
-
       - name: Invoke agent deployment
         run: poetry run watsonx-ai service invoke "Hello, how can you help me?" # Invoke the deployed agent
-
       - name: Quality validation
         run: poetry run python scripts/quality-check.py # Run quality checks
-
       - name: Remove deployment and associated asset
         run: yes | poetry run watsonx-ai service delete $(poetry run python -c "from utils import load_config; print(load_config('deployment')['deployment_id'])") # Delete the deployed service
 
@@ -143,12 +121,10 @@ jobs:
     steps:
       - name: Checkout latest update
         uses: actions/checkout@v4 # Checkout the latest code changes
-
       - name: Set up Python
         uses: actions/setup-python@v5 # Setup Python environment
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-
       - name: Restore Poetry dependencies and venv cache to speed-up installation
         uses: actions/cache@v4 # Restore cached Poetry dependencies and venv
         with:
@@ -158,24 +134,19 @@ jobs:
           key: poetry-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             poetry-${{ runner.os }}-
-
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 - # Install Poetry
           echo "$HOME/.local/bin" >> $GITHUB_PATH # Add Poetry to PATH
-
       - name: Install template with Poetry
         run: poetry install # Install the project dependencies
-
       - name: Set up deployment config
         env:
           WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
           WATSONX_URL: ${{ secrets.WATSONX_URL }}
           WATSONX_SPACE_ID: ${{ secrets.WATSONX_SPACE_ID_PROD }}
         run: poetry run python scripts/setup-config.py # Set up configuration for production deployment
-
       - name: Deploy agent to deployment space
         run: poetry run watsonx-ai service new # Create a new service in the production space
-
       - name: Invoke agent deployment
         run: poetry run watsonx-ai service invoke "Hello, how can you help me?" # Invoke the deployed agent in production
