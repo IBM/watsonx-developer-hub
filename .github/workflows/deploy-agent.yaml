@@ -42,27 +42,11 @@ jobs:
         run: |
           curl -sSL https://install.python-poetry.org | python3 - # Install Poetry
           echo "$HOME/.local/bin" >> $GITHUB_PATH # Add Poetry to PATH
-      - name: Remove old venv if cache is stale
-        run: |
-          if [ -d ".venv" ]; then
-            echo "Removing existing .venv to ensure fresh install"
-            rm -rf .venv
-          fi
       - name: Install template with Poetry
-        run: poetry install --with dev --sync # Install the project dependencies with sync to ensure clean state
-      - name: Debug - Check installed packages
         run: |
-          echo "=== Checking langgraph installation ==="
-          poetry run python -c "import langgraph; print('langgraph installed'); print('langgraph path:', langgraph.__path__)"
-          echo "=== Checking langgraph-prebuilt package location ==="
-          poetry run python -c "import site; import os; print('Site packages:', site.getsitepackages()); [print(f'Checking {sp}/langgraph:', os.listdir(f'{sp}/langgraph') if os.path.exists(f'{sp}/langgraph') else 'NOT FOUND') for sp in site.getsitepackages()]"
-          echo "=== Checking if prebuilt module exists ==="
-          poetry run python -c "import langgraph.prebuilt; print('langgraph.prebuilt imported successfully')" || echo "FAILED to import langgraph.prebuilt"
-          echo "=== Reinstalling langgraph-prebuilt explicitly ==="
-          poetry run pip install --force-reinstall --no-deps langgraph-prebuilt==0.6.5
-          echo "=== Checking again after reinstall ==="
-          poetry run python -c "import langgraph, os; print('langgraph contents:', os.listdir(langgraph.__path__[0]))"
-          poetry run python -c "import langgraph.prebuilt; print('SUCCESS: langgraph.prebuilt imported')"
+          poetry install --with dev # Install the project dependencies
+          # Fix namespace package issues by reinstalling with pip
+          poetry run pip install --force-reinstall --no-deps $(poetry show --only main | grep -E "^\S+" | awk '{print $1"=="$2}')
       - name: Test the tools
         run: poetry run pytest -r 'fEsxX' tests/ # Run tests with pytest
       - name: Set up template config
@@ -108,7 +92,10 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 - # Install Poetry
           echo "$HOME/.local/bin" >> $GITHUB_PATH # Add Poetry to PATH
       - name: Install template with Poetry
-        run: poetry install --with eval,dev # Install the project dependencies
+        run: |
+          poetry install --with eval,dev # Install the project dependencies
+          # Fix namespace package issues by reinstalling with pip
+          poetry run pip install --force-reinstall --no-deps $(poetry show --only main | grep -E "^\S+" | awk '{print $1"=="$2}')
       - name: Set up deployment config
         env:
           WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
@@ -158,7 +145,10 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 - # Install Poetry
           echo "$HOME/.local/bin" >> $GITHUB_PATH # Add Poetry to PATH
       - name: Install template with Poetry
-        run: poetry install # Install the project dependencies
+        run: |
+          poetry install # Install the project dependencies
+          # Fix namespace package issues by reinstalling with pip
+          poetry run pip install --force-reinstall --no-deps $(poetry show --only main | grep -E "^\S+" | awk '{print $1"=="$2}')
       - name: Set up deployment config
         env:
           WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
