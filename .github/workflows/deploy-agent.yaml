@@ -46,6 +46,14 @@ jobs:
         run: poetry install --with dev # Install the project dependencies
       - name: Test the tools
         run: poetry run pytest -r 'fEsxX' tests/ # Run tests with pytest
+      - name: Debug installed packages
+        run: |
+          # Activate the Poetry virtual environment
+          source $(poetry env info --path)/bin/activate
+          echo "Python executable: $(which python)"
+          echo "Python version: $(python --version)"
+          echo "PIP packages:"
+          pip list
       - name: Set up template config
         env:
           WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
