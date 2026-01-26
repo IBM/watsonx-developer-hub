@@ -1,6 +1,7 @@
 # Assisted by watsonx Code Assistant
 
 # quality-check.py
+import sys
 import json
 from pathlib import Path
 import warnings
@@ -13,6 +14,10 @@ with warnings.catch_warnings(category=UserWarning):
     from unitxt.blocks import Task, InputOutputTemplate  # type: ignore[import-untyped]
 
 import ibm_watsonx_ai  # type: ignore[import-untyped]
+
+# Add parent directory to Python path to import utils.py
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from utils import load_config
 
 
