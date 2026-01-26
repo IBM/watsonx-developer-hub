@@ -13,7 +13,7 @@ with warnings.catch_warnings(category=UserWarning):
     from unitxt.blocks import Task, InputOutputTemplate  # type: ignore[import-untyped]
 
 import ibm_watsonx_ai  # type: ignore[import-untyped]
-from ..utils import load_config
+from utils import load_config
 
 
 # Define schema for message, payload, and benchmark item structures
