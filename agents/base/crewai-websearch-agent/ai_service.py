@@ -48,6 +48,10 @@ def deployable_ai_service(context, url=None, model_id=None):
         Please note that the `system message` MUST be placed first in the list of messages!
         Also, only last user message will be passed to the model.
         """
+        import os
+
+        os.environ["WATSONX_TOKEN"] = context.get_token()
+
         messages = context.get_json()["messages"]
 
         # Do not include history
@@ -62,7 +66,6 @@ def deployable_ai_service(context, url=None, model_id=None):
         llm = LLM(
             model=f"watsonx/{model_id}",
             ## watsonx credentials
-            token=context.get_token(),
             api_base=url,
             space_id=context.get_space_id(),
             ## model params
