@@ -21,7 +21,7 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 ibm-watsonx-ai-cli = ">=0.3.0"
 ibm-watsonx-ai = "^1.5.0"
-ibm-watson-openscale="3.1.2"
+ibm-watson-openscale = "3.1.2"
 pytest = "^8.3.3"
 numpy = "<2.0.0"
 

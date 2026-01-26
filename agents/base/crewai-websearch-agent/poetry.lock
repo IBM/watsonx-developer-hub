@@ -5876,7 +5876,6 @@ description = "The lightning-fast ASGI server."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
-markers = "python_version == \"3.13\" and sys_platform != \"emscripten\" or python_version >= \"3.11\" and python_version < \"3.13\""
 files = [
     {file = "uvicorn-0.40.0-py3-none-any.whl", hash = "sha256:c6c8f55bc8bf13eb6fa9ff87ad62308bbbc33d0b67f84293151efe87e0d5f2ee"},
     {file = "uvicorn-0.40.0.tar.gz", hash = "sha256:839676675e87e73694518b5574fd0f24c9d97b46bea16df7b8c05ea1a51071ea"},
@@ -6554,4 +6553,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.14"
-content-hash = "8dd9434168bf6630e8b5a122f3a84cb2998fb5d0d20df1c8cf678e8e538b7045"
+content-hash = "725c38d03bdb4c7fa865dae60f4dba5db0e1eb7a14403eb52e27832614759eb6"
