@@ -2,6 +2,13 @@
 
 A catalog of templates designed to help you get started quickly with examples that can be easily customised, extended and deployed on the watsonx platform.
 
+> **Note**
+> Agent templates are moving to `base_sw_spec = "genai-A25-py3.12"`  
+> (previously `runtime-24.1-py3.11`).  
+> To use the old runtime, switch to the `rt-24_1` branch:  
+> https://github.com/IBM/watsonx-developer-hub/tree/rt-24_1
+
+
 ## Key features
 
 - 🌐 **Framework agnostic**: Build agents with any framework.

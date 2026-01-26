@@ -103,8 +103,7 @@ stored_ai_service_details = client.repository.store_ai_service(
 ai_service_id = stored_ai_service_details["metadata"].get("id")
 
 meta_props = {
-    client.deployments.ConfigurationMetaNames.NAME:
-        f"online ai_service test",
+    client.deployments.ConfigurationMetaNames.NAME: f"online ai_service test",
     client.deployments.ConfigurationMetaNames.ONLINE: {"parameters": online_parameters},
 }
 
