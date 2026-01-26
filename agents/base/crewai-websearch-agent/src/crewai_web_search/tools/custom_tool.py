@@ -11,9 +11,7 @@ class WebSearchInputSchema(BaseModel):
 
 class WebSearchTool(BaseTool):
     name: str = "DummyWebSearch"
-    description: str = (
-        "Clear description for what this tool is useful for, you agent will need this information to use it."
-    )
+    description: str = "Clear description for what this tool is useful for, you agent will need this information to use it."
     args_schema: Type[BaseModel] = WebSearchInputSchema
 
     def _run(self, argument: str) -> list[str]:

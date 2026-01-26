@@ -11,15 +11,17 @@ packages = [
 
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.13"
-crewai = "^0.150"
+python = ">=3.11,<3.14"
+crewai = "^1.6.1"
+litellm = "^1.81.1"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
 ibm-watsonx-ai-cli = ">=0.3.0"
-ibm-watsonx-ai = "^1.2.7"
+ibm-watsonx-ai = "^1.5.0"
+ibm-watson-openscale = "3.1.2"
 pytest = "^8.3.3"
 numpy = "<2.0.0"
 

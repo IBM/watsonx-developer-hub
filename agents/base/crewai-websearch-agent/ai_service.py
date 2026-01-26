@@ -1,8 +1,8 @@
-def deployable_ai_service(context, url = None, project_id = None, model_id = None):
+def deployable_ai_service(context, url=None, model_id=None):
     """AI service with AI Assistance Crew that can be deployed to a server."""
     from crewai import LLM
     from crewai.agents.parser import AgentAction, AgentFinish
-    from crewai.agents.crew_agent_executor import ToolResult
+    from crewai.tools.tool_types import ToolResult
 
     from crewai_web_search.crew import AssistanceAgents
 
@@ -48,6 +48,9 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
         Please note that the `system message` MUST be placed first in the list of messages!
         Also, only last user message will be passed to the model.
         """
+        import os
+
+        os.environ["WATSONX_TOKEN"] = context.get_token()
 
         messages = context.get_json()["messages"]
 
@@ -63,9 +66,8 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
         llm = LLM(
             model=f"watsonx/{model_id}",
             ## watsonx credentials
-            token=context.get_token(),
             api_base=url,
-            project_id=project_id,
+            space_id=context.get_space_id(),
             ## model params
             temperature=0.7,
         )
