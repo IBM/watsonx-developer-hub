@@ -15,7 +15,7 @@ with warnings.catch_warnings(category=UserWarning):
 
 import ibm_watsonx_ai  # type: ignore[import-untyped]
 
-# Add parent directory to Python path to import utils.py
+# Add parent directory to Python path to import from utils.py
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from utils import load_config
