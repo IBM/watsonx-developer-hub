@@ -146,7 +146,7 @@ You can test and debug your AI service locally via two alternative flows:
 ### ✅ Recommended flow: CLI
 
 ```sh
-watsonx-ai template invoke "<PROMPT>"
+watsonx-ai template invoke "<LOCATION>"  # e.g., Warsaw
 ```
 
 ### ⚠️ Alternative flow: Python Script (Deprecated)
@@ -198,13 +198,13 @@ You can send inference requests to your deployed AI service via two alternative 
 ### ✅ Recommended flow: CLI
 
 ```sh
-watsonx-ai service invoke --deployment_id "<DEPLOYMENT_ID>" "<PROMPT>"
+watsonx-ai service invoke --deployment_id "<DEPLOYMENT_ID>" "<LOCATION>"  # e.g., Warsaw
 ```
 
 *If `deployment_id` is set in `.env`, omit the flag.*
 
 ```sh
-watsonx-ai service invoke "<PROMPT>"
+watsonx-ai service invoke "<LOCATION>"  # e.g., Warsaw
 ```
 
 ### ⚠️ Alternative flow: Python Script (Deprecated)

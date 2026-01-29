@@ -5,16 +5,19 @@ from beeai_framework.workflows.agent import AgentWorkflow
 from beeai_framework.tools.search.duckduckgo import DuckDuckGoSearchTool
 from beeai_framework.tools.weather.openmeteo import OpenMeteoTool
 
-def get_beeai_framework_workflow(token: str, url: str, model_id: str, project_id: str) -> AgentWorkflow:
+
+def get_beeai_framework_workflow(
+    token: str, url: str, model_id: str, space_id: str
+) -> AgentWorkflow:
     # Initialise WatsonxChatModel
     watsonx_llm = ChatModel.from_name(
         "watsonx:" + model_id,
         {
-            "project_id": project_id,
+            "space_id": space_id,
             "token": token,
             "api_base": url,
         },
-    )  
+    )
     workflow = AgentWorkflow("Travel Advisor")
 
     workflow.add_agent(
