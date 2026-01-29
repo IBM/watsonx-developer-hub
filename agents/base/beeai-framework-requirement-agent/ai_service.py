@@ -1,20 +1,17 @@
-def deployable_ai_service(context, url = None, project_id = None, model_id = None):
+def deployable_ai_service(context, url=None, model_id=None):
     import asyncio
     import nest_asyncio
     import threading
     from beeai_framework_requirement_agent_base.agent import get_beeai_framework_agent
     from beeai_framework.agents.types import AgentExecutionConfig
+    from beeai_framework.agents.requirement.types import RequirementAgentOutput
     from beeai_framework.backend.message import (
-        Message,
         SystemMessage,
     )
 
+    nest_asyncio.apply()  # Inject support for nested event loops
 
-    nest_asyncio.apply() # Inject support for nested event loops
-
-    persistent_loop = (
-        asyncio.new_event_loop()
-    ) # Create a persistent event loop that will be used by generate and generate_stream
+    persistent_loop = asyncio.new_event_loop()  # Create a persistent event loop that will be used by generate and generate_stream
 
     def start_loop(loop: asyncio.AbstractEventLoop) -> None:
         asyncio.set_event_loop(loop)
@@ -22,21 +19,26 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
 
     threading.Thread(
         target=start_loop, args=(persistent_loop,), daemon=True
-    ).start() # Run a persistent loop in a separate daemon thread
+    ).start()  # Run a persistent loop in a separate daemon thread
 
-    def get_formatted_message(resp: Message) -> dict | None:
-        role = resp.role
-        if resp.content:
+    def get_formatted_message(resp: RequirementAgentOutput) -> dict | None:
+        last_message = resp.last_message
+        role = last_message.role
+        if last_message.content:
             if role == "assistant":
-                return {"role": role, "content": ''.join(message.text for message in resp.content)}
+                return {
+                    "role": role,
+                    "content": "".join(
+                        message.text for message in last_message.content
+                    ),
+                }
             elif role == "tool":
                 return {
                     "role": role,
-                    "tool_call_id": resp.tool.call_id,
-                    "name": resp.tool_name,
-                    "content": resp.content,
+                    "tool_call_id": last_message.tool.call_id,
+                    "name": last_message.tool_name,
+                    "content": last_message.content,
                 }
-
 
     async def generate_async(context) -> dict:
         """
@@ -61,10 +63,14 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
         Please note that the `system message` MUST be placed first in the list of messages!
         """
 
-        token=context.get_token()
+        token = context.get_token()
 
-        agent = get_beeai_framework_agent(token, url, model_id, project_id)
-        system_message = SystemMessage(content="You are a helpful AI assistant, please respond to the user's query to the best of your ability!")
+        agent = get_beeai_framework_agent(
+            token=token, url=url, model_id=model_id, space_id=context.get_space_id()
+        )
+        system_message = SystemMessage(
+            content="You are a helpful AI assistant, please respond to the user's query to the best of your ability!"
+        )
         await agent.memory.add(system_message)
 
         payload = context.get_json()
@@ -72,10 +78,12 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
         prompt = ""
         for message in payload.get("messages", []):
             prompt += "{}:\n{}\n\n".format(message["role"].upper(), message["content"])
-    
+
         response = await agent.run(
-             prompt,
-             execution=AgentExecutionConfig(max_retries_per_step=3, total_max_retries=10, max_iterations=20),
+            prompt,
+            execution=AgentExecutionConfig(
+                max_retries_per_step=3, total_max_retries=10, max_iterations=20
+            ),
         )
 
         return response
@@ -89,12 +97,12 @@ def deployable_ai_service(context, url = None, project_id = None, model_id = Non
             generate_async(context), persistent_loop
         )
         choices = []
-        generated_response = future.result()
 
-        output = get_formatted_message(generated_response.result)
+        output = get_formatted_message(future.result())
+
         if output is not None:
             choices.append({"index": 0, "message": output})
-        
+
         return {
             "headers": {"Content-Type": "application/json"},
             "body": {"choices": choices},
