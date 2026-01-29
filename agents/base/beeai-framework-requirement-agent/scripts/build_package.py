@@ -34,7 +34,9 @@ def build_zip_sc(sc_dir: Path) -> None:
     :param sc_dir: Path to the source directory for building and packaging.
     :type sc_dir: Path
     """
-    subprocess.run(["poetry", "build", f"--output={sc_dir.parent}", "--format=sdist"], check=True)
+    subprocess.run(
+        ["poetry", "build", f"--output={sc_dir.parent}", "--format=sdist"], check=True
+    )
     shutil.unpack_archive(sc_dir.with_suffix(".tar.gz"), sc_dir.parent)
 
     for file in sc_dir.parent.rglob("*"):
@@ -47,5 +49,10 @@ def build_zip_sc(sc_dir: Path) -> None:
 
 if __name__ == "__main__":
     pkg_name, pkg_version = get_package_name_and_version("../pyproject.toml")
-    pkg_ext_sc = Path(__file__).parent / ".." / "dist" / f"{pkg_name.replace('-', '_')}-{pkg_version}.zip"
+    pkg_ext_sc = (
+        Path(__file__).parent
+        / ".."
+        / "dist"
+        / f"{pkg_name.replace('-', '_')}-{pkg_version}.zip"
+    )
     build_zip_sc(pkg_ext_sc)
