@@ -78,13 +78,15 @@ class GraphNodes:
                 secretsManager.set_service_url(service_url=service_manager_service_url)
                 response = secretsManager.get_secret(id=secret_id)
             except Exception as e:
-                raise RuntimeError(f"Make sure that Secret Manager configuration parameters are correct: `service_manager_service_url` and `secret_id`. Reason: {str(e)}") from e
+                raise RuntimeError(
+                    f"Make sure that Secret Manager configuration parameters are correct: `service_manager_service_url` and `secret_id`. Reason: {str(e)}"
+                ) from e
 
             url = response.result["data"]["neo4j_uri"]
             username = response.result["data"]["neo4j_username"]
             password = response.result["data"]["neo4j_password"]
             database = response.result["data"]["neo4j_database"]
-            
+
         self.graph = Neo4jGraph(
             url=url,
             username=username,

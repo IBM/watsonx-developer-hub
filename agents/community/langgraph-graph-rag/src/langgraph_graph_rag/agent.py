@@ -5,7 +5,7 @@ from ibm_watsonx_ai import APIClient
 
 from langchain_core.messages import SystemMessage
 from langgraph.graph import StateGraph, START, END
-from langgraph.graph.graph import CompiledGraph
+from langgraph.graph.state import CompiledStateGraph
 
 
 from .nodes import AgentState, GraphNodes
@@ -21,7 +21,7 @@ def get_graph_closure(
 ) -> Callable:
     """Graph generator closure."""
 
-    def get_graph(system_message: SystemMessage | None = None) -> CompiledGraph:
+    def get_graph(system_message: SystemMessage | None = None) -> CompiledStateGraph:
         """Get compiled graph with overwritten system prompt, if provided"""
 
         if system_message is None:
