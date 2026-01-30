@@ -5,7 +5,7 @@ def deployable_ai_service(
     embedding_model_id,
     knowledge_graph_description,
     service_manager_service_url,
-    secret_id
+    secret_id,
 ):
     import urllib
     from typing import Generator
