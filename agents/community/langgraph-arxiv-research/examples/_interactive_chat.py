@@ -24,7 +24,7 @@ class InteractiveChat:
             (
                 "Find a list of papers on Granite models on arXiv",
                 "Return an overview of arXiv papers on AI Engineering from 2024",
-                "Summarize the arXiv research paper 2407.01502"
+                "Summarize the arXiv research paper 2407.01502",
             )
             if questions is None
             else questions
@@ -85,7 +85,6 @@ class InteractiveChat:
                 user_loop = self._user_input_loop()
 
                 for action, stage in user_loop:  # unsupported command support!
-
                     if action in {"h", "help"}:
                         print(self._help_message)
                     elif action in {"q", "quit"}:

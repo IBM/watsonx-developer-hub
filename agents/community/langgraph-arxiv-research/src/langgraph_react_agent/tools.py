@@ -1,10 +1,10 @@
-import numpy as np
+import httpx
+from bs4 import BeautifulSoup
 from langchain_core.tools import tool
 from langchain_community.tools import DuckDuckGoSearchResults
-from langchain_community.document_loaders import AsyncHtmlLoader
-from langchain_community.document_transformers import MarkdownifyTransformer
 
 web_search = DuckDuckGoSearchResults(output_format="list")
+
 
 @tool(parse_docstring=True)
 def get_arxiv_contents(url: str) -> str:
@@ -17,20 +17,17 @@ def get_arxiv_contents(url: str) -> str:
     Returns:
         Full contents of an arXiv research paper
     """
-    if "html" in url:
-        loader = AsyncHtmlLoader(url)
-        md = MarkdownifyTransformer()
+    if "arxiv.org/html/" not in url:
+        return "URL must be in format https://arxiv.org/html/<paper_id>"
 
-        html_content = loader.load()
+    html = httpx.get(url).text
+    soup = BeautifulSoup(html, "lxml")
 
-        if (html_content):
-            converted_content = md.transform_documents(html_content)
+    article = soup.find("article")
+    if not article:
+        return "Could not find paper content"
 
-            return converted_content[0].page_content[:999999]
-        else :
-            return 'Content not available'
-    else:
-        return "The URL to an arXiv research paper, must be in format 'https://arxiv.org/html/2501.12948v1'"
+    for tag in article(["script", "style", "nav", "table", "figure", "img", "math"]):
+        tag.decompose()
 
-
-
+    return article.get_text(" ", strip=True)
