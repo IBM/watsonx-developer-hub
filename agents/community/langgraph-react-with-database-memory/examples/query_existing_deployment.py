@@ -21,9 +21,9 @@ if thread_id == "PLACEHOLDER FOR YOUR THREAD ID":
 
 header = f" thread_id: {thread_id} "
 print()
-print(u"\u2554" + len(header) * u"\u2550" + "\u2557")
+print("\u2554" + len(header) * "\u2550" + "\u2557")
 print("\u2551" + header + "\u2551")
-print(u"\u255A" + len(header) * u"\u2550" + "\u255D")
+print("\u255a" + len(header) * "\u2550" + "\u255d")
 print()
 
 
