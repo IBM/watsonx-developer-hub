@@ -1,6 +1,4 @@
-from langgraph_react_with_database_memory import (
-    dummy_web_search
-)
+from langgraph_react_with_database_memory import dummy_web_search
 
 
 class TestTools:

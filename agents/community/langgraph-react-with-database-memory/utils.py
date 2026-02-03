@@ -4,6 +4,7 @@ from ibm_watsonx_ai import APIClient
 from dotenv import load_dotenv
 import os
 
+
 def load_dotenv_with_current_path() -> None:
     """
     Load environment variables from a `.env` file in the current working directory.
@@ -20,8 +21,8 @@ def get_from_env(env_key: str) -> str | None:
     value = os.environ.get(env_key, "").strip()
     return value
 
-def load_config(section: str | None = None) -> dict:
 
+def load_config(section: str | None = None) -> dict:
     dotenv_exists = True
     try:
         load_dotenv_with_current_path()
@@ -52,7 +53,7 @@ def generate_database_URI(client: APIClient, postgres_db_connection_id: str):
     db_credentials = db_details["entity"]["properties"]
     db_host = db_credentials["host"]
     db_port = db_credentials["port"]
-    db_name = db_credentials["database"] 
+    db_name = db_credentials["database"]
     db_username = db_credentials["username"]
     db_password = db_credentials["password"]
     return f"postgresql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}"

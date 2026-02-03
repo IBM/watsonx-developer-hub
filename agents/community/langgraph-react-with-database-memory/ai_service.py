@@ -1,4 +1,6 @@
-def deployable_ai_service(context, url=None, model_id=None, postgres_db_connection_id=None):
+def deployable_ai_service(
+    context, url=None, model_id=None, postgres_db_connection_id=None
+):
     import urllib
     from typing import Generator
     from langgraph.checkpoint.postgres import PostgresSaver
@@ -29,11 +31,11 @@ def deployable_ai_service(context, url=None, model_id=None, postgres_db_connecti
         db_credentials = db_details["entity"]["properties"]
         db_host = db_credentials["host"]
         db_port = db_credentials["port"]
-        db_name = db_credentials["database"] 
+        db_name = db_credentials["database"]
         db_username = db_credentials["username"]
         db_password = db_credentials["password"]
         return f"postgresql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}"
-    
+
     DB_URI = generate_database_URI()
 
     graph = get_graph_closure(client, model_id)
@@ -145,7 +147,7 @@ def deployable_ai_service(context, url=None, model_id=None, postgres_db_connecti
                 del messages[0]
             else:
                 agent = graph(saver, thread_id)
-            
+
             if thread_id:
                 config = {"configurable": {"thread_id": thread_id}}
                 generated_response = agent.invoke({"messages": messages}, config)
@@ -161,12 +163,14 @@ def deployable_ai_service(context, url=None, model_id=None, postgres_db_connecti
             choices.append(
                 {
                     "index": 0,
-                    "message": get_formatted_message(generated_response["messages"][-1]),
+                    "message": get_formatted_message(
+                        generated_response["messages"][-1]
+                    ),
                 }
             )
 
             return execute_response
-    
+
     def generate_stream(context) -> Generator[dict, ..., ...]:
         """
         The `generate_stream` function handles the REST call to the Server-Sent Events (SSE) inference endpoint
@@ -203,7 +207,7 @@ def deployable_ai_service(context, url=None, model_id=None, postgres_db_connecti
                 del messages[0]
             else:
                 agent = graph(saver, thread_id)
-            
+
             if thread_id:
                 config = {"configurable": {"thread_id": thread_id}}
                 response_stream = agent.stream(

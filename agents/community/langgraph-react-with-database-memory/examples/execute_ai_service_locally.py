@@ -21,22 +21,26 @@ client = APIClient(
 )
 
 context = RuntimeContext(api_client=client)
-ai_service_resp_func = deployable_ai_service(context=context, **online_parameters)[stream]
+ai_service_resp_func = deployable_ai_service(context=context, **online_parameters)[
+    stream
+]
 
 if thread_id == "PLACEHOLDER FOR YOUR THREAD ID":
     thread_id = str(uuid.uuid4())
 
 header = f" thread_id: {thread_id} "
 print()
-print(u"\u2554" + len(header) * u"\u2550" + "\u2557")
+print("\u2554" + len(header) * "\u2550" + "\u2557")
 print("\u2551" + header + "\u2551")
-print(u"\u255A" + len(header) * u"\u2550" + "\u255D")
+print("\u255a" + len(header) * "\u2550" + "\u255d")
 print()
+
 
 def ai_service_invoke(payload):
     payload["thread_id"] = thread_id
     context.request_payload_json = payload
     return ai_service_resp_func(context)
+
 
 chat = InteractiveChat(ai_service_invoke, stream=stream)
 chat.run()
