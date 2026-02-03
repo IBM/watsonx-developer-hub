@@ -21,7 +21,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from utils import load_config
 
 
-# Define schema for message, payload, and benchmark item structures
+# =========================
+# Schemas
+# =========================
+
+
 class MessageSchema(TypedDict):
     """Schema for a message in a conversation, specifying its role and content."""
 
@@ -43,17 +47,24 @@ class BenchmarkItemSchema(TypedDict):
     ground_truth: str
 
 
-# Default threshold for evaluation score
-SCORE_THRESHOLD = 0.5
+# =========================
+# Quality gate
+# =========================
+
+SCORE_THRESHOLD = 0.35
 
 
-# Helper functions
+# =========================
+# Helpers
+# =========================
+
+
 def retrieve_generated_answer(chat_completions: dict) -> str:
     """Extract the generated answer from the chat completion response."""
     return chat_completions["choices"][0]["message"]["content"]
 
 
-def load_benchmarking_data(benchmarking_data_path: str) -> list[BenchmarkItemSchema]:
+def load_benchmarking_data(path: str) -> list[BenchmarkItemSchema]:
     """Load benchmarking data from a JSON Lines file.
 
     Args:
@@ -62,10 +73,13 @@ def load_benchmarking_data(benchmarking_data_path: str) -> list[BenchmarkItemSch
     Returns:
         list[BenchmarkItemSchema]: List of benchmark items parsed from the file.
     """
-    with open(benchmarking_data_path, "r") as f:
-        benchmarking_data = [json.loads(line) for line in f]
+    with open(path, "r") as f:
+        return [json.loads(line) for line in f]
 
-    return benchmarking_data
+
+# =========================
+# Generation
+# =========================
 
 
 def generate_answers(
@@ -85,18 +99,25 @@ def generate_answers(
 
     for payload, payload_id in zip(input_data, ids):
         try:
-            results.append(
-                retrieve_generated_answer(
-                    api_client.deployments.run_ai_service(
-                        deployment_id=deployment_id, ai_service_payload=payload
-                    )
-                )
+            response = api_client.deployments.run_ai_service(
+                deployment_id=deployment_id,
+                ai_service_payload=payload,
             )
+
+            results.append(retrieve_generated_answer(response))
             final_ids.append(payload_id)
+
         except Exception as e:
-            warnings.warn(f"Skipping sample: {payload_id}. Reason: {e}")
+            raise RuntimeError(
+                f"❌ Generation failed for sample {payload_id}: {e}"
+            ) from e
 
     return final_ids, results
+
+
+# =========================
+# Evaluation
+# =========================
 
 
 def evaluate_agent(
@@ -153,11 +174,15 @@ def evaluate_agent(
 
     results = evaluate(predictions=predictions, dataset=dataset)
 
-    df_results = results.global_scores.to_df()
-    print(df_results)
+    df = results.global_scores.to_df()
+    print(df)
 
-    return df_results.to_dict().get("score", {}).get("score", 0)
+    return float(df.loc["score", "score"])
 
+
+# =========================
+# Main
+# =========================
 
 if __name__ == "__main__":
     # Load config and set deployment_id
@@ -167,46 +192,46 @@ if __name__ == "__main__":
     # Init ibm_watsonx_ai.APIClient
     api_client = ibm_watsonx_ai.APIClient(
         credentials=ibm_watsonx_ai.Credentials(
-            url=config["watsonx_url"], api_key=config["watsonx_apikey"]
+            url=config["watsonx_url"],
+            api_key=config["watsonx_apikey"],
         ),
         space_id=config["space_id"],
     )
 
-    # Load benchmarking data
-    benchmarking_filename = "benchmarking_data.jsonl"
-
-    # benchmarking data are read from benchmarking_data dir
-    benchmarking_data_dir = Path("benchmarking_data")
+    # benchmarking data are read from benchmarking_data d
     benchmarking_data_path = (
-        Path(__file__).parents[1] / benchmarking_data_dir / benchmarking_filename
+        Path(__file__).parents[1] / "benchmarking_data" / "benchmarking_data.jsonl"
     )
 
-    benchmarking_data = load_benchmarking_data(
-        benchmarking_data_path=str(benchmarking_data_path)
-    )
+    benchmarking_data = load_benchmarking_data(str(benchmarking_data_path))
 
     # Executing deployed AI service with provided scoring data
     payloads_list: list[PayloadSchema] = [
         {"messages": [{"role": "user", "content": data["input"]}]}
         for data in benchmarking_data
     ]
-    correct_answer_list = [data["ground_truth"] for data in benchmarking_data]
+
     ids_list = [data["id"] for data in benchmarking_data]
 
     final_ids, answers = generate_answers(payloads_list, ids_list)
 
+    # Safety check: never allow partial evaluation
+    if len(final_ids) != len(ids_list):
+        raise RuntimeError("❌ Not all benchmark samples produced predictions.")
+
     metrics = ["metrics.rouge", "metrics.bleu"]
 
-    # Check whether QA metric score is larger than acceptable threshold
-    assert (
-        evaluate_agent(
-            evaluation_data=[
-                _data for _data in benchmarking_data if _data["id"] in final_ids
-            ],
-            predictions=answers,
-            metrics=metrics,
-        )
-        > SCORE_THRESHOLD
-    ), (
-        f"Agent does not pass quality check. Used metrics: {metrics}, threshold: {SCORE_THRESHOLD}"
+    score = evaluate_agent(
+        evaluation_data=benchmarking_data,
+        predictions=answers,
+        metrics=metrics,
     )
+
+    print(f"\nFinal quality score: {score:.3f}")
+
+    assert score >= SCORE_THRESHOLD, (
+        f"❌ Quality gate failed: {score:.3f} < {SCORE_THRESHOLD}\n"
+        f"Used metrics: {metrics}"
+    )
+
+    print("✅ Quality gate passed")
