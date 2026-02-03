@@ -13,15 +13,16 @@ def sql_tools_watsonx(
     api_client: "APIClient",
     tool_config: dict,
 ) -> list[BaseTool]:
-
     chat_llm = ChatWatsonx(
-        model_id=tool_config['model_id'],
+        model_id=tool_config["model_id"],
         params={"temperature": 0.2},
         watsonx_client=api_client,
     )
 
     sql_database = WatsonxSQLDatabase(
-        connection_id=tool_config['connection_id'], schema=tool_config['schema'], watsonx_client=api_client
+        connection_id=tool_config["connection_id"],
+        schema=tool_config["schema"],
+        watsonx_client=api_client,
     )
     sql_toolkit = WatsonxSQLDatabaseToolkit(db=sql_database, llm=chat_llm)
 

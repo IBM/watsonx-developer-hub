@@ -11,13 +11,13 @@
 [deployment.online.parameters]
   # during creation of deployment additional parameters can be provided inside `ONLINE` object for further referencing
   # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
-  model_id = "meta-llama/llama-3-3-70b-instruct"  # underlying model of WatsonxChat
+  model_id = "mistral-large-2512"  # underlying model of WatsonxChat
   url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
 
   # SQL db connection configuration
   # Required:
   tool_config_connection_id = ""
-  tool_config_model_id = "meta-llama/llama-3-3-70b-instruct"
+  tool_config_model_id = "mistral-large-2512"
   tool_config_dialect = ""
   tool_config_schema = ""
 
@@ -33,5 +33,5 @@
   overwrite = false
 
   # The base software specification used to deploy the AI service. The template dependencies will be installed based on the packages included in the selected base software specification
-  # Default: "runtime-24.1-py3.11"
-  base_sw_spec = "runtime-24.1-py3.11"
+  # Default: "genai-A25-py3.12"
+  base_sw_spec = "genai-A25-py3.12"
