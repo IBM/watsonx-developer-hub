@@ -2,7 +2,7 @@ from typing import Callable
 
 from ibm_watsonx_ai import APIClient
 from langchain_ibm import ChatWatsonx
-from langgraph.graph.graph import CompiledGraph
+from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import create_react_agent
 
 from langgraph_tavily_tool import tavily_search_watsonx
@@ -27,15 +27,14 @@ def get_graph_closure(
     # Define system prompt
     default_system_prompt = "You are a helpful AI assistant, please respond to the user's query to the best of your ability!"
 
-
-    def get_graph(system_prompt=default_system_prompt) -> CompiledGraph:
+    def get_graph(system_prompt=default_system_prompt) -> CompiledStateGraph:
         """Get compiled graph with overwritten system prompt, if provided"""
 
         # Create instance of compiled graph
         return create_react_agent(
             chat,
             tools=TOOLS,
-            state_modifier=system_prompt,
+            prompt=system_prompt,
         )
 
     return get_graph

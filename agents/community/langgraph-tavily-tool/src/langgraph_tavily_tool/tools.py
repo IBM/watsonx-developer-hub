@@ -14,7 +14,6 @@ def tavily_search_watsonx(
     service_manager_service_url: str,
     secret_id: str,
 ) -> Callable:
-
     authenticator = BearerTokenAuthenticator(api_client.token)
 
     secretsManager = SecretsManagerV2(authenticator=authenticator)
