@@ -42,14 +42,14 @@ def deployable_ai_service(
             "schema": tool_config_schema,
             "dialect": tool_config_dialect,
             "model_id": tool_config_model_id,
-        }
+        },
     )()
 
     def _validate_messages(messages: list[dict]):
         if (
-                messages
-                and isinstance(messages, (list, tuple))
-                and (messages[-1]["role"] == "user")
+            messages
+            and isinstance(messages, (list, tuple))
+            and (messages[-1]["role"] == "user")
         ):
             return None
         raise ValueError(
@@ -65,7 +65,6 @@ def deployable_ai_service(
             return SystemMessage(content=_dict["content"])
         else:
             return HumanMessage(content=_dict["content"])
-
 
     def generate(context) -> dict:
         """
@@ -169,7 +168,7 @@ def deployable_ai_service(
         for chunk_type, data in response_stream:
             if chunk_type == "messages":
                 if last_update is not None and last_update.get("agent", {}).get(
-                        "messages", [AIMessage(content="")]
+                    "messages", [AIMessage(content="")]
                 )[0].additional_kwargs.get("tool_calls"):
                     _from_tool_evaluation = True
                 if (delta := data[0].content) and not _from_tool_evaluation:

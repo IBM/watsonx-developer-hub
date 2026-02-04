@@ -2,15 +2,15 @@ from typing import Callable
 
 from ibm_watsonx_ai import APIClient
 from langchain_ibm import ChatWatsonx
-from langgraph.graph.graph import CompiledGraph
+from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import create_react_agent
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import (
-        BaseMessage,
-        AIMessage,
-        HumanMessage,
-        SystemMessage,
-        ToolMessage,
+    BaseMessage,
+    AIMessage,
+    HumanMessage,
+    SystemMessage,
+    ToolMessage,
 )
 from langgraph_sql_rag import sql_tools_watsonx
 
@@ -19,7 +19,9 @@ def get_graph_closure(client: APIClient, model_id: str, tool_config: dict) -> Ca
     """Graph generator closure."""
 
     # Initialise ChatWatsonx
-    chat = ChatWatsonx(model_id=model_id, watsonx_client=client, params={"temperature": 0.01})
+    chat = ChatWatsonx(
+        model_id=model_id, watsonx_client=client, params={"temperature": 0.01}
+    )
 
     # Define system prompt
     SYSTEM_PROMPT_TEMPLATE = """You are an agent designed to interact with a SQL database.
@@ -40,20 +42,19 @@ def get_graph_closure(client: APIClient, model_id: str, tool_config: dict) -> Ca
     system_prompt_template = ChatPromptTemplate.from_messages(
         [("system", SYSTEM_PROMPT_TEMPLATE)]
     )
-    default_system_prompt = system_prompt_template.format(dialect=tool_config['dialect'], top_k=3)
+    default_system_prompt = system_prompt_template.format(
+        dialect=tool_config["dialect"], top_k=3
+    )
 
     tools = sql_tools_watsonx(
         api_client=client,
         tool_config=tool_config,
     )
 
-
-    def get_graph(system_prompt=default_system_prompt) -> CompiledGraph:
+    def get_graph(system_prompt=default_system_prompt) -> CompiledStateGraph:
         """Get compiled graph with overwritten db dialect, if provided"""
 
         # Create instance of compiled graph
-        return create_react_agent(
-            chat, tools=tools, state_modifier=system_prompt
-        )
+        return create_react_agent(chat, tools=tools, prompt=system_prompt)
 
     return get_graph
