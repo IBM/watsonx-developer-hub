@@ -2,7 +2,7 @@ from typing import Callable
 
 from ibm_watsonx_ai import APIClient
 from langchain_ibm import ChatWatsonx
-from langgraph.graph.graph import CompiledGraph
+from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import create_react_agent
 
 from langgraph_react_agent_model_gateway import TOOLS
@@ -22,7 +22,7 @@ def get_graph_closure(client: APIClient, model: str) -> Callable:
         "like 'https://arxiv.org/html/2501.12948v1'"
     )
 
-    def get_graph(system_prompt=default_system_prompt) -> CompiledGraph:
+    def get_graph(system_prompt=default_system_prompt) -> CompiledStateGraph:
         """Get compiled graph with overwritten system prompt, if provided"""
 
         # Create instance of compiled graph
