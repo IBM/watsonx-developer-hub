@@ -133,7 +133,6 @@ def deployable_ai_service(
         else:
             agent = graph()
 
-
         # Invoke agent
         generated_response = agent.invoke({"messages": messages})
 

@@ -81,7 +81,6 @@ class InteractiveChat:
                 user_loop = self._user_input_loop()
 
                 for action, stage in user_loop:  # unsupported command support!
-
                     if action == "h" or action == "help":
                         print(self._help_message)
                     elif action == "quit" or action == "q":
