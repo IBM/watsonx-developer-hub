@@ -11,7 +11,7 @@
 [deployment.online.parameters]
 # during creation of deployment additional parameters can be provided inside `ONLINE` object for further referencing
 # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create
-  model = "mistralai/mistral-large"  # model used by Model Gateway (can also be an alias)
+  model = "mistralai/mistral-small-3-1-24b-instruct-2503"  # model used by Model Gateway (can also be an alias)
   url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
 
 [deployment.software_specification]
@@ -23,5 +23,5 @@
   overwrite = false
 
   # The base software specification used to deploy the AI service. The template dependencies will be installed based on the packages included in the selected base software specification
-  # Default: "runtime-24.1-py3.11"
-  base_sw_spec = "runtime-24.1-py3.11"
+  # Default: "genai-A25-py3.12"
+  base_sw_spec = "genai-A25-py3.12"
