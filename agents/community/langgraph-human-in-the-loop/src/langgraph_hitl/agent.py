@@ -14,12 +14,12 @@ from langgraph_hitl.tools import web_search
 
 if TYPE_CHECKING:
     from langgraph.checkpoint.memory import InMemorySaver
-    from langgraph.graph.graph import CompiledGraph
+    from langgraph.graph.state import CompiledStateGraph
 
 
 def get_graph(
     client: APIClient, model_id: str, checkpointer: "InMemorySaver"
-) -> "CompiledGraph":
+) -> "CompiledStateGraph":
     """Graph generator."""
 
     # Initialise ChatWatsonx
