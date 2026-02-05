@@ -6,7 +6,7 @@ from ibm_watsonx_ai import APIClient
 from langchain_ibm import ChatWatsonx
 
 from langgraph.graph import END, StateGraph, START
-from langgraph.graph.graph import CompiledGraph
+from langgraph.graph.state import CompiledStateGraph
 from langgraph.graph.message import add_messages
 
 from langgraph.prebuilt import ToolNode, tools_condition
@@ -105,7 +105,9 @@ def get_graph_closure(
         response = rag_chain.invoke({"context": docs, "question": question})
         return {"messages": [AIMessage(response)]}
 
-    def get_graph(instruction_prompt: SystemMessage | None = None) -> CompiledGraph:
+    def get_graph(
+        instruction_prompt: SystemMessage | None = None,
+    ) -> CompiledStateGraph:
         """Get compiled graph with overwritten system prompt, if provided"""
 
         # Define a new graph
