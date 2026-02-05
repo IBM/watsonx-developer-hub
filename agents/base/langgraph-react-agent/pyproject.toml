@@ -14,13 +14,13 @@ python = ">=3.11,<3.14"
 langgraph = "^0.6.11"
 langchain-ibm = "^0.3.20"
 ibm-watsonx-ai = "^1.5.0"
-pytest = "^8.3.3"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
 ibm-watsonx-ai-cli = ">=0.3.0"
+pytest = "^8.3.3"
 
 [tool.poetry.group.eval.dependencies]
 setuptools = "<80.9.0"

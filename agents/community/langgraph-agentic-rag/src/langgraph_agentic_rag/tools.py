@@ -10,8 +10,7 @@ def retriever_tool_watsonx(
     api_client: "APIClient",
     tool_config: dict,
 ) -> Callable:
-
-    from langchain_ibm.toolkit import WatsonxToolkit
+    from langchain_ibm.agent_toolkits.utility import WatsonxToolkit
 
     toolkit = WatsonxToolkit(watsonx_client=api_client)
 
