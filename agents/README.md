@@ -33,8 +33,11 @@ watsonx-ai template new
 Go to the [Developer Access](https://dataplatform.cloud.ibm.com/developer-access) to find your environment variables.
 
 ```bash
+cp template.env .env
 cp config.toml.example config.toml
 ```
+
+Fill in IBM credentials
 
 4. **Run** the template
 
@@ -71,16 +74,18 @@ Designed to help you get started quickly with examples that can be easily custom
 
 Templates published and maintained by the community.
 
-| Template                                                                                  | Framework | Description                                                              | CLI support |
-|-------------------------------------------------------------------------------------------| --------- |--------------------------------------------------------------------------| ----------- |
-| [Agentic RAG](./community/langgraph-agentic-rag/)                                         | Langraph  | Agent to improve retrieval augmented generation (RAG) scenario.          | Yes |
-| [arXiv Research Agent](./community/langgraph-arxiv-research/)                             | Langraph  | Agent to search and summarize research papers published on arXiv.        | Yes |
-| [arXiv Research Model Gateway Agent](./community/langgraph-arxiv-research-model-gateway ) | Langraph  | Agent to route requests to LLM providers using Model Gateway.  | Yes | 
-| [Graph RAG Agent](./community/langgraph-graph-rag )                                       | Langraph  | Agent to solve RAG tasks by combining Neo4j-powered knowledge graphs with vector similarity search.  | Yes | 
-| [Agent with database memory](./community/langgraph-react-with-database-memory )           | Langraph  | Agent to manage conversation memory using a Postgres database, retaining context from recent messages for LLM interactions.  | Yes | 
-| [Agent with the Tavily search Tool](./community/langgraph-tavily-tool/)                   | Langraph  | Agent that uses Tavily search tool and IBM Cloud® Secrets Manager.       | Yes | 
-| [Agent with MCP server and AutoAI model](./community/mcp-autoai-template/)                | Langraph  | Agent that uses MCP Server to interact with a deployed AutoAI model.     | No |
-| [Agent with Human In The Loop architecture](./community/langgraph-human-in-the-loop/)                   | Langraph  | Agent that follows Human In The Loop architecture       | partial | 
+| Template | Framework | Description | CLI support |
+|----------| --------- |-------------| ----------- |
+| [Agentic RAG](./community/langgraph-agentic-rag/) | Langraph | Agent to improve retrieval augmented generation (RAG) scenario. | Yes |
+| [arXiv Research Agent](./community/langgraph-arxiv-research/) | Langraph  | Agent to search and summarize research papers published on arXiv. | Yes |
+| [arXiv Research Model Gateway Agent](./community/langgraph-arxiv-research-model-gateway ) | Langraph | Agent to route requests to LLM providers using Model Gateway. | Yes | 
+| [Graph RAG Agent](./community/langgraph-graph-rag ) | Langraph | Agent to solve RAG tasks by combining Neo4j-powered knowledge graphs with vector similarity search. | Yes | 
+| [Agent with Human In The Loop architecture](./community/langgraph-human-in-the-loop/) | Langraph | Agent that follows Human In The Loop architecture. | partial | 
+| [Agent with database memory](./community/langgraph-react-with-database-memory ) | Langraph | Agent to manage conversation memory using a Postgres database, retaining context from recent messages for LLM interactions. | Yes | 
+| [Agentic SQL RAG](./community/langgraph-sql-rag/) | Langraph | Agentic RAG template for querying SQL databases with LLMs | Yes | 
+| [Agent with the Tavily search Tool](./community/langgraph-tavily-tool/) | Langraph | Agent that uses Tavily search tool and IBM Cloud® Secrets Manager. | Yes | 
+| [Agent with MCP server and AutoAI model](./community/mcp-autoai-template/) | Langraph | Agent that uses MCP Server to interact with a deployed AutoAI model. | No |
+
 
 ## Videos with Quickstart
 
