@@ -1,34 +1,29 @@
-# Agents
+# Templates
 
 A catalog of templates designed to help you get started quickly with examples that can be easily customised, extended and deployed on the watsonx platform.
 
 > **Note**
-> Agent templates are moving to `base_sw_spec = "genai-A25-py3.12"`  
-> (previously `runtime-24.1-py3.11`).  
-> To use the old runtime, switch to the `rt-24_1` branch:  
+> Templates are moving to `base_sw_spec = "genai-A25-py3.12"`
+> (previously `runtime-24.1-py3.11`).
+> To use the old runtime, switch to the `rt-24_1` branch:
 > https://github.com/IBM/watsonx-developer-hub/tree/rt-24_1
 
 ## Key features
 
-- 🌐 **Framework agnostic**: Build agents with any framework.
-- ☁️ **Deployment**: Deploy agents as AI services with one command.
+- 🌐 **Framework agnostic**: Build solutions with any framework.
+- ☁️ **Deployment**: Deploy as AI services with one command.
 
 ## Get started
 
 ### Quick Start Guide
 
-Follow these steps to get started with any agent template:
+Follow these steps to get started with any template:
 
-#### 1. Prerequisites
+#### 1. One-Time Setup
 
-Before you begin, ensure you have:
+Before you begin, ensure you have the following installed on your system:
 
-- **Python 3.11-3.13** installed on your system
-- **[Poetry](https://python-poetry.org/)** package manager (recommended installation via [pipx](https://github.com/pypa/pipx))
-- **IBM Cloud account** with access to watsonx.ai
-- **Deployment space** created in watsonx.ai
-
-#### 2. Install the CLI
+**Install the CLI and Poetry:**
 
 Install or upgrade the IBM watsonx AI CLI tool:
 
@@ -36,7 +31,19 @@ Install or upgrade the IBM watsonx AI CLI tool:
 pip install -U ibm-watsonx-ai-cli
 ```
 
-#### 3. Download a Template
+Install Poetry package manager (if not already installed):
+
+```bash
+pipx install --python 3.11 poetry
+```
+
+**Prerequisites:**
+
+- **Python 3.11-3.13** installed on your system
+- **IBM Cloud account** with access to watsonx.ai (for IBM Cloud deployments) OR **watsonx.ai Software** installation (for on-premise deployments)
+- **Deployment space** created in watsonx.ai
+
+#### 2. Download a Template
 
 List available templates:
 
@@ -58,13 +65,7 @@ watsonx-ai template new "base/langgraph-react-agent"
 
 The CLI will prompt you to specify a target directory for the template.
 
-#### 4. Install Poetry (if not already installed)
-
-```bash
-pipx install --python 3.11 poetry
-```
-
-#### 5. Install Template Dependencies
+#### 3. Install Template Dependencies
 
 Navigate to your template directory and install dependencies:
 
@@ -79,45 +80,63 @@ Optionally, activate the virtual environment:
 source $(poetry -q env use 3.11 && poetry env info --path)/bin/activate
 ```
 
-#### 6. Configure Environment Variables
+#### 4. Configure Environment Variables
 
-Copy the template environment file and fill in your credentials:
+Copy the template environment file and configure your credentials:
 
 ```bash
 cp template.env .env
 ```
 
-Edit the `.env` file with your IBM Cloud credentials. You can find these at [Developer Access](https://dataplatform.cloud.ibm.com/developer-access):
+Edit the `.env` file with your credentials. **For security reasons, never hard-code credentials in your scripts or config files.**
+
+**For IBM watsonx.ai for IBM Cloud deployments:**
 
 ```bash
-# Required credentials
+# One of the below is required
 WATSONX_APIKEY=<your-api-key>
-WATSONX_URL=https://<region>.ml.cloud.ibm.com
-WATSONX_SPACE_ID=<your-space-id>
+WATSONX_TOKEN=
 
-# Optional (for IBM watsonx.ai Software)
-WATSONX_PASSWORD=
-WATSONX_USERNAME=
-WATSONX_INSTANCE_ID=
+# Should follow the format: https://{REGION}.ml.cloud.ibm.com
+WATSONX_URL=https://<region>.ml.cloud.ibm.com
+
+# Deployment space ID (required)
+WATSONX_SPACE_ID=<your-space-id>
 ```
 
-**Important:** The `WATSONX_URL` should follow the format `https://{REGION}.ml.cloud.ibm.com` where `{REGION}` is your IBM Cloud region (e.g., `us-south`, `eu-de`, `jp-tok`).
+You can find your IBM Cloud credentials at [Developer Access](https://dataplatform.cloud.ibm.com/developer-access).
 
-#### 7. Configure Deployment Settings
+**For on-premise (IBM watsonx.ai software) deployments:**
 
-Copy the configuration template and customize it:
+```bash
+# Authentication: Choose ONE of the following methods:
+# Method 1: API key + username
+WATSONX_APIKEY=<your-api-key>
+WATSONX_USERNAME=<your-username>
+
+# Method 2: Password + username
+WATSONX_PASSWORD=<your-password>
+WATSONX_USERNAME=<your-username>
+
+# Method 3: Token only
+WATSONX_TOKEN=<your-token>
+
+# Your watsonx.ai Software URL (required)
+WATSONX_URL=<your-watsonx-software-url>
+
+# Deployment space ID (required)
+WATSONX_SPACE_ID=<your-space-id>
+```
+
+#### 5. Configure Deployment Settings
+
+Copy the configuration template:
 
 ```bash
 cp config.toml.example config.toml
 ```
 
-Edit `config.toml` to configure:
-
-- **Model selection**: Choose the underlying LLM model (e.g., `ibm/granite-4-h-small`)
-- **Software specification**: Specify the base runtime environment (default: `genai-A25-py3.12`)
-- **Deployment parameters**: Set streaming options and other deployment-specific settings
-
-Example `config.toml`:
+Edit `config.toml` file to configure deployment parameters:
 
 ```toml
 [cli.options]
@@ -126,7 +145,7 @@ Example `config.toml`:
 
 [deployment.online.parameters]
   model_id = "ibm/granite-4-h-small"
-  url = "https://us-south.ml.cloud.ibm.com"
+  url = "https://us-south.ml.cloud.ibm.com"  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
 
 [deployment.software_specification]
   name = ""
@@ -134,17 +153,17 @@ Example `config.toml`:
   base_sw_spec = "genai-A25-py3.12"
 ```
 
-#### 8. Test Locally
+#### 6. Test Locally
 
-Before deploying, test your agent locally:
+Before deploying, test your template locally:
 
 ```bash
 watsonx-ai template invoke "Hello, how can you help me?"
 ```
 
-#### 9. Deploy to IBM Cloud
+#### 7. Deploy Your AI Service
 
-Deploy your agent as an AI service:
+Deploy your template as an AI service:
 
 ```bash
 watsonx-ai service new
@@ -155,9 +174,8 @@ This command will:
 1. Build a package extension from your template
 2. Create or update a software specification
 3. Deploy the AI service to your watsonx.ai space
-4. Store the deployment ID in your `.env` file
 
-#### 10. Query the Deployment
+#### 8. Query the Deployment
 
 Once deployed, invoke your AI service:
 
@@ -165,7 +183,7 @@ Once deployed, invoke your AI service:
 watsonx-ai service invoke "Hello from the cloud!"
 ```
 
-#### 11. Manage Deployments
+#### 9. Manage Deployments
 
 List all deployments in your space:
 
@@ -233,8 +251,8 @@ source $(poetry env info --path)/bin/activate
 
 **Solution**: Verify your credentials in the `.env` file:
 
-- Check that `WATSONX_APIKEY` is valid and not expired
-- Ensure `WATSONX_URL` matches your region
+- Check that `WATSONX_APIKEY`/`WATSONX_TOKEN` (or `WATSONX_USERNAME`/`WATSONX_PASSWORD` for on-premise) is valid and not expired
+- Ensure `WATSONX_URL` matches your region (IBM Cloud) or your watsonx.ai Software installation (on-premise)
 - Confirm `WATSONX_SPACE_ID` exists and you have access
 
 #### Issue: Deployment fails with "Software specification not found"
@@ -265,10 +283,10 @@ base_sw_spec = "genai-A25-py3.12"
 
 **Solution**: Create a deployment space in watsonx.ai:
 
-1. Go to [IBM Cloud watsonx.ai](https://dataplatform.cloud.ibm.com/)
+1. Go to [IBM Cloud watsonx.ai](https://dataplatform.cloud.ibm.com/) (or your watsonx.ai Software installation)
 2. Navigate to Deployments > Spaces
 3. Create a new deployment space
-4. Copy the space ID to your `.env` file
+4. Copy the space ID to your `.env` file as `WATSONX_SPACE_ID`
 
 ### Getting Help
 
@@ -281,7 +299,7 @@ If you encounter issues not covered here:
 
 ## Template Requirements
 
-Ensuring seamless integration and full lifecycle support, all agent templates must comply with the following requirements.
+Ensuring seamless integration and full lifecycle support, all templates must comply with the following requirements. These requirements ensure that the same instructions can be used consistently across all templates.
 
 ### 1. Discoverability Requirements
 
@@ -302,7 +320,7 @@ The template directory must exist on the `main` branch under one of the followin
 
 - **Base templates:** Curated and maintained by IBM developers, these provide a foundational starting point for building more advanced applications.
 
-- **Community templates:** Contributed by the wider community, these showcase more advanced agents and include integrations with external tools—such as web search, retrieval-augmented generation (RAG), or custom toolkits—to solve specialized problems.
+- **Community templates:** Contributed by the wider community, these showcase more advanced solutions and include integrations with external tools—such as web search, retrieval-augmented generation (RAG), or custom toolkits—to solve specialized problems.
 
 > **Naming:** Use kebab-case (e.g., `my-new-agent`).  
 > **Uniqueness:** No duplicate `<template-name>` values across **base** and **community** folders.
@@ -315,10 +333,11 @@ The CLI validation logic will confirm the presence of:
 
 - **ai_service.py** - File contains the function to be deployed as an AI service defining the application's logic.
 - **pyproject.toml** - Defines package metadata and dependency declarations.
-- **src/** - Folder contains the Python package with Agent source code.
-- **config.toml.example** - A configuration file with placeholders that stores the deployment metadata.
+- **src/** - Folder contains the Python package with source code.
+- **template.env** - Template for environment variables containing credentials (copied to `.env`).
+- **config.toml.example** - Configuration file for deployment parameters (copied to `config.toml`).
 - **schema/** - Folder contains request and response schemas for the `/ai_service` endpoint queries.
-- **README.md** - Provides user guidance
+- **README.md** - Provides user guidance following the same structure as this document
 
 #### 2.2. Dependency & Metadata Compliance
 
@@ -360,9 +379,9 @@ In the `ai_service.py` file, define an external function with `context` as its f
   - Handles SSE calls to `/ml/v4/deployments/{id}/ai_service_stream`.
   - Yields incremental `choices` with `delta` updates.
 
-#### 2.4. Agent Logic & Tools
+#### 2.4. Application Logic & Tools
 
-- The `src/<python_package>/` directory must be a valid Python package (include an `__init__.py` file) containing all agent and tool implementations.
+- The `src/<python_package>/` directory must be a valid Python package (include an `__init__.py` file) containing all application and tool implementations.
 
 - Filenames are flexible but should clearly convey purpose and be importable (e.g., `workflow.py`, `graph_builder.py`, `custom_tools.py`).
 
@@ -372,7 +391,19 @@ In the `ai_service.py` file, define an external function with `context` as its f
 
 #### 2.5. Configuration Management
 
-After downloading the template repository, copy the contents of the `config.toml.example` file to the `config.toml` file and fill in the required fields. `config.toml` file can also be used to tweak the model for your use case.
+Templates use a two-file configuration approach:
+
+1. **`.env` file**: Contains all credentials and authentication parameters
+   - Copy from `template.env` and fill in your credentials
+   - Never commit this file to version control
+   - Environment variables are automatically loaded by the CLI
+
+2. **`config.toml` file**: Contains deployment parameters
+   - Copy from `config.toml.example` if the template requires it
+   - Configures model selection, runtime settings, and deployment options
+   - Some templates may require specific configuration options
+
+This separation ensures security (credentials in `.env`) while maintaining flexibility (deployment parameters in `config.toml`).
 
 #### 2.6. Schema Definitions
 
@@ -448,9 +479,9 @@ Signed-off-by: John Doe <john.doe@example.com>
 
 We automatically verify that all commit messages contain a `Signed-off-by:` line with your email address.
 
-## Consuming deployed agents
+## Consuming deployed services
 
-All of the available templates can be easily consumed in the [React UI App](../apps/base/nextjs-chat-with-ai-service/) that creates local running React application providing users an option to infer agents. To run the app local please follow these [steps](../apps/base/nextjs-chat-with-ai-service/README.md).
+All of the available templates can be easily consumed in the [React UI App](../apps/base/nextjs-chat-with-ai-service/) that creates local running React application providing users an option to interact with deployed AI services. To run the app locally please follow these [steps](../apps/base/nextjs-chat-with-ai-service/README.md).
 
 ## Support
 
