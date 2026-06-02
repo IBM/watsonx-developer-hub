@@ -89,7 +89,6 @@ def write_generated_config(metadata: dict[str, Any]) -> None:
     content = (
         f'SERVER_NAME = "{metadata["server_name"]}"\n'
         f'TOOL_NAME = "{metadata["tool_name"]}"\n'
-        f"TOOL_DESCRIPTION = \"Predict the value of '{metadata['label_column']}' using the deployed watsonx.ai AutoAI model. Provide all required input fields defined by the generated schema. Returns the prediction result from the deployment.\"\n"
         f'PREDICTION_COLUMN = "{metadata["label_column"]}"\n'
         f"INPUT_FIELDS = {repr(metadata['input_fields'])}\n"
     )
