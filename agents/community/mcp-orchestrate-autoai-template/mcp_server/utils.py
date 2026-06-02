@@ -63,4 +63,6 @@ def extract_petal_width(response: dict) -> float:
         # The deployment returns a list of predicted values; petal width is the first
         return float(values[0])
     except (KeyError, IndexError, TypeError, ValueError) as e:
-        raise RuntimeError(f"Unexpected response structure from deployment: {response}") from e
+        raise RuntimeError(
+            f"Unexpected response structure from deployment: {response}"
+        ) from e
