@@ -1,0 +1,13 @@
+spec_version: v1
+kind: mcp
+name: iris-toolkit
+description: "Iris petal width prediction using watsonx.ai deployment"
+command: python server.py
+env:
+  - WATSONX_URL
+  - WATSONX_API_KEY
+  - WATSONX_SPACE_ID
+  - WATSONX_PETAL_WIDTH_DEPLOYMENT_ID
+tools:
+  - "*"
+package_root: ./mcp_server
