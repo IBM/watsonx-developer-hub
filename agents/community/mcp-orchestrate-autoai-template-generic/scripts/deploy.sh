@@ -14,18 +14,36 @@ if [ ! -f .env ]; then
     exit 1
 fi
 
-# Step 1: Add connection
+# Step 1: Generate template files (toolkit.yaml, agent.yaml, generated_config.py)
 echo ""
-echo "Step 1: Adding connection 'autoai-prediction-connection'..."
+echo "Step 1: Generating template files from AutoAI deployment..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if python "$SCRIPT_DIR/generate_template.py" 2>/dev/null; then
+    echo "✓ Template files generated successfully"
+    echo "  - toolkit.yaml"
+    echo "  - agent.yaml"
+    echo "  - mcp_server/generated_config.py"
+else
+    echo "❌ Failed to generate template files"
+    echo "Please ensure:"
+    echo "  - Python dependencies are installed (ibm-watsonx-ai, python-dotenv, pyyaml)"
+    echo "  - .env file contains valid credentials"
+    echo "  - WATSONX_AUTOAI_DEPLOYMENT_ID is correct"
+    exit 1
+fi
+
+# Step 2: Add connection
+echo ""
+echo "Step 2: Adding connection 'autoai-prediction-connection'..."
 if orchestrate connections add -a autoai-prediction-connection 2>/dev/null; then
     echo "✓ Connection added successfully"
 else
     echo "⚠ Failed to add connection (may already exist)"
 fi
 
-# Step 2: Export environment variables from .env file
+# Step 3: Export environment variables from .env file
 echo ""
-echo "Step 2: Loading environment variables from .env file..."
+echo "Step 3: Loading environment variables from .env file..."
 if export $(grep -v '^#' .env | xargs) 2>/dev/null; then
     echo "✓ Environment variables loaded successfully"
     echo "  - WATSONX_URL: ${WATSONX_URL:0:30}..."
@@ -37,9 +55,9 @@ else
     exit 1
 fi
 
-# Step 3: Configure connections for both draft and live environments
+# Step 4: Configure connections for both draft and live environments
 echo ""
-echo "Step 3: Configuring connections for draft and live environments..."
+echo "Step 4: Configuring connections for draft and live environments..."
 
 for env in draft live; do
     echo ""
@@ -71,9 +89,9 @@ for env in draft live; do
     fi
 done
 
-# Step 4: Import toolkit
+# Step 5: Import toolkit
 echo ""
-echo "Step 4: Importing toolkit from toolkit.yaml..."
+echo "Step 5: Importing toolkit from toolkit.yaml..."
 if [ ! -f toolkit.yaml ]; then
     echo "❌ Error: toolkit.yaml file not found in current directory"
     exit 1
@@ -85,9 +103,9 @@ else
     echo "⚠ Failed to import toolkit (may already exist or invalid configuration)"
 fi
 
-# Step 5: Import agent
+# Step 6: Import agent
 echo ""
-echo "Step 5: Importing agent from agent.yaml..."
+echo "Step 6: Importing agent from agent.yaml..."
 if [ ! -f agent.yaml ]; then
     echo "❌ Error: agent.yaml file not found in current directory"
     exit 1
@@ -99,9 +117,9 @@ else
     echo "⚠ Failed to import agent (may already exist or invalid configuration)"
 fi
 
-# Step 6: Deploy agent
+# Step 7: Deploy agent
 echo ""
-echo "Step 6: Deploying agent 'autoai_prediction_agent'..."
+echo "Step 7: Deploying agent 'autoai_prediction_agent'..."
 if orchestrate agents deploy --name autoai_prediction_agent 2>/dev/null; then
     echo "✓ Agent deployed successfully"
 else
