@@ -1,0 +1,121 @@
+#!/bin/bash
+
+# Deployment script for AutoAI orchestration resources
+# This script creates and configures all required resources with individual error handling
+# Each step is wrapped in a try-catch equivalent to handle errors gracefully
+
+echo "Starting deployment of AutoAI orchestration resources..."
+echo "========================================================="
+
+# Check if .env file exists
+if [ ! -f .env ]; then
+    echo "❌ Error: .env file not found in current directory"
+    echo "Please create a .env file with required environment variables"
+    exit 1
+fi
+
+# Step 1: Add connection
+echo ""
+echo "Step 1: Adding connection 'autoai-prediction-connection'..."
+if orchestrate connections add -a autoai-prediction-connection 2>/dev/null; then
+    echo "✓ Connection added successfully"
+else
+    echo "⚠ Failed to add connection (may already exist)"
+fi
+
+# Step 2: Export environment variables from .env file
+echo ""
+echo "Step 2: Loading environment variables from .env file..."
+if export $(grep -v '^#' .env | xargs) 2>/dev/null; then
+    echo "✓ Environment variables loaded successfully"
+    echo "  - WATSONX_URL: ${WATSONX_URL:0:30}..."
+    echo "  - WATSONX_API_KEY: ${WATSONX_API_KEY:0:10}..."
+    echo "  - WATSONX_SPACE_ID: $WATSONX_SPACE_ID"
+    echo "  - WATSONX_AUTOAI_DEPLOYMENT_ID: $WATSONX_AUTOAI_DEPLOYMENT_ID"
+else
+    echo "❌ Failed to load environment variables from .env file"
+    exit 1
+fi
+
+# Step 3: Configure connections for both draft and live environments
+echo ""
+echo "Step 3: Configuring connections for draft and live environments..."
+
+for env in draft live; do
+    echo ""
+    echo "  Configuring $env environment..."
+    
+    # Configure connection
+    if orchestrate connections configure \
+        -a autoai-prediction-connection \
+        --env $env \
+        --type team \
+        --kind key_value 2>/dev/null; then
+        echo "  ✓ Connection configured for $env environment"
+    else
+        echo "  ⚠ Failed to configure connection for $env environment"
+        continue
+    fi
+    
+    # Set credentials
+    if orchestrate connections set-credentials \
+        -a autoai-prediction-connection \
+        --env $env \
+        -e "WATSONX_URL=$WATSONX_URL" \
+        -e "WATSONX_API_KEY=$WATSONX_API_KEY" \
+        -e "WATSONX_SPACE_ID=$WATSONX_SPACE_ID" \
+        -e "WATSONX_AUTOAI_DEPLOYMENT_ID=$WATSONX_AUTOAI_DEPLOYMENT_ID" 2>/dev/null; then
+        echo "  ✓ Credentials set for $env environment"
+    else
+        echo "  ⚠ Failed to set credentials for $env environment"
+    fi
+done
+
+# Step 4: Import toolkit
+echo ""
+echo "Step 4: Importing toolkit from toolkit.yaml..."
+if [ ! -f toolkit.yaml ]; then
+    echo "❌ Error: toolkit.yaml file not found in current directory"
+    exit 1
+fi
+
+if orchestrate toolkits import -f toolkit.yaml -a autoai-prediction-connection 2>/dev/null; then
+    echo "✓ Toolkit imported successfully"
+else
+    echo "⚠ Failed to import toolkit (may already exist or invalid configuration)"
+fi
+
+# Step 5: Import agent
+echo ""
+echo "Step 5: Importing agent from agent.yaml..."
+if [ ! -f agent.yaml ]; then
+    echo "❌ Error: agent.yaml file not found in current directory"
+    exit 1
+fi
+
+if orchestrate agents import -f agent.yaml 2>/dev/null; then
+    echo "✓ Agent imported successfully"
+else
+    echo "⚠ Failed to import agent (may already exist or invalid configuration)"
+fi
+
+# Step 6: Deploy agent
+echo ""
+echo "Step 6: Deploying agent 'autoai_prediction_agent'..."
+if orchestrate agents deploy --name autoai_prediction_agent 2>/dev/null; then
+    echo "✓ Agent deployed successfully"
+else
+    echo "⚠ Failed to deploy agent (may already be deployed or configuration error)"
+fi
+
+echo ""
+echo "========================================================="
+echo "Deployment process completed!"
+echo "Note: Warnings indicate resources that already exist or configuration issues."
+echo ""
+echo "To verify the deployment, you can run:"
+echo "  orchestrate agents list"
+echo "  orchestrate toolkits list"
+echo "  orchestrate connections list"
+
+# Made with Bob
