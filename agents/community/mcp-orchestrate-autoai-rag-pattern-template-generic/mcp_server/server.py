@@ -1,4 +1,5 @@
 from mcp.server.fastmcp import FastMCP
+from pydantic import BaseModel, Field
 
 from utils import (
     get_deployment_name,
@@ -9,6 +10,12 @@ from utils import (
 )
 
 mcp = FastMCP(get_server_name())
+
+
+class RAGQuestionInput(BaseModel):
+    question: str = Field(
+        ..., description="The question to ask the RAG Pattern AI service"
+    )
 
 
 def _build_tool_description() -> str:
@@ -23,32 +30,21 @@ def _build_tool_description() -> str:
 
 
 @mcp.tool(name=get_tool_name(), description=_build_tool_description())
-def ask_rag_question(question: str):
-    """
-    Ask a question to the AutoAI RAG Pattern AI service.
-
-    Args:
-        question: The question to ask the RAG Pattern AI service
-
-    Returns:
-        dict: Contains the answer from the AI service
-    """
+def invoke_rag_question(input_data: RAGQuestionInput):
     api_client = prepare_api_client()
     deployment_id = get_rag_deployment_id()
 
-    payload = {"messages": [{"role": "user", "content": question}]}
+    payload = {"messages": [{"role": "user", "content": input_data.question}]}
 
     score_response = api_client.deployments.run_ai_service(deployment_id, payload)
 
     output_for_user = score_response["choices"][0]["message"]["content"]
 
     return {
-        "question": question,
+        "question": input_data.question,
         "answer": output_for_user,
     }
 
 
 if __name__ == "__main__":
     mcp.run(transport="stdio")
-
-# Made with Bob

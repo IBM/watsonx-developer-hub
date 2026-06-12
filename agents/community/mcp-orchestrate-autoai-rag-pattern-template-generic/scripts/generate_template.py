@@ -14,7 +14,7 @@ AGENT_PATH = ROOT_DIR / "agent.yaml"
 
 DEFAULT_TOOLKIT_NAME = "autoai-rag-pattern-toolkit"
 DEFAULT_AGENT_NAME = "autoai_rag_pattern_agent"
-DEFAULT_TOOL_NAME = "ask_rag_question"
+DEFAULT_TOOL_NAME = "get_rag_pattern_answer"
 DEFAULT_SERVER_NAME = "autoai-rag-pattern-toolkit"
 DEFAULT_LLM_NAME = "groq/openai/gpt-oss-120b"
 
