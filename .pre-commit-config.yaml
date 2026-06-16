@@ -1,0 +1,13 @@
+repos:
+  - repo: https://github.com/ibm/detect-secrets
+    rev: 0.13.1+ibm.64.dss
+    hooks:
+      - id: detect-secrets # pragma: whitelist secret
+        args: [--baseline, .secrets.baseline]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        stages: [ pre-commit ]
+      - id: end-of-file-fixer
+        stages: [ pre-commit ]
