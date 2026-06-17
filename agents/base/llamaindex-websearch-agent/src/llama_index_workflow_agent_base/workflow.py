@@ -2,7 +2,7 @@ from typing import Any, List
 
 from llama_index.core.llms.function_calling import FunctionCallingLLM
 from llama_index.core.memory import ChatMemoryBuffer
-from llama_index.core.tools import ToolSelection, ToolOutput
+from llama_index.core.tools import ToolSelection
 from llama_index.core.tools.types import BaseTool
 from llama_index.core.llms import ChatMessage
 from llama_index.core.workflow import (

@@ -56,4 +56,4 @@ def generate_database_URI(client: APIClient, postgres_db_connection_id: str):
     db_name = db_credentials["database"]
     db_username = db_credentials["username"]
     db_password = db_credentials["password"]
-    return f"postgresql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}"
+    return f"postgresql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}"  # pragma: allowlist secret

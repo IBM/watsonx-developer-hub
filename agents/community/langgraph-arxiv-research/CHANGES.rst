@@ -27,7 +27,7 @@ Version 0.1.2
 Addressed general feedback received on the template:
 
 - changed template name to `langgraph-react-agent`,
-- enhanced documentation, mainly added more links and elaborated on some aspects (like credential management), 
+- enhanced documentation, mainly added more links and elaborated on some aspects (like credential management),
 - added a possibility to keep the conversation going with the WatsonxChat after asking the first question,
 - WatsonxChat now should remember previous conversations (within same deployment).
 

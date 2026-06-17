@@ -54,7 +54,6 @@ class InteractiveChat:
         print(self._help_message)
 
         while True:
-
             print(self._questions_prompt)
 
             q = input("\nChoose a question or ask one of your own.\n --> ")
@@ -86,7 +85,6 @@ class InteractiveChat:
                 user_loop = self._user_input_loop()
 
                 for action, stage in user_loop:  # unsupported command support!
-
                     if action == "h" or action == "help":
                         print(self._help_message)
                     elif action == "quit" or action == "q":
@@ -119,7 +117,7 @@ class InteractiveChat:
 
                         if self.stream:
                             for r in resp:
-                                if type(r) == str:
+                                if isinstance(r, str):
                                     r = json.loads(r)
                                 for c in r["choices"]:
                                     self._print_message(c)

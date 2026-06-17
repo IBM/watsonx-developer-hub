@@ -40,7 +40,8 @@ def _delete_space(api_client: APIClient, space_id: str, space_name: str) -> None
 
 
 def _delete_old_spaces(api_client: APIClient) -> None:
-    delete_threshold = datetime.now(tz=timezone.utc) - timedelta(days=0) # TODO: increase after tests
+    # TODO: increase for proper testing
+    delete_threshold = datetime.now(tz=timezone.utc) - timedelta(days=0)
 
     for _, row in api_client.spaces.list().iterrows():
         space_id = str(row["ID"])
@@ -104,10 +105,7 @@ def fixture_space_id(context_free_api_client: APIClient) -> Generator[str, None,
 
 @pytest.fixture(scope="session", name="env_file_values")
 def fixture_env_file_values(space_id: str) -> dict[str, str]:
-    env_values = {
-        cli: os.environ[env]
-        for cli, env in OS_VARS_MAPPING.items()
-    }
+    env_values = {cli: os.environ[env] for cli, env in OS_VARS_MAPPING.items()}
     env_values["WATSONX_SPACE_ID"] = space_id
 
     return env_values

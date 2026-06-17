@@ -1,7 +1,6 @@
 import json
 import logging
 from pathlib import Path
-import json
 
 import ibm_watsonx_ai
 
@@ -104,7 +103,7 @@ ai_service_id = stored_ai_service_details["metadata"].get("id")
 online_parameters = dep_config["online"]["parameters"]
 
 meta_props = {
-    client.deployments.ConfigurationMetaNames.NAME: f"online ai_service test",
+    client.deployments.ConfigurationMetaNames.NAME: "online ai_service test",
     client.deployments.ConfigurationMetaNames.ONLINE: {"parameters": online_parameters},
 }
 

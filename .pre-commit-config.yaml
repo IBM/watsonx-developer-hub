@@ -4,10 +4,19 @@ repos:
     hooks:
       - id: detect-secrets # pragma: whitelist secret
         args: [--baseline, .secrets.baseline]
+        exclude: "(poetry\\.lock|package-lock\\.json|\\.pre-commit-config.yaml)$"
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
+        exclude: "(\\.md|\\.svg)$"
         stages: [ pre-commit ]
       - id: end-of-file-fixer
+        exclude: "\\.svg$"
         stages: [ pre-commit ]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.17
+    hooks:
+      - id: ruff-check
+        args: [ --fix ]
+      - id: ruff-format
