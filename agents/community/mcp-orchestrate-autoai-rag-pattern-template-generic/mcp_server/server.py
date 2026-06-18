@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 
 from utils import (
     get_deployment_name,
+    get_deployment_description,
     get_rag_answer_tool_name,
     get_rag_deployment_id,
     get_rag_deployment_details_tool_name,
@@ -59,6 +60,7 @@ def get_rag_pattern_deployment_details():
 
     return {
         "deployment_name": get_deployment_name(),
+        "deployment_description": get_deployment_description(),
         "deployment_id": deployment_id,
         "server_name": get_server_name(),
         "required_environment_variables": get_required_env_status(),

@@ -5,6 +5,7 @@ from ibm_watsonx_ai import APIClient, Credentials
 
 from generated_config import (
     DEPLOYMENT_NAME,
+    DEPLOYMENT_DESCRIPTION,
     RAG_ANSWER_TOOL_NAME,
     RAG_DEPLOYMENT_DETAILS_TOOL_NAME,
     SERVER_NAME,
@@ -48,6 +49,9 @@ def get_rag_deployment_details_tool_name() -> str:
 
 def get_deployment_name() -> str:
     return DEPLOYMENT_NAME
+
+def get_deployment_description() -> str:
+    return DEPLOYMENT_DESCRIPTION
 
 
 def get_required_env_status() -> dict:
