@@ -3,7 +3,12 @@ import os
 from dotenv import load_dotenv
 from ibm_watsonx_ai import APIClient, Credentials
 
-from generated_config import DEPLOYMENT_NAME, SERVER_NAME, TOOL_NAME
+from generated_config import (
+    DEPLOYMENT_NAME,
+    RAG_ANSWER_TOOL_NAME,
+    RAG_DEPLOYMENT_DETAILS_TOOL_NAME,
+    SERVER_NAME,
+)
 
 
 def load_env() -> None:
@@ -33,12 +38,25 @@ def get_server_name() -> str:
     return SERVER_NAME
 
 
-def get_tool_name() -> str:
-    return TOOL_NAME
+def get_rag_answer_tool_name() -> str:
+    return RAG_ANSWER_TOOL_NAME
+
+
+def get_rag_deployment_details_tool_name() -> str:
+    return RAG_DEPLOYMENT_DETAILS_TOOL_NAME
 
 
 def get_deployment_name() -> str:
     return DEPLOYMENT_NAME
 
 
-# Made with Bob
+def get_required_env_status() -> dict:
+    load_env()
+    required_env_vars = [
+        "WATSONX_URL",
+        "WATSONX_API_KEY",
+        "WATSONX_SPACE_ID",
+        "WATSONX_AUTOAI_RAG_PATTERN_DEPLOYMENT_ID",
+    ]
+
+    return {env_var: bool(os.getenv(env_var)) for env_var in required_env_vars}

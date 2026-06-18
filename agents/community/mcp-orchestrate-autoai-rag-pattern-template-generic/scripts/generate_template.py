@@ -12,10 +12,11 @@ GENERATED_CONFIG_PATH = MCP_SERVER_DIR / "generated_config.py"
 TOOLKIT_PATH = ROOT_DIR / "toolkit.yaml"
 AGENT_PATH = ROOT_DIR / "agent.yaml"
 
-DEFAULT_TOOLKIT_NAME = "autoai-rag-pattern-toolkit"
-DEFAULT_AGENT_NAME = "autoai_rag_pattern_agent"
-DEFAULT_TOOL_NAME = "get_rag_pattern_answer"
-DEFAULT_SERVER_NAME = "autoai-rag-pattern-toolkit"
+DEFAULT_TOOLKIT_NAME = "autoai-rag-pattern-toolkit-v2"
+DEFAULT_AGENT_NAME = "autoai_rag_pattern_agent_v2"
+DEFAULT_RAG_ANSWER_TOOL_NAME = "get_rag_pattern_answer"
+DEFAULT_RAG_DEPLOYMENT_DETAILS_TOOL_NAME = "get_rag_pattern_deployment_details"
+DEFAULT_SERVER_NAME = "autoai-rag-pattern-toolkit-v2"
 DEFAULT_LLM_NAME = "groq/openai/gpt-oss-120b"
 
 
@@ -64,7 +65,8 @@ def build_metadata(
         "deployment_id": deployment_id,
         "deployment_name": deployment_name,
         "toolkit_name": DEFAULT_TOOLKIT_NAME,
-        "tool_name": DEFAULT_TOOL_NAME,
+        "rag_answer_tool_name": DEFAULT_RAG_ANSWER_TOOL_NAME,
+        "rag_deployment_details_tool_name": DEFAULT_RAG_DEPLOYMENT_DETAILS_TOOL_NAME,
         "agent_name": DEFAULT_AGENT_NAME,
         "server_name": DEFAULT_SERVER_NAME,
         "llm": DEFAULT_LLM_NAME,
@@ -74,7 +76,8 @@ def build_metadata(
 def write_generated_config(metadata: dict[str, Any]) -> None:
     content = (
         f'SERVER_NAME = "{metadata["server_name"]}"\n'
-        f'TOOL_NAME = "{metadata["tool_name"]}"\n'
+        f'RAG_ANSWER_TOOL_NAME = "{metadata["rag_answer_tool_name"]}"\n'
+        f'RAG_DEPLOYMENT_DETAILS_TOOL_NAME = "{metadata["rag_deployment_details_tool_name"]}"\n'
         f'DEPLOYMENT_NAME = "{metadata["deployment_name"]}"\n'
     )
     with open(GENERATED_CONFIG_PATH, "w", encoding="utf-8") as file:
@@ -86,7 +89,7 @@ def build_toolkit_yaml() -> dict[str, Any]:
         "spec_version": "v1",
         "kind": "mcp",
         "name": DEFAULT_TOOLKIT_NAME,
-        "description": "Generic watsonx.ai AutoAI RAG Pattern toolkit",
+        "description": "Generic watsonx.ai AutoAI RAG Pattern toolkit with grounded answer and deployment diagnostics tools",
         "command": "python server.py",
         "env": [
             "WATSONX_URL",
@@ -101,14 +104,17 @@ def build_toolkit_yaml() -> dict[str, Any]:
 
 def build_agent_yaml(deployment_name: str) -> dict[str, Any]:
     instructions = (
-        f"You are a question-answering assistant powered by the '{deployment_name}' AutoAI RAG Pattern AI service.\n\n"
+        "You are a knowledge-grounded assistant powered by a watsonx.ai AutoAI RAG Pattern AI service.\n\n"
         "STRICT RULES — follow these without exception:\n"
-        "1. NEVER answer questions from your own knowledge or reasoning.\n"
-        f"2. ALWAYS call {DEFAULT_TOOL_NAME} when the user asks a question.\n"
-        "3. After the tool returns a result, present the answer clearly to the user.\n"
-        "4. Do NOT make up answers or use your own knowledge.\n"
-        "5. If the tool returns an error, inform the user and ask them to try again.\n\n"
-        "Your role is to pass user questions to the RAG Pattern AI service and relay the responses."
+        "1. For user questions that require an answer from the knowledge base, ALWAYS call "
+        f"{DEFAULT_RAG_ANSWER_TOOL_NAME}.\n"
+        "2. NEVER answer knowledge questions from your own knowledge when the RAG tool should be used.\n"
+        "3. If the user asks whether the deployment is configured, available, or what deployment is being used, call "
+        f"{DEFAULT_RAG_DEPLOYMENT_DETAILS_TOOL_NAME}.\n"
+        "4. After a tool returns a result, summarize it clearly and concisely for the user.\n"
+        "5. If a tool returns an error, explain the failure plainly and do not invent missing information.\n"
+        "6. Prefer grounded answers and mention deployment details only when relevant to the user request.\n\n"
+        "Your role is to route knowledge questions to the RAG Pattern AI service and use the diagnostics tool only for configuration or troubleshooting requests."
     )
 
     return {
@@ -116,13 +122,17 @@ def build_agent_yaml(deployment_name: str) -> dict[str, Any]:
         "kind": "native",
         "name": DEFAULT_AGENT_NAME,
         "description": (
-            f"Answers questions using the '{deployment_name}' watsonx.ai deployed AutoAI RAG Pattern AI service."
+            "Answers knowledge-grounded questions using a watsonx.ai deployed AutoAI "
+            "RAG Pattern AI service and can inspect deployment configuration for troubleshooting."
         ),
         "llm": DEFAULT_LLM_NAME,
         "style": "react",
         "hide_reasoning": False,
         "instructions": instructions,
-        "tools": [f"{DEFAULT_TOOLKIT_NAME}:{DEFAULT_TOOL_NAME}"],
+        "tools": [
+            f"{DEFAULT_TOOLKIT_NAME}:{DEFAULT_RAG_ANSWER_TOOL_NAME}",
+            f"{DEFAULT_TOOLKIT_NAME}:{DEFAULT_RAG_DEPLOYMENT_DETAILS_TOOL_NAME}",
+        ],
         "collaborators": [],
     }
 
@@ -173,5 +183,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-# Made with Bob

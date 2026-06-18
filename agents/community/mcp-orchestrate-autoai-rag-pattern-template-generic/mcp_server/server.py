@@ -3,9 +3,11 @@ from pydantic import BaseModel, Field
 
 from utils import (
     get_deployment_name,
+    get_rag_answer_tool_name,
     get_rag_deployment_id,
+    get_rag_deployment_details_tool_name,
+    get_required_env_status,
     get_server_name,
-    get_tool_name,
     prepare_api_client,
 )
 
@@ -29,7 +31,7 @@ def _build_tool_description() -> str:
     )
 
 
-@mcp.tool(name=get_tool_name(), description=_build_tool_description())
+@mcp.tool(name=get_rag_answer_tool_name(), description=_build_tool_description())
 def invoke_rag_question(input_data: RAGQuestionInput):
     api_client = prepare_api_client()
     deployment_id = get_rag_deployment_id()
@@ -43,6 +45,23 @@ def invoke_rag_question(input_data: RAGQuestionInput):
     return {
         "question": input_data.question,
         "answer": output_for_user,
+        "deployment_name": get_deployment_name(),
+        "deployment_id": deployment_id,
+    }
+
+
+@mcp.tool(
+    name=get_rag_deployment_details_tool_name(),
+    description="Return configuration-oriented details about the watsonx.ai AutoAI RAG deployment used by this toolkit.",
+)
+def get_rag_pattern_deployment_details():
+    deployment_id = get_rag_deployment_id()
+
+    return {
+        "deployment_name": get_deployment_name(),
+        "deployment_id": deployment_id,
+        "server_name": get_server_name(),
+        "required_environment_variables": get_required_env_status(),
     }
 
 
