@@ -1,12 +1,9 @@
 def deployable_ai_service(context, url=None, model_id=None):
     import asyncio
-    import nest_asyncio
     import threading
     from datetime import date
     from beeai_framework_workflow_base.workflow import get_beeai_framework_workflow
     from beeai_framework.workflows.agent import AgentWorkflowInput
-
-    nest_asyncio.apply()  # Inject support for nested event loops
 
     persistent_loop = asyncio.new_event_loop()  # Create a persistent event loop that will be used by generate and generate_stream
 

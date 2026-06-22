@@ -1,6 +1,5 @@
 def deployable_ai_service(context, url=None, model_id=None):
     import asyncio
-    import nest_asyncio
     import threading
     from typing import Generator, AsyncGenerator
     from ibm_watsonx_ai import Credentials
@@ -13,7 +12,6 @@ def deployable_ai_service(context, url=None, model_id=None):
         BaseMessage,
     )
 
-    nest_asyncio.apply()  # We inject support for nested event loops
     persistent_loop = asyncio.new_event_loop()  # Create a persistent event loop that will be used by generate and generate_stream
 
     def start_loop(loop: asyncio.AbstractEventLoop) -> None:
