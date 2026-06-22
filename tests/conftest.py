@@ -1,5 +1,7 @@
 from datetime import datetime, timezone, timedelta
 import os
+from pathlib import Path
+import subprocess
 from tempfile import TemporaryDirectory
 import time
 from typing import Generator
@@ -111,7 +113,24 @@ def fixture_env_file_values(space_id: str) -> dict[str, str]:
     return env_values
 
 
-@pytest.fixture(scope="session", name="tmp_dir")
+@pytest.fixture(name="tmp_dir")
 def fixture_tmp_dir() -> Generator[str, None, None]:
     with TemporaryDirectory() as tmp_dir:
         yield tmp_dir
+
+
+@pytest.fixture(name="use_cli")
+def fixture_use_cli() -> bool:
+    return os.environ.get("USE_CLI", "").lower() == "true"
+
+
+@pytest.fixture(name="test_venv_path")
+def fixture_test_venv_path() -> Path:
+    venv_name = ".venv_test"
+
+    subprocess.run(
+        [Path(__file__).parent / "create_test_venv_with_uv.sh", venv_name, "3.11"],
+        check=True,
+    )
+
+    return Path(__file__).parents[1] / venv_name
