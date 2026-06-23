@@ -127,7 +127,7 @@ def build_toolkit_yaml() -> dict[str, Any]:
         "spec_version": "v1",
         "kind": "mcp",
         "name": DEFAULT_TOOLKIT_NAME,
-        "description": "Generic watsonx.ai AI Services toolkit with deployed AI services as tools",
+        "description": "Generic watsonx.ai AI Services toolkit with deployed AI service as a tool",
         "command": "python server.py",
         "env": [
             "WATSONX_URL",
@@ -140,21 +140,31 @@ def build_toolkit_yaml() -> dict[str, Any]:
     }
 
 
-def build_agent_yaml(deployment_name: str, deployment_description: str) -> dict[str, Any]:
+def build_agent_yaml(
+        deployment_name: str,
+        deployment_description: str,
+        ai_service_name: str,
+        ai_service_description: str,
+) -> dict[str, Any]:
     instructions = (
         "You are an assistant powered by deployed watsonx.ai AI services.\n\n"
+        "AVAILABLE AI SERVICE:\n"
+        f"- Deployment Name: {deployment_name}\n"
+        f"- Deployment Description: {deployment_description}\n"
+        f"- AI Service Name: {ai_service_name}\n"
+        f"- AI Service Description: {ai_service_description}\n\n"
         "STRICT RULES — follow these without exception:\n"
-        "1. For user questions that require an answer from the knowledge base, ALWAYS call "
-        f"{DEFAULT_TOOL_NAME}.\n"
-        "2. Determine necessity to use a tool basing on a user request association with the name or description of the RAG Pattern AI service.\n"
-        f"The name is: '{deployment_name}'. The description is: '{deployment_description}'\n"
-        "3. If you are not sure, prefer calling "
-        f"{DEFAULT_TOOL_NAME}.\n"
-        "4. NEVER answer knowledge questions from your own knowledge when the RAG tool should be used.\n"
-        "5. If the user asks whether the deployment is configured, available, or what deployment is being used, call "
-        f"{DEFAULT_RAG_DEPLOYMENT_DETAILS_TOOL_NAME}.\n"
-        "6. If a tool returns an error, explain the failure plainly and do not invent missing information.\n"
-        "Your role is to route knowledge questions to the RAG Pattern AI service and use the diagnostics tool only for configuration or troubleshooting requests."
+        "1. When the user says hello or asks what you can do, list the available tools and briefly explain their purpose and required inputs.\n"
+        "2. ONLY call the AI service tool when the user's request is clearly related to the deployment or AI service based on their names and descriptions above.\n"
+        "3. If one or more required tool input fields are missing, ask only for the missing fields.\n"
+        "4. Analyze the user's request carefully:\n"
+        "   - If it matches the purpose described in the deployment/service descriptions, use the tool\n"
+        "   - If it's a general question unrelated to the AI service's purpose, answer from your own knowledge\n"
+        "   - When in doubt about relevance, ask the user for clarification rather than calling the tool\n"
+        "5. If a tool returns an error, explain the failure clearly and do not invent missing information.\n"
+        "6. When the tool returns a result, retrieve only helpful data based on a user's request and provide them to the user.\n"
+        "7. Be helpful and conversational, but precise about when to use the AI service tool.\n\n"
+        "Your role is to intelligently route requests to the AI service only when appropriate, based on the service's documented purpose."
     )
 
     return {
@@ -162,7 +172,7 @@ def build_agent_yaml(deployment_name: str, deployment_description: str) -> dict[
         "kind": "native",
         "name": DEFAULT_AGENT_NAME,
         "description": (
-            "Answers user questions using a watsonx.ai deployed AI service if needed."
+            "Answers user questions using a watsonx.ai deployed AI service when appropriate."
         ),
         "llm": DEFAULT_LLM_NAME,
         "style": "react",
@@ -197,7 +207,7 @@ def main() -> None:
     load_env()
     client = prepare_api_client()
 
-    deployment_id = require_env("WATSONX_AUTOAI_RAG_PATTERN_DEPLOYMENT_ID")
+    deployment_id = require_env("WATSONX_AI_SERVICE_DEPLOYMENT_ID")
 
     deployment_details = get_deployment_details(client, deployment_id)
     deployment_name = get_deployment_name(deployment_details)
@@ -219,7 +229,12 @@ def main() -> None:
     write_generated_config(metadata)
 
     toolkit_yaml = build_toolkit_yaml()
-    agent_yaml = build_agent_yaml(deployment_name=deployment_name, deployment_description=deployment_description)
+    agent_yaml = build_agent_yaml(
+        deployment_name=deployment_name,
+        deployment_description=deployment_description,
+        ai_service_name=ai_service_name,
+        ai_service_description=ai_service_description,
+    )
 
     write_yaml(TOOLKIT_PATH, toolkit_yaml)
     write_yaml(AGENT_PATH, agent_yaml)

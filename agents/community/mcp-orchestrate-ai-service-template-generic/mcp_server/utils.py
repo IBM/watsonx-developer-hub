@@ -193,6 +193,7 @@ def create_pydantic_model_from_schema(
 ) -> Type[BaseModel]:
     """
     Create a Pydantic model dynamically from a JSON schema.
+    Recursively handles nested objects and arrays.
 
     Args:
         schema: JSON schema dictionary
@@ -212,7 +213,9 @@ def create_pydantic_model_from_schema(
     field_definitions = {}
 
     for prop_name, prop_schema in properties.items():
-        field_type = _json_schema_type_to_python(prop_schema)
+        # Create a unique model name for nested structures
+        nested_model_name = f"{model_name}_{prop_name.capitalize()}"
+        field_type = _json_schema_type_to_python(prop_schema, nested_model_name)
         field_description = prop_schema.get("title", "") or prop_schema.get(
             "description", ""
         )
@@ -226,23 +229,31 @@ def create_pydantic_model_from_schema(
     return create_model(model_name, **field_definitions)
 
 
-def _json_schema_type_to_python(prop_schema: Dict[str, Any]) -> type:
+def _json_schema_type_to_python(
+        prop_schema: Dict[str, Any], model_name: str = "NestedModel"
+) -> type:
     """
     Convert JSON schema type to Python type for Pydantic.
+    Recursively creates nested Pydantic models for object types with properties.
 
     Args:
         prop_schema: Property schema dictionary
+        model_name: Name for nested model (used for object types)
 
     Returns:
-        Python type
+        Python type or Pydantic model class
     """
     schema_type = prop_schema.get("type", "string")
 
     # Handle array types
     if schema_type == "array":
         items_schema = prop_schema.get("items", {})
-        item_type = _json_schema_type_to_python(items_schema)
+        item_type = _json_schema_type_to_python(items_schema, f"{model_name}Item")
         return list[item_type]
+
+    # Handle object types with properties - create nested Pydantic model
+    if schema_type == "object" and "properties" in prop_schema:
+        return create_pydantic_model_from_schema(prop_schema, model_name)
 
     # Handle basic types
     type_mapping = {
@@ -250,7 +261,7 @@ def _json_schema_type_to_python(prop_schema: Dict[str, Any]) -> type:
         "integer": int,
         "number": float,
         "boolean": bool,
-        "object": dict,
+        "object": dict,  # Fallback for objects without properties
         "null": type(None),
     }
 
