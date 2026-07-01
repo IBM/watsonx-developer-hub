@@ -14,8 +14,8 @@ api_client = APIClient(
 )
 
 tool_config = {
-    "projectId": dep_config["custom"]["tool_config_projectId"],
-    "vectorIndexId": dep_config["custom"]["tool_config_vectorIndexId"],
+    "spaceId": dep_config["online"]["parameters"]["tool_config_spaceId"],
+    "vectorIndexId": dep_config["online"]["parameters"]["tool_config_vectorIndexId"],
 }
 
 
@@ -24,4 +24,4 @@ class TestTools:
         query = "IBM"
         rag_tool = retriever_tool_watsonx(api_client, tool_config)
         result = rag_tool.invoke({"query": query})
-        assert "output" in result  # Check if the tool returns correct payload
+        assert isinstance(result, str)

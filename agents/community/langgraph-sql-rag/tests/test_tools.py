@@ -10,14 +10,15 @@ dep_config = config["deployment"]
 api_client = APIClient(
     credentials=Credentials(
         url=dep_config["watsonx_url"], api_key=dep_config["watsonx_apikey"]
-    )
+    ),
+    space_id=dep_config["space_id"],
 )
 
 tool_config = {
-    "connection_id": dep_config["online"]["tool_config_connection_id"],
-    "schema": dep_config["online"]["tool_config_schema"],
-    "model_id": dep_config["online"]["tool_config_model_id"],
-    "dialect": dep_config["online"]["tool_config_dialect"],
+    "connection_id": dep_config["online"]["parameters"]["tool_config_connection_id"],
+    "schema": dep_config["online"]["parameters"]["tool_config_schema"],
+    "model_id": dep_config["online"]["parameters"]["tool_config_model_id"],
+    "dialect": dep_config["online"]["parameters"]["tool_config_dialect"],
 }
 
 
