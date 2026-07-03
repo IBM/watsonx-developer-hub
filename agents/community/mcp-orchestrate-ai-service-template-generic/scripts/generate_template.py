@@ -11,8 +11,8 @@ GENERATED_CONFIG_PATH = MCP_SERVER_DIR / "generated_config.py"
 TOOLKIT_PATH = ROOT_DIR / "toolkit.yaml"
 AGENT_PATH = ROOT_DIR / "agent.yaml"
 
-DEFAULT_TOOLKIT_NAME = "ai-services-toolkit-v1"
-DEFAULT_AGENT_NAME = "ai_services_agent_v1"
+DEFAULT_TOOLKIT_NAME = "ai-services-toolkit-v2"
+DEFAULT_AGENT_NAME = "ai_services_agent_v2"
 DEFAULT_TOOL_NAME = "get_ai_service_response"
 DEFAULT_SERVER_NAME = DEFAULT_TOOLKIT_NAME
 DEFAULT_LLM_NAME = "groq/openai/gpt-oss-120b"

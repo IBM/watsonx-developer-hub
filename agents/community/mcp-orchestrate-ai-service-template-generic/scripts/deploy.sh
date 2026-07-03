@@ -119,8 +119,8 @@ fi
 
 # Step 7: Deploy agent
 echo ""
-echo "Step 7: Deploying agent 'ai_services_agent_v1'..."
-if orchestrate agents deploy --name ai_services_agent_v1 2>/dev/null; then
+echo "Step 7: Deploying agent 'ai_services_agent_v2'..."
+if orchestrate agents deploy --name ai_services_agent_v2 2>/dev/null; then
     echo "✓ Agent deployed successfully"
 else
     echo "⚠ Failed to deploy agent (may already be deployed or configuration error)"
