@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 
 class TestAgents:
     SKIPPED_TESTS = {
-        "community/langgraph-graph-rag": "Neo4j credentials required to run the AI service on the Cloud",
-        "community/langgraph-tavily-tool": "Tavily credentials required to run the AI service on the Cloud",
+        "community/langgraph-graph-rag": "Neo4j credentials required to run the AI service in the Cloud",
+        "community/langgraph-tavily-tool": "Tavily credentials required to run the AI service in the Cloud",
     }
 
     CONFIG_TOML_REPLACEMENTS = {
