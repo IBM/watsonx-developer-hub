@@ -28,7 +28,7 @@ def sub(a: int, b: int) -> int:
 
 # AutoAI tool
 @mcp.tool()
-def invoke_credit_risk_deployemnt(person_information: PersonInformation) -> dict:
+def invoke_credit_risk_deployment(person_information: PersonInformation) -> dict:
     """Invoke deployment about credit risk information based on all information about person.
 
     Fill person_information only about possible inputs provided in PersonInformation typing.

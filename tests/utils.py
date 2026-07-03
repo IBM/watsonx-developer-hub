@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import re
 
 import pytest
 
@@ -72,7 +73,9 @@ def create_env_file(env_file_values: dict[str, str]) -> None:
         env_file_content = file.read()
 
     for key, value in env_file_values.items():
-        env_file_content = env_file_content.replace(f"{key}=\n", f"{key}={value}\n")
+        env_file_content = re.sub(
+            rf"{key}=[^\n]*\n", f"{key}={value}\n", env_file_content
+        )
 
     with open(".env", "w+", encoding="utf-8") as file:
         file.write(env_file_content)

@@ -121,9 +121,9 @@ class TestAgents:
             pytest.skip(self.SKIPPED_TESTS[agent_name])
 
         clone_agent_template(venv_path, tmp_dir, agent_name, monkeypatch)
+        create_env_file(env_file_values)
 
         self._create_config_toml_file(env_file_values, request)
-        create_env_file(env_file_values)
 
     def _template_tests(self, venv_path: Path, agent_name: str) -> None:
         if use_cli():

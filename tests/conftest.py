@@ -4,10 +4,14 @@ import os
 from pathlib import Path
 import subprocess
 from tempfile import TemporaryDirectory
-from typing import Generator
+from typing import Generator, cast
+from ibm_watsonx_ai.experiment.autoai.optimizers import RemoteAutoPipelines
 import pytest
 
 from ibm_watsonx_ai import Credentials, APIClient
+from ibm_watsonx_ai.deployment import WebService
+from ibm_watsonx_ai.experiment import AutoAI
+from ibm_watsonx_ai.helpers import DataConnection, ContainerLocation
 from ibm_watsonx_ai.foundation_models.utils import VectorIndexes
 from ibm_watsonx_ai.foundation_models.embeddings import Embeddings
 from ibm_watsonx_ai.foundation_models.extensions.rag import VectorStore
@@ -84,6 +88,7 @@ def fixture_project_api_client(
 def fixture_env_file_values(space_id: str) -> dict[str, str]:
     os_vars_mapping = {
         "WATSONX_APIKEY": "WX_API_KEY",  # pragma: allowlist secret
+        "WATSONX_API_KEY": "WX_API_KEY",  # pragma: allowlist secret
         "WATSONX_URL": "WX_URL",
     }
 
@@ -162,8 +167,8 @@ def fixture_project_vector_index_id(
     index_name = f"watsonxdeveloperhubindex{int(datetime.now().timestamp())}"
     database_name = "default"
     embedding_model_id = (
-        project_api_client.foundation_models.EmbeddingModels.SLATE_125M_ENGLISH_RTRVR_V2
-    )  # type: ignore
+        project_api_client.foundation_models.EmbeddingModels.SLATE_125M_ENGLISH_RTRVR_V2  # type: ignore
+    )
 
     vector_indexes = VectorIndexes(project_api_client)
     vector_index_details = vector_indexes.create(
@@ -213,3 +218,49 @@ def fixture_vector_index_id(
     return context_free_api_client.spaces.promote(
         project_vector_index_id, project_id, space_id
     )
+
+
+@pytest.fixture(scope="session", name="credit_risk_deployment_id")
+def fixture_credit_risk_deployment_id(space_api_client: APIClient) -> str:
+    credit_risk_connection = DataConnection(ContainerLocation("credit_risk_light.csv"))
+    credit_risk_connection.set_client(space_api_client)
+    credit_risk_connection.write(
+        Path(__file__).parent / "data" / "credit_risk_training_light.csv"
+    )
+
+    experiment = AutoAI(
+        space_api_client.credentials, space_id=space_api_client.default_space_id
+    )
+
+    pipeline_optimizer = experiment.optimizer(
+        name="Credit Risk Prediction and bias detection - AutoAI",
+        prediction_type=AutoAI.PredictionType.BINARY,  # type: ignore
+        prediction_column="Risk",
+        scoring=AutoAI.Metrics.ROC_AUC_SCORE,  # type: ignore
+    )
+    pipeline_optimizer = cast(RemoteAutoPipelines, pipeline_optimizer)
+
+    # pylint: disable=no-value-for-parameter,unexpected-keyword-arg
+    run_details = pipeline_optimizer.fit(
+        training_data_reference=[credit_risk_connection]
+    )
+
+    run_id = run_details["metadata"]["id"]
+
+    assert pipeline_optimizer.get_run_status() == "completed"
+
+    service = WebService(
+        space_api_client.credentials, source_space_id=space_api_client.default_space_id
+    )
+    service.create(
+        next(iter(pipeline_optimizer.summary().index)),
+        "Credit Risk Deployment AutoAI",
+        experiment_run_id=run_id,
+    )
+
+    assert service.id is not None, "Service ID should be set after deployment"
+
+    # Created during the fit process
+    os.remove("request.json")
+
+    return service.id
