@@ -7,8 +7,8 @@ from ibm_watsonx_ai import APIClient, Credentials
 from pydantic import BaseModel, Field, create_model
 
 from generated_config import (
-    DEPLOYMENT_NAME,
-    DEPLOYMENT_DESCRIPTION,
+    # DEPLOYMENT_NAME,
+    # DEPLOYMENT_DESCRIPTION,
     SERVER_NAME,
     TOOL_NAME,
 )
@@ -30,11 +30,51 @@ def prepare_api_client() -> APIClient:
 
 
 def get_ai_service_deployment_id() -> str:
+    """
+    Get single deployment ID (legacy support).
+    """
     load_env()
     deployment_id = os.getenv("WATSONX_AI_SERVICE_DEPLOYMENT_ID")
     if not deployment_id:
         raise ValueError("WATSONX_AI_SERVICE_DEPLOYMENT_ID is not set")
     return deployment_id
+
+
+def get_ai_service_deployment_ids() -> Dict[str, str]:
+    """
+    Get all deployment IDs from environment variables.
+    Supports both legacy single ID and new multiple ID format.
+
+    Returns:
+        Dictionary mapping deployment index/name to deployment ID
+        Example: {"1": "id1", "2": "id2"} or {"default": "single_id"}
+    """
+    load_env()
+    deployment_ids = {}
+
+    # Check for legacy single deployment ID
+    single_id = os.getenv("WATSONX_AI_SERVICE_DEPLOYMENT_ID")
+    if single_id:
+        deployment_ids["default"] = single_id
+        return deployment_ids
+
+    # Check for numbered deployment IDs
+    index = 1
+    while True:
+        env_var = f"WATSONX_AI_SERVICE_DEPLOYMENT_ID_{index}"
+        deployment_id = os.getenv(env_var)
+        if not deployment_id:
+            break
+        deployment_ids[str(index)] = deployment_id
+        index += 1
+
+    if not deployment_ids:
+        raise ValueError(
+            "No deployment IDs found. Set either WATSONX_AI_SERVICE_DEPLOYMENT_ID "
+            "or WATSONX_AI_SERVICE_DEPLOYMENT_ID_1, WATSONX_AI_SERVICE_DEPLOYMENT_ID_2, etc."
+        )
+
+    return deployment_ids
 
 
 def get_server_name() -> str:
@@ -45,12 +85,12 @@ def get_tool_name() -> str:
     return TOOL_NAME
 
 
-def get_deployment_name() -> str:
-    return DEPLOYMENT_NAME
-
-
-def get_deployment_description() -> str:
-    return DEPLOYMENT_DESCRIPTION
+# def get_deployment_name() -> str:
+#     return DEPLOYMENT_NAME
+#
+#
+# def get_deployment_description() -> str:
+#     return DEPLOYMENT_DESCRIPTION
 
 
 def get_required_env_status() -> dict:
@@ -59,66 +99,70 @@ def get_required_env_status() -> dict:
         "WATSONX_URL",
         "WATSONX_API_KEY",
         "WATSONX_SPACE_ID",
-        "WATSONX_AI_SERVICE_DEPLOYMENT_ID",
     ]
 
-    return {env_var: bool(os.getenv(env_var)) for env_var in required_env_vars}
+    status = {env_var: bool(os.getenv(env_var)) for env_var in required_env_vars}
+
+    # Check for at least one deployment ID
+    has_deployment_id = bool(os.getenv("WATSONX_AI_SERVICE_DEPLOYMENT_ID"))
+    if not has_deployment_id:
+        # Check for numbered IDs
+        has_deployment_id = bool(os.getenv("WATSONX_AI_SERVICE_DEPLOYMENT_ID_1"))
+
+    status["WATSONX_AI_SERVICE_DEPLOYMENT_ID"] = has_deployment_id
+
+    return status
 
 
-def get_deployment_details(api_client: APIClient) -> Dict[str, Any]:
+def get_deployment_details(api_client: APIClient, deployment_id: str) -> Dict[str, Any]:
     """
-    Fetch deployment details.
-    """
-    deployment_id = get_ai_service_deployment_id()
+    Fetch deployment details for a specific deployment ID.
 
+    Args:
+        api_client: Watson API client
+        deployment_id: The deployment ID to fetch details for
+    """
     try:
         details = api_client.deployments.get_details(deployment_id)
         return details
     except Exception as e:
-        raise RuntimeError(f"Failed to fetch deployment details: {e}")
+        raise RuntimeError(
+            f"Failed to fetch deployment details for {deployment_id}: {e}"
+        )
 
 
-@lru_cache(maxsize=1)
-def get_ai_service_details() -> Dict[str, Any]:
+@lru_cache(maxsize=128)
+def get_ai_service_details(deployment_id: str) -> Dict[str, Any]:
     """
     Fetch AI service details including documentation schema.
     Cached to avoid repeated API calls.
+
+    Args:
+        deployment_id: The deployment ID to fetch AI service details for
     """
     api_client = prepare_api_client()
-    deployment_details = get_deployment_details(api_client)
+    deployment_details = get_deployment_details(api_client, deployment_id)
     ai_service_id = deployment_details["entity"]["asset"]["id"]
 
     return api_client.repository.get_ai_service_details(ai_service_id)
 
 
-def get_request_schema() -> Optional[Dict[str, Any]]:
+def get_request_schema(deployment_id: str) -> Optional[Dict[str, Any]]:
     """
     Extract request schema from deployment documentation.
     Returns the JSON schema for the request payload.
+
+    Args:
+        deployment_id: The deployment ID to get schema for
     """
-    details = get_ai_service_details()
+    details = get_ai_service_details(deployment_id)
 
     try:
         documentation = details.get("entity", {}).get("documentation", {})
         request_schema = documentation.get("request", {}).get("application/json", {})
         return request_schema if request_schema else None
     except (KeyError, AttributeError):
-        return None
-
-
-def get_response_schema() -> Optional[Dict[str, Any]]:
-    """
-    Extract response schema from deployment documentation.
-    Returns the JSON schema for the response payload.
-    """
-    details = get_ai_service_details()
-
-    try:
-        documentation = details.get("entity", {}).get("documentation", {})
-        response_schema = documentation.get("response", {}).get("application/json", {})
-        return response_schema if response_schema else None
-    except (KeyError, AttributeError):
-        return None
+        raise RuntimeError(f"Given AI Service with deployment id `{deployment_id}` does not include request schema.")
 
 
 def build_payload_from_schema(
@@ -145,47 +189,6 @@ def build_payload_from_schema(
             payload[prop_name] = input_data[prop_name]
 
     return payload
-
-
-def extract_output_from_response(
-        response: Dict[str, Any], schema: Dict[str, Any]
-) -> Any:
-    """
-    Extract relevant output from API response based on the response schema.
-
-    Args:
-        response: Raw API response
-        schema: JSON schema defining the response structure
-
-    Returns:
-        Extracted output value(s)
-    """
-    if not schema or "properties" not in schema:
-        return response
-
-    properties = schema.get("properties", {})
-
-    # Try to extract the main content based on common patterns
-    # For chat-like responses, look for choices[0].message.content
-    if "choices" in properties and "choices" in response:
-        choices = response.get("choices", [])
-        if choices and len(choices) > 0:
-            message = choices[0].get("message", {})
-            if "content" in message:
-                return message["content"]
-            # Handle streaming delta format
-            if "delta" in message:
-                delta = message.get("delta", {})
-                if "content" in delta:
-                    return delta["content"]
-
-    # For simpler responses, return the first property value
-    for prop_name in properties.keys():
-        if prop_name in response:
-            return response[prop_name]
-
-    # Fallback to returning the entire response
-    return response
 
 
 def create_pydantic_model_from_schema(

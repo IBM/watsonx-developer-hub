@@ -49,7 +49,27 @@ if export $(grep -v '^#' .env | xargs) 2>/dev/null; then
     echo "  - WATSONX_URL: ${WATSONX_URL:0:30}..."
     echo "  - WATSONX_API_KEY: ${WATSONX_API_KEY:0:10}..."
     echo "  - WATSONX_SPACE_ID: $WATSONX_SPACE_ID"
-    echo "  - WATSONX_AI_SERVICE_DEPLOYMENT_ID: $WATSONX_AI_SERVICE_DEPLOYMENT_ID"
+    
+    # Display deployment IDs (supports both single and multiple)
+    if [ -n "$WATSONX_AI_SERVICE_DEPLOYMENT_ID" ]; then
+        echo "  - WATSONX_AI_SERVICE_DEPLOYMENT_ID: $WATSONX_AI_SERVICE_DEPLOYMENT_ID"
+    else
+        # Check for numbered deployment IDs
+        deployment_count=0
+        for i in {1..10}; do
+            var_name="WATSONX_AI_SERVICE_DEPLOYMENT_ID_$i"
+            if [ -n "${!var_name}" ]; then
+                echo "  - WATSONX_AI_SERVICE_DEPLOYMENT_ID_$i: ${!var_name}"
+                deployment_count=$((deployment_count + 1))
+            else
+                break
+            fi
+        done
+        
+        if [ $deployment_count -eq 0 ]; then
+            echo "  ⚠ Warning: No deployment IDs found"
+        fi
+    fi
 else
     echo "❌ Failed to load environment variables from .env file"
     exit 1
@@ -75,14 +95,28 @@ for env in draft live; do
         continue
     fi
     
-    # Set credentials
-    if orchestrate connections set-credentials \
-        -a ai-service-connection \
-        --env $env \
-        -e "WATSONX_URL=$WATSONX_URL" \
-        -e "WATSONX_API_KEY=$WATSONX_API_KEY" \
-        -e "WATSONX_SPACE_ID=$WATSONX_SPACE_ID" \
-        -e "WATSONX_AI_SERVICE_DEPLOYMENT_ID=$WATSONX_AI_SERVICE_DEPLOYMENT_ID" 2>/dev/null; then
+    # Set credentials - build the command dynamically to support multiple deployment IDs
+    credentials_cmd="orchestrate connections set-credentials -a ai-service-connection --env $env"
+    credentials_cmd="$credentials_cmd -e \"WATSONX_URL=$WATSONX_URL\""
+    credentials_cmd="$credentials_cmd -e \"WATSONX_API_KEY=$WATSONX_API_KEY\""
+    credentials_cmd="$credentials_cmd -e \"WATSONX_SPACE_ID=$WATSONX_SPACE_ID\""
+    
+    # Add single deployment ID if it exists
+    if [ -n "$WATSONX_AI_SERVICE_DEPLOYMENT_ID" ]; then
+        credentials_cmd="$credentials_cmd -e \"WATSONX_AI_SERVICE_DEPLOYMENT_ID=$WATSONX_AI_SERVICE_DEPLOYMENT_ID\""
+    fi
+    
+    # Add numbered deployment IDs
+    for i in {1..10}; do
+        var_name="WATSONX_AI_SERVICE_DEPLOYMENT_ID_$i"
+        if [ -n "${!var_name}" ]; then
+            credentials_cmd="$credentials_cmd -e \"WATSONX_AI_SERVICE_DEPLOYMENT_ID_$i=${!var_name}\""
+        else
+            break
+        fi
+    done
+    
+    if eval "$credentials_cmd" 2>/dev/null; then
         echo "  ✓ Credentials set for $env environment"
     else
         echo "  ⚠ Failed to set credentials for $env environment"
@@ -119,8 +153,8 @@ fi
 
 # Step 7: Deploy agent
 echo ""
-echo "Step 7: Deploying agent 'ai_services_agent_v2'..."
-if orchestrate agents deploy --name ai_services_agent_v2 2>/dev/null; then
+echo "Step 7: Deploying agent 'ai_services_agent_v3'..."
+if orchestrate agents deploy --name ai_services_agent_v3 2>/dev/null; then
     echo "✓ Agent deployed successfully"
 else
     echo "⚠ Failed to deploy agent (may already be deployed or configuration error)"
