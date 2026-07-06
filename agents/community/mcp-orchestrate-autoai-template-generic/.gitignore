@@ -1,0 +1,13 @@
+# Sekrety — nigdy nie commitować
+.env
+
+# Artefakty generowane przez scripts/generate_template.py
+# (regenerowane lokalnie na podstawie WATSONX_AUTOAI_DEPLOYMENT_ID)
+/toolkit.yaml
+/agent.yaml
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

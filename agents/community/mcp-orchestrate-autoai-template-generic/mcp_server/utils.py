@@ -1,34 +1,38 @@
 import os
+from functools import lru_cache
 from typing import Any
 
 from dotenv import load_dotenv
 from ibm_watsonx_ai import APIClient, Credentials
 from pydantic import BaseModel, Field, create_model
 
-from generated_config import INPUT_FIELDS, PREDICTION_COLUMN, SERVER_NAME, TOOL_NAME
+# Loaded once at module import — in Orchestrate runtime the variables come
+# from toolkit.yaml `env:` anyway, and load_dotenv() is a no-op when .env is absent.
+load_dotenv()
+
+SERVER_NAME = "autoai-generic-toolkit"
+TOOL_NAME = "get_autoai_prediction"
 
 
-def load_env() -> None:
-    load_dotenv()
+def require_env(name: str) -> str:
+    value = os.getenv(name)
+    if not value:
+        raise ValueError(f"{name} is not set")
+    return value
 
 
 def prepare_api_client() -> APIClient:
-    load_env()
     return APIClient(
         credentials=Credentials(
-            url=os.getenv("WATSONX_URL"),
-            api_key=os.getenv("WATSONX_API_KEY"),
+            url=require_env("WATSONX_URL"),
+            api_key=require_env("WATSONX_API_KEY"),
         ),
-        space_id=os.getenv("WATSONX_SPACE_ID"),
+        space_id=require_env("WATSONX_SPACE_ID"),
     )
 
 
 def get_autoai_deployment_id() -> str:
-    load_env()
-    deployment_id = os.getenv("WATSONX_AUTOAI_DEPLOYMENT_ID")
-    if not deployment_id:
-        raise ValueError("WATSONX_AUTOAI_DEPLOYMENT_ID is not set")
-    return deployment_id
+    return require_env("WATSONX_AUTOAI_DEPLOYMENT_ID")
 
 
 def get_server_name() -> str:
@@ -39,8 +43,70 @@ def get_tool_name() -> str:
     return TOOL_NAME
 
 
+@lru_cache(maxsize=1)
+def _fetch_deployment_schema() -> tuple[list[dict[str, Any]], str]:
+    """
+    Fetches INPUT_FIELDS and PREDICTION_COLUMN from the watsonx API on first call.
+    The result is cached for the lifetime of the process — the API is queried only once.
+    """
+    client = prepare_api_client()
+    deployment_id = get_autoai_deployment_id()
+
+    deployment_details = client.deployments.get_details(deployment_id)
+    asset_id = _get_model_asset_id(deployment_details)
+    asset_details = client.repository.get_model_details(asset_id)
+
+    input_fields = _extract_input_fields(asset_details)
+    label_column = _extract_label_column(asset_details)
+
+    return input_fields, label_column
+
+
+def _get_model_asset_id(deployment_details: dict[str, Any]) -> str:
+    entity = deployment_details.get("entity", {})
+    asset_id = entity.get("asset", {}).get("id")
+    if not asset_id:
+        raise RuntimeError(
+            "Could not read entity.asset.id from deployment_details. "
+            "Dump deployment_details to JSON and inspect the structure manually."
+        )
+    return asset_id
+
+
+def _extract_input_fields(asset_details: dict[str, Any]) -> list[dict[str, Any]]:
+    entity = asset_details.get("entity", {})
+    schemas = entity.get("schemas") or entity.get("wml_model", {}).get("schemas")
+    if not schemas or "input" not in schemas or not schemas["input"]:
+        raise RuntimeError(
+            "Input schema not found in model metadata. Dump "
+            "asset_details to JSON, locate the input schema and adjust "
+            "_extract_input_fields()."
+        )
+    return schemas["input"][0]["fields"]
+
+
+def _extract_label_column(asset_details: dict[str, Any]) -> str:
+    entity = asset_details.get("entity", {})
+    label_column = entity.get("label_column") or entity.get("wml_model", {}).get(
+        "label_column"
+    )
+    if not label_column:
+        raise RuntimeError(
+            "label_column not found in model metadata. Dump "
+            "asset_details to JSON, locate the target column and adjust "
+            "_extract_label_column()."
+        )
+    return label_column
+
+
 def get_input_fields() -> list[dict[str, Any]]:
-    return INPUT_FIELDS
+    fields, _ = _fetch_deployment_schema()
+    return fields
+
+
+def get_prediction_column() -> str:
+    _, label_column = _fetch_deployment_schema()
+    return label_column
 
 
 def python_type_for_field(field: dict[str, Any]) -> type:
@@ -55,7 +121,7 @@ def python_type_for_field(field: dict[str, Any]) -> type:
 
 
 def create_input_model() -> type[BaseModel]:
-    model_fields: dict[str, tuple[type, Field]] = {}
+    model_fields: dict[str, tuple[type, Any]] = {}
 
     for field in get_input_fields():
         field_name = field["name"]
@@ -93,7 +159,3 @@ def extract_prediction(response: dict[str, Any]) -> Any:
         raise RuntimeError(
             f"Unexpected response structure from deployment: {response}"
         ) from error
-
-
-def get_prediction_column() -> str:
-    return PREDICTION_COLUMN

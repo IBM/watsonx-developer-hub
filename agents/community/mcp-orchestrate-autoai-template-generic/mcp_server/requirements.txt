@@ -1,5 +1,8 @@
+# Runtime dependencies of the MCP server.
+# This file MUST reside inside package_root (./mcp_server), because only that
+# folder is packaged during `orchestrate toolkits import`.
+
 mcp
-python-dotenv
 ibm-watsonx-ai
 pydantic
-pyyaml
+python-dotenv

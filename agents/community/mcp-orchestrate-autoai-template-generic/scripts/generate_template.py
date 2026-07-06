@@ -1,3 +1,14 @@
+"""
+Generates toolkit.yaml and agent.yaml based on the AutoAI deployment
+specified by WATSONX_AUTOAI_DEPLOYMENT_ID.
+
+Run from the template root directory:
+    python scripts/generate_template.py
+
+Requires a .env file in the root directory (copied from template.env).
+"""
+
+import os
 from pathlib import Path
 from typing import Any
 
@@ -5,10 +16,7 @@ import yaml
 from dotenv import load_dotenv
 from ibm_watsonx_ai import APIClient, Credentials
 
-
 ROOT_DIR = Path(__file__).resolve().parent.parent
-MCP_SERVER_DIR = ROOT_DIR / "mcp_server"
-GENERATED_CONFIG_PATH = MCP_SERVER_DIR / "generated_config.py"
 TOOLKIT_PATH = ROOT_DIR / "toolkit.yaml"
 AGENT_PATH = ROOT_DIR / "agent.yaml"
 
@@ -23,6 +31,15 @@ def load_env() -> None:
     load_dotenv(ROOT_DIR / ".env")
 
 
+def require_env(name: str) -> str:
+    value = os.getenv(name)
+    if not value:
+        raise ValueError(
+            f"{name} is not set. Copy template.env to .env and fill in the values."
+        )
+    return value
+
+
 def prepare_api_client() -> APIClient:
     return APIClient(
         credentials=Credentials(
@@ -31,15 +48,6 @@ def prepare_api_client() -> APIClient:
         ),
         space_id=require_env("WATSONX_SPACE_ID"),
     )
-
-
-def require_env(name: str) -> str:
-    import os
-
-    value = os.getenv(name)
-    if not value:
-        raise ValueError(f"{name} is not set")
-    return value
 
 
 def get_deployment_details(client: APIClient, deployment_id: str) -> dict[str, Any]:
@@ -51,49 +59,57 @@ def get_model_asset_id(deployment_details: dict[str, Any]) -> str:
     asset = entity.get("asset", {})
     asset_id = asset.get("id")
     if not asset_id:
-        raise RuntimeError("Could not determine model asset id from deployment details")
+        raise RuntimeError(
+            "Could not read entity.asset.id from deployment_details. "
+            "Dump deployment_details to JSON and inspect the structure manually."
+        )
     return asset_id
 
 
 def get_model_asset_details(client: APIClient, asset_id: str) -> dict[str, Any]:
-    return client.data_assets.get_details(asset_id)
+    """
+    Fetches the metadata of the model backing the deployment.
+
+    NOTE: an AutoAI deployment points to a MODEL asset in the repository,
+    not to a data asset. `client.data_assets.get_details()` (used in a previous
+    version of this code) was incorrect and failed for most WML instances.
+    The correct call is `client.repository.get_model_details()`.
+    """
+    try:
+        return client.repository.get_model_details(asset_id)
+    except Exception as error:
+        raise RuntimeError(
+            f"Failed to fetch model details for asset_id={asset_id!r} "
+            "via client.repository.get_model_details(). Verify that "
+            "entity.asset.id in deployment_details actually points to "
+            f"a model in the repository. Original error: {error}"
+        ) from error
 
 
 def get_input_fields(asset_details: dict[str, Any]) -> list[dict[str, Any]]:
-    schemas = asset_details["entity"]["wml_model"]["schemas"]
+    entity = asset_details.get("entity", {})
+    schemas = entity.get("schemas") or entity.get("wml_model", {}).get("schemas")
+    if not schemas or "input" not in schemas or not schemas["input"]:
+        raise RuntimeError(
+            "Input schema not found in model metadata. Dump "
+            "asset_details to JSON, locate the input schema and adjust "
+            "get_input_fields()."
+        )
     return schemas["input"][0]["fields"]
 
 
 def get_label_column(asset_details: dict[str, Any]) -> str:
-    return asset_details["entity"]["wml_model"]["label_column"]
-
-
-def build_metadata(
-    deployment_id: str,
-    input_fields: list[dict[str, Any]],
-    label_column: str,
-) -> dict[str, Any]:
-    return {
-        "deployment_id": deployment_id,
-        "toolkit_name": DEFAULT_TOOLKIT_NAME,
-        "tool_name": DEFAULT_TOOL_NAME,
-        "agent_name": DEFAULT_AGENT_NAME,
-        "server_name": DEFAULT_SERVER_NAME,
-        "llm": DEFAULT_LLM_NAME,
-        "label_column": label_column,
-        "input_fields": input_fields,
-    }
-
-
-def write_generated_config(metadata: dict[str, Any]) -> None:
-    content = (
-        f'SERVER_NAME = "{metadata["server_name"]}"\n'
-        f'TOOL_NAME = "{metadata["tool_name"]}"\n'
-        f'PREDICTION_COLUMN = "{metadata["label_column"]}"\n'
-        f"INPUT_FIELDS = {repr(metadata['input_fields'])}\n"
+    entity = asset_details.get("entity", {})
+    label_column = entity.get("label_column") or entity.get("wml_model", {}).get(
+        "label_column"
     )
-    with open(GENERATED_CONFIG_PATH, "w", encoding="utf-8") as file:
-        file.write(content)
+    if not label_column:
+        raise RuntimeError(
+            "label_column not found in model metadata. Dump "
+            "asset_details to JSON, locate the target column and adjust "
+            "get_label_column()."
+        )
+    return label_column
 
 
 def build_toolkit_yaml() -> dict[str, Any]:
@@ -180,13 +196,6 @@ def main() -> None:
     input_fields = get_input_fields(asset_details)
     label_column = get_label_column(asset_details)
 
-    metadata = build_metadata(
-        deployment_id=deployment_id,
-        input_fields=input_fields,
-        label_column=label_column,
-    )
-    write_generated_config(metadata)
-
     toolkit_yaml = build_toolkit_yaml()
     agent_yaml = build_agent_yaml(
         label_column=label_column,
@@ -198,7 +207,6 @@ def main() -> None:
 
     print(f"Generated {TOOLKIT_PATH}")
     print(f"Generated {AGENT_PATH}")
-    print(f"Generated {GENERATED_CONFIG_PATH}")
 
 
 if __name__ == "__main__":

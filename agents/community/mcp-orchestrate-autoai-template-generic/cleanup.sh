@@ -1,13 +1,14 @@
 #!/bin/bash
+set -uo pipefail
 
-# Cleanup script for AutoAI orchestration resources
-# This script removes all created items with individual error handling
-# Each deletion is wrapped in a try-catch equivalent to handle non-existent resources
+# Cleanup script for AutoAI orchestration resources.
+# Run from the template root directory: ./cleanup.sh
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Starting cleanup of AutoAI orchestration resources..."
 echo "=================================================="
 
-# Step 1: Undeploy the agent
 echo ""
 echo "Step 1: Undeploying agent 'autoai_prediction_agent'..."
 if orchestrate agents undeploy --name autoai_prediction_agent 2>/dev/null; then
@@ -16,7 +17,6 @@ else
     echo "⚠ Failed to undeploy agent (may not exist or already undeployed)"
 fi
 
-# Step 2: Remove the agent
 echo ""
 echo "Step 2: Removing agent 'autoai_prediction_agent'..."
 if orchestrate agents remove --name autoai_prediction_agent --kind native 2>/dev/null; then
@@ -25,7 +25,6 @@ else
     echo "⚠ Failed to remove agent (may not exist)"
 fi
 
-# Step 3: Remove the toolkit
 echo ""
 echo "Step 3: Removing toolkit 'autoai-generic-toolkit'..."
 if orchestrate toolkits remove --name autoai-generic-toolkit 2>/dev/null; then
@@ -34,7 +33,6 @@ else
     echo "⚠ Failed to remove toolkit (may not exist)"
 fi
 
-# Step 4: Remove the connection
 echo ""
 echo "Step 4: Removing connection 'autoai-prediction-connection'..."
 if orchestrate connections remove --app-id autoai-prediction-connection 2>/dev/null; then
@@ -44,8 +42,11 @@ else
 fi
 
 echo ""
+echo "Step 5: Removing locally generated artifacts..."
+rm -f "$SCRIPT_DIR/toolkit.yaml" "$SCRIPT_DIR/agent.yaml"
+echo "✓ Removed toolkit.yaml, agent.yaml (if present)"
+
+echo ""
 echo "=================================================="
 echo "Cleanup process completed!"
 echo "Note: Warnings indicate resources that were already removed or never existed."
-
-# Made with Bob
