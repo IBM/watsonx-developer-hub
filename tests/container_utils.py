@@ -111,7 +111,9 @@ def create_new_project(api_client: APIClient) -> tuple[str, str]:
     storage_guid = (
         os.environ["COS_RESOURCE_INSTANCE_ID"].replace("::", "").split(":")[-1]
     )
-    compute_guid = os.environ["WX_IAM_SERVICE_ID_CRN"].replace("::", "").split(":")[-1]
+    compute_guid = (
+        os.environ["WATSONX_IAM_SERVICE_ID_CRN"].replace("::", "").split(":")[-1]
+    )
 
     meta_props = {
         api_client.projects.ConfigurationMetaNames.NAME: project_name,
@@ -124,7 +126,7 @@ def create_new_project(api_client: APIClient) -> tuple[str, str]:
         api_client.projects.ConfigurationMetaNames.COMPUTE: {
             "type": "machine_learning",
             "name": os.environ["WATSONX_COMPUTE_NAME"],
-            "crn": os.environ["WX_IAM_SERVICE_ID_CRN"],
+            "crn": os.environ["WATSONX_IAM_SERVICE_ID_CRN"],
             "guid": compute_guid,
         },
         api_client.projects.ConfigurationMetaNames.TYPE: "wx",
