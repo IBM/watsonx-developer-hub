@@ -37,7 +37,7 @@ class TestAgents:
         ]
 
     def _create_config_toml_file(
-        self, env_file_values: dict[str, str], request: pytest.FixtureRequest
+        self, env_vars: dict[str, str], request: pytest.FixtureRequest
     ) -> None:
         with open("config.toml.example", encoding="utf-8") as file:
             config_toml_content = file.read()
@@ -49,7 +49,7 @@ class TestAgents:
             value, value_type = replacement
             match value_type:
                 case "env":
-                    value = env_file_values[value]
+                    value = env_vars[value]
                 case "fixture":
                     value = request.getfixturevalue(value)
 
@@ -113,7 +113,7 @@ class TestAgents:
         venv_path: Path,
         agent_name: str,
         tmp_dir: str,
-        env_file_values: dict[str, str],
+        env_vars: dict[str, str],
         monkeypatch: pytest.MonkeyPatch,
         request: pytest.FixtureRequest,
     ) -> None:
@@ -121,9 +121,9 @@ class TestAgents:
             pytest.skip(self.SKIPPED_TESTS[agent_name])
 
         clone_agent_template(venv_path, tmp_dir, agent_name, monkeypatch)
-        create_env_file(env_file_values)
+        create_env_file(env_vars)
 
-        self._create_config_toml_file(env_file_values, request)
+        self._create_config_toml_file(env_vars, request)
 
     def _template_tests(self, venv_path: Path, agent_name: str) -> None:
         if use_cli():
@@ -145,7 +145,7 @@ class TestAgents:
     def test_base_agent(
         self,
         agent_name: str,
-        env_file_values: dict[str, str],
+        env_vars: dict[str, str],
         tmp_dir: str,
         test_venv_path: Path,
         monkeypatch: pytest.MonkeyPatch,
@@ -155,7 +155,7 @@ class TestAgents:
             test_venv_path,
             agent_name,
             tmp_dir,
-            env_file_values,
+            env_vars,
             monkeypatch,
             request,
         )
@@ -166,7 +166,7 @@ class TestAgents:
     def test_community_agent(
         self,
         agent_name: str,
-        env_file_values: dict[str, str],
+        env_vars: dict[str, str],
         tmp_dir: str,
         test_venv_path: Path,
         monkeypatch: pytest.MonkeyPatch,
@@ -176,7 +176,7 @@ class TestAgents:
             test_venv_path,
             agent_name,
             tmp_dir,
-            env_file_values,
+            env_vars,
             monkeypatch,
             request,
         )

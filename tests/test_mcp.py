@@ -59,7 +59,7 @@ class TestMCPAutoAITemplate:
         self,
         test_venv_path: Path,
         tmp_dir: str,
-        env_file_values: dict[str, str],
+        env_vars: dict[str, str],
         credit_risk_deployment_id: str,
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
@@ -70,8 +70,7 @@ class TestMCPAutoAITemplate:
         run_cli(test_venv_path, ["install", "-r", "requirements.txt"], "pip")
 
         create_env_file(
-            env_file_values
-            | {"WATSONX_CREDIT_RISK_DEPLOYMENT_ID": credit_risk_deployment_id}
+            env_vars | {"WATSONX_CREDIT_RISK_DEPLOYMENT_ID": credit_risk_deployment_id}
         )
 
         with self._run_server(test_venv_path):

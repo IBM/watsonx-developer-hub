@@ -68,11 +68,11 @@ def clone_agent_template(
     return target_dir
 
 
-def create_env_file(env_file_values: dict[str, str]) -> None:
+def create_env_file(env_vars: dict[str, str]) -> None:
     with open("template.env", encoding="utf-8") as file:
         env_file_content = file.read()
 
-    for key, value in env_file_values.items():
+    for key, value in env_vars.items():
         env_file_content = re.sub(
             rf"{key}=[^\n]*\n", f"{key}={value}\n", env_file_content
         )

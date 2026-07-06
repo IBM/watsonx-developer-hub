@@ -1,0 +1,51 @@
+name: Run tests defined in the repository
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 7 * * 0"
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    env:
+      PIP_ROOT_USER_ACTION: ignore
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ vars.PYTHON_VERSION }}
+
+      - name: Install test dependencies
+        run: |
+          pip install -r tests/requirements.txt
+
+      - name: Run tests
+        env:
+          WATSONX_URL: ${{ secrets.WATSONX_URL }}
+          WATSONX_API_KEY: ${{ secrets.WATSONX_API_KEY }}
+          WATSONX_COMPUTE_NAME: ${{ secrets.WATSONX_COMPUTE_NAME }}
+          WATSONX_IAM_SERVICE_ID_CRN: ${{ secrets.WATSONX_IAM_SERVICE_ID_CRN }}
+          COS_API_KEY: ${{ secrets.COS_API_KEY }}
+          COS_HMAC_ACCESS_KEY_ID: ${{ secrets.COS_HMAC_ACCESS_KEY_ID }}
+          COS_HMAC_SECRET_ACCESS_KEY: ${{ secrets.COS_HMAC_SECRET_ACCESS_KEY }}
+          COS_IAM_API_KEY_DESCRIPTION: ${{ secrets.COS_IAM_API_KEY_DESCRIPTION }}
+          COS_IAM_API_KEY_NAME: ${{ secrets.COS_IAM_API_KEY_NAME }}
+          COS_IAM_ROLE_CRN: ${{ secrets.COS_IAM_ROLE_CRN }}
+          COS_IAM_SERVICE_ID_CRN: ${{ secrets.COS_IAM_SERVICE_ID_CRN }}
+          COS_RESOURCE_INSTANCE_ID: ${{ secrets.COS_RESOURCE_INSTANCE_ID }}
+          PSQL_HOST: ${{ secrets.PSQL_HOST }}
+          PSQL_PORT: ${{ secrets.PSQL_PORT }}
+          PSQL_DATABASE: ${{ secrets.PSQL_DATABASE }}
+          PSQL_USERNAME: ${{ secrets.PSQL_USERNAME }}
+          PSQL_PASSWORD: ${{ secrets.PSQL_PASSWORD }}
+          MILVUS_HOST: ${{ secrets.MILVUS_HOST }}
+          MILVUS_PORT: ${{ secrets.MILVUS_PORT }}
+          MILVUS_USERNAME: ${{ secrets.MILVUS_USERNAME }}
+          MILVUS_PASSWORD: ${{ secrets.MILVUS_PASSWORD }}
+        run: pytest -vv tests

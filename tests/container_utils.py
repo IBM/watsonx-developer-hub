@@ -88,8 +88,8 @@ def create_new_space(api_client: APIClient) -> tuple[str, str]:
             "resource_crn": os.environ["COS_RESOURCE_INSTANCE_ID"],
         },
         api_client.spaces.ConfigurationMetaNames.COMPUTE: {
-            "name": os.environ["WX_NAME"],
-            "crn": os.environ["WX_IAM_SERVICE_ID_CRN"],
+            "name": os.environ["WATSONX_COMPUTE_NAME"],
+            "crn": os.environ["WATSONX_IAM_SERVICE_ID_CRN"],
         },
         api_client.spaces.ConfigurationMetaNames.TYPE: "wx",
     }
@@ -123,7 +123,7 @@ def create_new_project(api_client: APIClient) -> tuple[str, str]:
         },
         api_client.projects.ConfigurationMetaNames.COMPUTE: {
             "type": "machine_learning",
-            "name": os.environ["WX_NAME"],
+            "name": os.environ["WATSONX_COMPUTE_NAME"],
             "crn": os.environ["WX_IAM_SERVICE_ID_CRN"],
             "guid": compute_guid,
         },
