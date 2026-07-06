@@ -21,10 +21,10 @@ TOOLKIT_PATH = ROOT_DIR / "toolkit.yaml"
 AGENT_PATH = ROOT_DIR / "agent.yaml"
 
 DEFAULT_TOOLKIT_NAME = "autoai-generic-toolkit"
+DEFAULT_SERVER_NAME = "autoai-generic-toolkit"
 DEFAULT_AGENT_NAME = "autoai_prediction_agent"
 DEFAULT_TOOL_NAME = "get_autoai_prediction"
-DEFAULT_SERVER_NAME = "autoai-generic-toolkit"
-DEFAULT_LLM_NAME = "groq/openai/gpt-oss-120b"
+DEFAULT_LLM_NAME = os.getenv("LLM_NAME", "groq/openai/gpt-oss-120b")
 
 
 def load_env() -> None:
@@ -95,7 +95,14 @@ def get_input_fields(asset_details: dict[str, Any]) -> list[dict[str, Any]]:
             "asset_details to JSON, locate the input schema and adjust "
             "get_input_fields()."
         )
-    return schemas["input"][0]["fields"]
+    first_input = schemas["input"][0]
+    if "fields" not in first_input:
+        raise RuntimeError(
+            "'fields' key missing from the first input schema entry. Dump "
+            "asset_details to JSON, locate the fields list and adjust "
+            "get_input_fields()."
+        )
+    return first_input["fields"]
 
 
 def get_label_column(asset_details: dict[str, Any]) -> str:

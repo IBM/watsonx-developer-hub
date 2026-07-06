@@ -1,3 +1,4 @@
+import logging
 import os
 from functools import lru_cache
 from typing import Any
@@ -10,6 +11,8 @@ from pydantic import BaseModel, Field, create_model
 # from toolkit.yaml `env:` anyway, and load_dotenv() is a no-op when .env is absent.
 load_dotenv()
 
+logger = logging.getLogger(__name__)
+
 SERVER_NAME = "autoai-generic-toolkit"
 TOOL_NAME = "get_autoai_prediction"
 
@@ -21,6 +24,7 @@ def require_env(name: str) -> str:
     return value
 
 
+@lru_cache(maxsize=1)
 def prepare_api_client() -> APIClient:
     return APIClient(
         credentials=Credentials(
@@ -82,7 +86,14 @@ def _extract_input_fields(asset_details: dict[str, Any]) -> list[dict[str, Any]]
             "asset_details to JSON, locate the input schema and adjust "
             "_extract_input_fields()."
         )
-    return schemas["input"][0]["fields"]
+    first_input = schemas["input"][0]
+    if "fields" not in first_input:
+        raise RuntimeError(
+            "'fields' key missing from the first input schema entry. Dump "
+            "asset_details to JSON, locate the fields list and adjust "
+            "_extract_input_fields()."
+        )
+    return first_input["fields"]
 
 
 def _extract_label_column(asset_details: dict[str, Any]) -> str:
@@ -101,7 +112,7 @@ def _extract_label_column(asset_details: dict[str, Any]) -> str:
 
 def get_input_fields() -> list[dict[str, Any]]:
     fields, _ = _fetch_deployment_schema()
-    return fields
+    return list(fields)
 
 
 def get_prediction_column() -> str:
@@ -156,6 +167,15 @@ def extract_prediction(response: dict[str, Any]) -> Any:
             return values[0]
         return values
     except (KeyError, IndexError, TypeError) as error:
+        logger.debug("Unexpected deployment response: %s", response)
+        predictions = (
+            response.get("predictions") if isinstance(response, dict) else None
+        )
+        safe_summary = (
+            f"top-level keys={list(response.keys())}, predictions length={len(predictions)}"
+            if isinstance(response, dict) and predictions is not None
+            else f"response type={type(response).__name__}"
+        )
         raise RuntimeError(
-            f"Unexpected response structure from deployment: {response}"
+            f"Unexpected response structure from deployment: {safe_summary}"
         ) from error
