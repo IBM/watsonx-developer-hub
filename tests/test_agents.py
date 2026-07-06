@@ -3,7 +3,14 @@ from pathlib import Path
 
 import pytest
 
-from utils import AGENTS_PATH, clone_agent_template, create_env_file, use_cli, run_cli
+from utils import (
+    AGENTS_PATH,
+    clone_agent_template,
+    create_env_file,
+    get_env_vars,
+    use_cli,
+    run_cli,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -113,7 +120,6 @@ class TestAgents:
         venv_path: Path,
         agent_name: str,
         tmp_dir: str,
-        env_vars: dict[str, str],
         monkeypatch: pytest.MonkeyPatch,
         request: pytest.FixtureRequest,
     ) -> None:
@@ -121,8 +127,9 @@ class TestAgents:
             pytest.skip(self.SKIPPED_TESTS[agent_name])
 
         clone_agent_template(venv_path, tmp_dir, agent_name, monkeypatch)
-        create_env_file(env_vars)
 
+        env_vars = get_env_vars()
+        create_env_file(env_vars)
         self._create_config_toml_file(env_vars, request)
 
     def _template_tests(self, venv_path: Path, agent_name: str) -> None:
@@ -141,11 +148,11 @@ class TestAgents:
         self._run_service_invoke(venv_path)
         self._run_service_delete(venv_path, deployment_id)
 
+    @pytest.mark.usefixtures("space_id")
     @pytest.mark.parametrize("agent_name", _get_agent_names("base"))
     def test_base_agent(
         self,
         agent_name: str,
-        env_vars: dict[str, str],
         tmp_dir: str,
         test_venv_path: Path,
         monkeypatch: pytest.MonkeyPatch,
@@ -155,18 +162,17 @@ class TestAgents:
             test_venv_path,
             agent_name,
             tmp_dir,
-            env_vars,
             monkeypatch,
             request,
         )
         self._template_tests(test_venv_path, agent_name)
         self._service_tests(test_venv_path)
 
+    @pytest.mark.usefixtures("space_id")
     @pytest.mark.parametrize("agent_name", _get_agent_names("community"))
     def test_community_agent(
         self,
         agent_name: str,
-        env_vars: dict[str, str],
         tmp_dir: str,
         test_venv_path: Path,
         monkeypatch: pytest.MonkeyPatch,
@@ -176,7 +182,6 @@ class TestAgents:
             test_venv_path,
             agent_name,
             tmp_dir,
-            env_vars,
             monkeypatch,
             request,
         )

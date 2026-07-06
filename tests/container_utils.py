@@ -59,7 +59,7 @@ def delete_container(
 
 
 def delete_old_containers(api_client: APIClient, container_type: ContainerType) -> None:
-    delete_threshold = datetime.now(tz=timezone.utc) - timedelta(days=0)
+    delete_threshold = datetime.now(tz=timezone.utc) - timedelta(days=1)
 
     if container_type == "project":
         container_df = api_client.projects.list()

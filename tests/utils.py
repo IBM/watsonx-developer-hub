@@ -9,6 +9,13 @@ import pytest
 
 AGENTS_PATH = Path(__file__).parents[1] / "agents"
 
+ENV_VARS_MAPPING = {
+    "WATSONX_APIKEY": "WATSONX_API_KEY",  # pragma: allowlist secret
+    "WATSONX_API_KEY": "WATSONX_API_KEY",  # pragma: allowlist secret
+    "WATSONX_URL": "WATSONX_URL",
+    "WATSONX_SPACE_ID": "WATSONX_SPACE_ID",
+}
+
 logger = logging.getLogger(__name__)
 
 
@@ -66,6 +73,15 @@ def clone_agent_template(
     monkeypatch.chdir(target_dir)
 
     return target_dir
+
+
+def get_env_vars(additional_env_vars: dict[str, str] | None = None) -> dict[str, str]:
+    env_vars = {cli: os.environ[env] for cli, env in ENV_VARS_MAPPING.items()}
+
+    if additional_env_vars:
+        env_vars.update(additional_env_vars)
+
+    return env_vars
 
 
 def create_env_file(env_vars: dict[str, str]) -> None:

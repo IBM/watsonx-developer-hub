@@ -85,20 +85,6 @@ def fixture_project_api_client(
     return api_client
 
 
-@pytest.fixture(scope="session", name="env_vars")
-def fixture_env_vars(space_id: str) -> dict[str, str]:
-    os_vars_mapping = {
-        "WATSONX_APIKEY": "WATSONX_API_KEY",  # pragma: allowlist secret
-        "WATSONX_API_KEY": "WATSONX_API_KEY",  # pragma: allowlist secret
-        "WATSONX_URL": "WATSONX_URL",
-    }
-
-    env_values = {cli: os.environ[env] for cli, env in os_vars_mapping.items()}
-    env_values["WATSONX_SPACE_ID"] = space_id
-
-    return env_values
-
-
 @pytest.fixture(name="tmp_dir")
 def fixture_tmp_dir() -> Generator[str, None, None]:
     with TemporaryDirectory() as tmp_dir:
