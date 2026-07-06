@@ -2,17 +2,18 @@
 set -uo pipefail
 
 # Deployment script for AutoAI orchestration resources.
-# Run from the template root directory: ./deploy.sh
+# Run from the template root directory: ./scripts/deploy.sh
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR" || exit 1
+ROOT_DIR="$(dirname "$SCRIPT_DIR")"
+cd "$ROOT_DIR" || exit 1
 
 echo "Starting deployment of AutoAI orchestration resources..."
 echo "========================================================="
 
 # Check if .env file exists
-if [ ! -f "$SCRIPT_DIR/.env" ]; then
-    echo "❌ Error: .env file not found in $SCRIPT_DIR"
+if [ ! -f "$ROOT_DIR/.env" ]; then
+    echo "❌ Error: .env file not found in $ROOT_DIR"
     echo "Copy template.env to .env and fill in the required values."
     exit 1
 fi
@@ -20,7 +21,7 @@ fi
 # Step 1: Generate template files (toolkit.yaml, agent.yaml)
 echo ""
 echo "Step 1: Generating template files from AutoAI deployment..."
-if python "$SCRIPT_DIR/scripts/generate_template.py"; then
+if python "$SCRIPT_DIR/generate_template.py"; then
     echo "✓ Template files generated successfully"
     echo "  - toolkit.yaml"
     echo "  - agent.yaml"
@@ -47,7 +48,7 @@ echo ""
 echo "Step 3: Loading environment variables from .env file..."
 set -a
 # shellcheck disable=SC1091
-source "$SCRIPT_DIR/.env"
+source "$ROOT_DIR/.env"
 set +a
 if [ -n "${WATSONX_URL:-}" ] && [ -n "${WATSONX_API_KEY:-}" ] && [ -n "${WATSONX_SPACE_ID:-}" ] && [ -n "${WATSONX_AUTOAI_DEPLOYMENT_ID:-}" ]; then
     echo "✓ Environment variables loaded successfully"
@@ -91,12 +92,12 @@ done
 # Step 5: Import toolkit
 echo ""
 echo "Step 5: Importing toolkit from toolkit.yaml..."
-if [ ! -f "$SCRIPT_DIR/toolkit.yaml" ]; then
+if [ ! -f "$ROOT_DIR/toolkit.yaml" ]; then
     echo "❌ Error: toolkit.yaml file not found"
     exit 1
 fi
 
-if orchestrate toolkits import -f "$SCRIPT_DIR/toolkit.yaml" -a autoai-prediction-connection 2>/dev/null; then
+if orchestrate toolkits import -f "$ROOT_DIR/toolkit.yaml" -a autoai-prediction-connection 2>/dev/null; then
     echo "✓ Toolkit imported successfully"
 else
     echo "⚠ Failed to import toolkit (may already exist or invalid configuration)"
@@ -105,12 +106,12 @@ fi
 # Step 6: Import agent
 echo ""
 echo "Step 6: Importing agent from agent.yaml..."
-if [ ! -f "$SCRIPT_DIR/agent.yaml" ]; then
+if [ ! -f "$ROOT_DIR/agent.yaml" ]; then
     echo "❌ Error: agent.yaml file not found"
     exit 1
 fi
 
-if orchestrate agents import -f "$SCRIPT_DIR/agent.yaml" 2>/dev/null; then
+if orchestrate agents import -f "$ROOT_DIR/agent.yaml" 2>/dev/null; then
     echo "✓ Agent imported successfully"
 else
     echo "⚠ Failed to import agent (may already exist or invalid configuration)"

@@ -2,9 +2,10 @@
 set -uo pipefail
 
 # Cleanup script for AutoAI orchestration resources.
-# Run from the template root directory: ./cleanup.sh
+# Run from the template root directory: ./scripts/cleanup.sh
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 
 echo "Starting cleanup of AutoAI orchestration resources..."
 echo "=================================================="
@@ -43,7 +44,7 @@ fi
 
 echo ""
 echo "Step 5: Removing locally generated artifacts..."
-rm -f "$SCRIPT_DIR/toolkit.yaml" "$SCRIPT_DIR/agent.yaml"
+rm -f "$ROOT_DIR/toolkit.yaml" "$ROOT_DIR/agent.yaml"
 echo "✓ Removed toolkit.yaml, agent.yaml (if present)"
 
 echo ""
