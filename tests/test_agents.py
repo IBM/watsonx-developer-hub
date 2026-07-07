@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 class TestAgents:
     SKIPPED_TESTS = {
+        "base/crewai-websearch-agent": "CrewAI is not compatible with genai-A25-py3.12 software specification",
         "community/langgraph-graph-rag": "Neo4j credentials required to run the AI service in the Cloud",
         "community/langgraph-tavily-tool": "Tavily credentials required to run the AI service in the Cloud",
     }
