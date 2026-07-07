@@ -32,11 +32,7 @@ class TestAgents:
         'tool_config_vectorIndexId = "{}"': ("vector_index_id", "fixture"),
     }
 
-    USER_MESSAGE_CONTENT = (
-        "Call your tool with some example value exactly once. "
-        "Keep your response brief, do not repeat yourself. "
-        "In your response, provide only the output you received."
-    )
+    USER_MESSAGE_CONTENT = "Use one of your available tools with any example input and tell me what it returned."
 
     @staticmethod
     def _get_agent_names(dir_name: str) -> list[str]:
