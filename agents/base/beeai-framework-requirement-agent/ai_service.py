@@ -1,6 +1,5 @@
 def deployable_ai_service(context, url=None, model_id=None):
     import asyncio
-    import nest_asyncio
     import threading
     from beeai_framework_requirement_agent_base.agent import get_beeai_framework_agent
     from beeai_framework.agents.types import AgentExecutionConfig
@@ -8,8 +7,6 @@ def deployable_ai_service(context, url=None, model_id=None):
     from beeai_framework.backend.message import (
         SystemMessage,
     )
-
-    nest_asyncio.apply()  # Inject support for nested event loops
 
     persistent_loop = asyncio.new_event_loop()  # Create a persistent event loop that will be used by generate and generate_stream
 

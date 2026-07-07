@@ -13,17 +13,17 @@ chat_watsonx = prepare_chat_watsonx()
 questions = {
     "Simple addition": "What is 1+1?",
     "Subtraction example": "What is 100-1?",
-    "No Risk question": """Please answer, based on the each informations below about the person whether he or she has credit risk.
+    "No Risk question": """Please answer, based on the each information below about the person whether they have credit risk.
 
 Marek is a 35-year-old man applying for a loan. His checking account status shows a small positive balance. He is requesting a loan to be repaid over a duration of 24 months. Marek has a good credit history, having previously repaid all loans successfully. The purpose of the loan is to purchase a new car. The loan amount he is applying for is 8,000 EUR. He has moderate existing savings in his savings account. Marek has been employed for over 4 years at his current job. He plans to allocate 20% of his monthly income to cover the loan installments.
-Marek is male and is applying for the loan individually (no others on the loan). He has been living at his current residence for 5 years. He owns a house in the city. Marek’s age is 35. He has no other installment plans ongoing. His housing situation is stable, as he owns his property. He currently has one existing credit with another financial institution.
+Marek is male and is applying for the loan individually (no others on the loan). He has been living at his current residence for 5 years. He owns a house in the city. Marek's age is 35. He has no other installment plans ongoing. His housing situation is stable, as he owns his property. He currently has one existing credit with another financial institution.
 Marek works as a skilled employee. He has one dependent child. He also owns a telephone. Lastly, Marek is a domestic worker, not a foreign worker.
 """,
-    "Risk question": """Please answer, based on the each informations below about the person whether he or she has credit risk.
+    "Risk question": """Please answer, based on the each information below about the person whether they have credit risk.
 
 A 49-year-old male is applying for a 7,138 EUR loan over 35 months to purchase appliances.
 He has no checking account and an outstanding credit history, indicating unpaid debts.
-Despite over 7 years of employment in a skilled job and savings between 500–1000 EUR, he has two existing credits and a relatively high installment burden (5% of income).
+Despite over 7 years of employment in a skilled job and savings between 500-1000 EUR, he has two existing credits and a relatively high installment burden (5% of income).
 He lives in free housing with a co-applicant, has two dependents, owns a telephone, and has been residing at his current address for 4 years.
 Overall, the applicant presents a moderate to high credit risk.
 """,

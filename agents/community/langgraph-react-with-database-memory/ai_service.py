@@ -34,7 +34,7 @@ def deployable_ai_service(
         db_name = db_credentials["database"]
         db_username = db_credentials["username"]
         db_password = db_credentials["password"]
-        return f"postgresql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}"
+        return f"postgresql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}"  # pragma: allowlist secret
 
     DB_URI = generate_database_URI()
 

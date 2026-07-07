@@ -5,13 +5,6 @@ from langchain_ibm import ChatWatsonx
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import create_react_agent
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.messages import (
-    BaseMessage,
-    AIMessage,
-    HumanMessage,
-    SystemMessage,
-    ToolMessage,
-)
 from langgraph_sql_rag import sql_tools_watsonx
 
 

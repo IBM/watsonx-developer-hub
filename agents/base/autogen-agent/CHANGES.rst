@@ -1,3 +1,8 @@
+Version 0.1.1
+-------------
+
+Removed ``nest_asyncio`` loop from AI service.
+
 Version 0.1.0
 -------------
 

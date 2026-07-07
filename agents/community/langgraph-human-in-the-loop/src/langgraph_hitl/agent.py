@@ -82,9 +82,11 @@ def get_graph(
     workflow.set_entry_point("agent")
     workflow.add_conditional_edges(
         "agent",
-        lambda state: "use_tool"
-        if bool(state["messages"][-1].additional_kwargs.get("tool_calls"))
-        else "final",
+        lambda state: (
+            "use_tool"
+            if bool(state["messages"][-1].additional_kwargs.get("tool_calls"))
+            else "final"
+        ),
         {
             "use_tool": "human_approval",  # If human approval needed
             # Otherwise we finish.

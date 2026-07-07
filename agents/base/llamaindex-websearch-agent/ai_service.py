@@ -1,6 +1,5 @@
 def deployable_ai_service(context, url=None, model_id=None):
     import asyncio
-    import nest_asyncio
     import threading
     import json
     import urllib
@@ -15,11 +14,7 @@ def deployable_ai_service(context, url=None, model_id=None):
         StartEvent,
     )
 
-    nest_asyncio.apply()  # We inject support for nested event loops
-
-    persistent_loop = (
-        asyncio.new_event_loop()
-    )  # Create a persistent event loop that will be used by generate and generate_stream
+    persistent_loop = asyncio.new_event_loop()  # Create a persistent event loop that will be used by generate and generate_stream
 
     def start_loop(loop: asyncio.AbstractEventLoop) -> None:
         asyncio.set_event_loop(loop)
@@ -69,11 +64,9 @@ def deployable_ai_service(context, url=None, model_id=None):
     ) -> list | None:
 
         if isinstance(resp, StartEvent):
-
             return
 
         elif isinstance(resp, InputEvent):
-
             responses = []
 
             resp_input = resp.input
@@ -86,9 +79,7 @@ def deployable_ai_service(context, url=None, model_id=None):
 
             if last_assistant_index is not None:
                 for event_input in resp_input[last_assistant_index + 1 :]:
-
                     if event_input.role == "tool":
-
                         tool_call_id = event_input.additional_kwargs["tool_call_id"]
                         if is_assistant:
                             to_queue = {
@@ -119,7 +110,6 @@ def deployable_ai_service(context, url=None, model_id=None):
             responses = []
 
             for tool_call in resp.tool_calls:
-
                 arguments_str = json.dumps(tool_call.tool_kwargs)
 
                 if is_assistant:

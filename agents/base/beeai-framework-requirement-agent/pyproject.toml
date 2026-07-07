@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "beeai_framework_requirement_agent_base"
-version = "0.1.0"
+version = "0.1.1"
 description = "A template for a beeai-framework LLM app deployable on IBM Cloud as an ai_service."
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
@@ -20,7 +20,6 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 ibm-watsonx-ai = "^1.5.0"
-nest-asyncio = "^1.6.0"
 pytest = "^8.3.3"
 pytest-asyncio = "^0.25.3"
 ibm-watsonx-ai-cli = "^0.4.1"

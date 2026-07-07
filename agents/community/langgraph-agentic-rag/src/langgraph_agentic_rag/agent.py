@@ -11,9 +11,9 @@ from langgraph.graph.message import add_messages
 
 from langgraph.prebuilt import ToolNode, tools_condition
 
-from langchain import hub
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.messages import BaseMessage, SystemMessage, AIMessage
+from langsmith import Client as LangSmithClient
 
 from langgraph_agentic_rag import retriever_tool_watsonx
 
@@ -96,7 +96,10 @@ def get_graph_closure(
         docs = last_message.content
 
         # Prompt
-        prompt = hub.pull("rlm/rag-prompt")
+        langsmith_client = LangSmithClient()
+        prompt = langsmith_client.pull_prompt(
+            "rlm/rag-prompt:50442af1", dangerously_pull_public_prompt=True
+        )
 
         # Chain
         rag_chain = prompt | chat | StrOutputParser()
