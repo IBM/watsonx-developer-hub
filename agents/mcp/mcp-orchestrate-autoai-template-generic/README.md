@@ -74,17 +74,17 @@ In order not to clone the whole `IBM/watsonx-developer-hub` repository we'll use
 ```sh
 git clone --no-tags --depth 1 --single-branch --filter=tree:0 --sparse https://github.com/IBM/watsonx-developer-hub.git
 cd watsonx-developer-hub
-git sparse-checkout add agents/community/mcp-orchestrate-autoai-template-generic
+git sparse-checkout add agents/mcp/mcp-orchestrate-autoai-template-generic
 ```
 
 Move to the directory with the template:
 
 ```sh
-cd agents/community/mcp-orchestrate-autoai-template-generic
+cd agents/mcp/mcp-orchestrate-autoai-template-generic
 ```
 
 > [!NOTE]
-> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/community/mcp-orchestrate-autoai-template-generic/`
+> From now on it'll be considered that the working directory is `watsonx-developer-hub/agents/mcp/mcp-orchestrate-autoai-template-generic/`
 
 Install local dependencies:
 
