@@ -32,6 +32,12 @@ class TestAgents:
         'tool_config_vectorIndexId = "{}"': ("vector_index_id", "fixture"),
     }
 
+    USER_MESSAGE_CONTENT = (
+        "Call your tool with some example value exactly once. "
+        "Keep your response brief, do not repeat yourself. "
+        "In your response, provide only the output you received."
+    )
+
     @staticmethod
     def _get_agent_names(dir_name: str) -> list[str]:
         agents_path = AGENTS_PATH / dir_name
@@ -87,11 +93,7 @@ class TestAgents:
     def _run_template_invoke(self, venv_path: Path) -> None:
         run_cli(
             venv_path,
-            [
-                "template",
-                "invoke",
-                "Call your tool with some example value and tell me what you asked for and what you received.",
-            ],
+            ["template", "invoke", self.USER_MESSAGE_CONTENT],
             input=b"y",  # for package installation
         )
 
@@ -106,7 +108,7 @@ class TestAgents:
         run_cli(venv_path, ["service", "get", deployment_id])
 
     def _run_service_invoke(self, venv_path: Path) -> None:
-        run_cli(venv_path, ["service", "invoke", "Hello"])
+        run_cli(venv_path, ["service", "invoke", self.USER_MESSAGE_CONTENT])
 
     def _run_service_delete(self, venv_path: Path, deployment_id: str) -> None:
         run_cli(
