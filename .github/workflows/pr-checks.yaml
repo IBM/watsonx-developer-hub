@@ -46,13 +46,24 @@ jobs:
           # pytest -k matches on substrings of test IDs, so the folder name is sufficient:
           #   agents/base/langgraph-react-agent   → matches test_base_agent[base/langgraph-react-agent]
           #   agents/community/mcp-autoai-template → matches test_mcp_autoai_template
-          TEMPLATE_NAMES=$(git diff --name-only origin/main...HEAD \
+          AGENT_TEMPLATE_PARAMETER_NAMES=$(git diff --name-only origin/main...HEAD \
             | grep -E '^agents/(base|community)/[^/]+/' \
             | awk -F'/' '{print $2"/"$3}' \
-            | sort -u)
+            | uniq)
 
-          echo "Changed templates:"
-          echo "$TEMPLATE_NAMES"
+          MCP_TEMPLATE_TEST_NAMES=$(git diff --name-only origin/main...HEAD \
+            | grep -E '^agents/(mcp/[^/]+|community/mcp-autoai-template)/' \
+            | awk -F'/' '{print $3}' \
+            | uniq \
+            | tr '-' '_' \
+            | sed 's/^/test_/')
+
+          echo "Agent tests to run:"
+          echo "$AGENT_TEMPLATE_PARAMETER_NAMES"
+          echo "MCP tests to run:"
+          echo "$MCP_TEMPLATE_TEST_NAMES"
+
+          TEMPLATE_NAMES=$(printf '%s\n' $AGENT_TEMPLATE_PARAMETER_NAMES $MCP_TEMPLATE_TEST_NAMES | sort -u)
 
           if [[ -z "$TEMPLATE_NAMES" ]]; then
             echo "No agent or MCP templates changed — skipping tests."
