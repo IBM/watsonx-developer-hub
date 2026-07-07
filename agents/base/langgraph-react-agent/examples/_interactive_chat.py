@@ -72,8 +72,6 @@ class InteractiveChat:
         # TODO implement signal handling (especially Ctrl-C)
         while True:
             try:
-                q = None
-
                 user_loop = self._user_input_loop()
 
                 for action, stage in user_loop:  # unsupported command support!
@@ -109,7 +107,7 @@ class InteractiveChat:
 
                         if self.stream:
                             for r in resp:
-                                if type(r) == str:
+                                if isinstance(r, str):
                                     r = json.loads(r)
                                 for c in r["choices"]:
                                     self._print_message(c)

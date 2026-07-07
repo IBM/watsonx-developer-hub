@@ -7,7 +7,7 @@
   # Note that, the payload file will be only used when no `query` is provided when running `invoke ` command
   # Default: None
   payload_path = ""
-  
+
 [deployment.online.parameters]
   # during creation of deployment additional parameters can be provided inside `ONLINE` object for further referencing
   # please refer to the API docs: https://cloud.ibm.com/apidocs/machine-learning-cp#deployments-create

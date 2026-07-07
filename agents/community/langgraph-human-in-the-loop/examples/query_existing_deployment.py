@@ -1,3 +1,4 @@
+from functools import partial
 import ibm_watsonx_ai
 
 from utils import load_config
@@ -20,15 +21,12 @@ client = ibm_watsonx_ai.APIClient(
 )
 
 # Executing deployed AI service with provided scoring data
-if stream:
-
-    def ai_service_invoke(payload: dict) -> dict:
-        return client.deployments.run_ai_service_stream(deployment_id, payload)
-else:
-
-    def ai_service_invoke(payload: dict) -> dict:
-        return client.deployments.run_ai_service(deployment_id, payload)
-
+ai_service_invoke = partial(
+    client.deployments.run_ai_service_stream
+    if stream
+    else client.deployments.run_ai_service,
+    deployment_id,
+)
 
 chat = InteractiveChat(ai_service_invoke, stream=stream)
 chat.run()

@@ -150,9 +150,6 @@ def deployable_ai_service(
         }
         Please note that the `system message` MUST be placed first in the list of messages!
         """
-        headers = context.get_headers()
-        is_assistant = headers.get("X-Ai-Interface") == "assistant"
-
         client.set_token(context.get_token())
 
         payload = context.get_json()
