@@ -213,7 +213,7 @@ class TestOrchestrateMCPAutoAITemplate:
         orchestrate_env_name: str,
     ) -> None:
         """Register a uniquely-named Orchestrate environment."""
-        orchestrate_url = os.environ["ORCHESTRATE_URL"]
+        orchestrate_url = os.environ["WATSONX_ORCHESTRATE_URL"]
 
         result = run_cli(
             test_venv_path,
@@ -230,7 +230,7 @@ class TestOrchestrateMCPAutoAITemplate:
         orchestrate_env_name: str,
     ) -> None:
         """Activate the registered Orchestrate environment with an API key."""
-        orchestrate_api_key = os.environ["ORCHESTRATE_API_KEY"]
+        orchestrate_api_key = os.environ["WATSONX_ORCHESTRATE_API_KEY"]
 
         result = run_cli(
             test_venv_path,
