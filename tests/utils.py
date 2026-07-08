@@ -119,3 +119,13 @@ def assert_tool_used(
         f"Expected tool '{tool_name}' to respond, but it was not found in output.\n\n"
         f"Stdout:\n{output}"
     )
+
+
+def assert_tool_not_used(
+    result: subprocess.CompletedProcess[bytes], tool_name: str
+) -> None:
+    output = strip_ansi(result.stdout.decode())
+    assert f"Called tool '{tool_name}'" not in output, (
+        f"Tool '{tool_name}' was called but should not have been for this input.\n\n"
+        f"Stdout:\n{output}"
+    )

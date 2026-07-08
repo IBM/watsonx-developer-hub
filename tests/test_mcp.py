@@ -7,6 +7,7 @@ from typing import Generator
 import pytest
 import os
 from utils import (
+    assert_tool_not_used,
     assert_tool_used,
     clone_agent_template,
     create_env_file,
@@ -139,11 +140,15 @@ class TestOrchestrateMCPAutoAITemplate:
     TEMPLATE_PATH = "mcp/mcp-orchestrate-autoai-template-generic"
     AUTOAI_DEPLOYMENT_ID = "019e8259-1d14-7361-9509-c89f174cce0d"
 
-    # Prompts sent to the agent during the chat interaction test.
-    CHAT_PROMPTS = [
+    # Greeting-only prompts — the AutoAI tool must NOT be invoked.
+    CHAT_PROMPTS_GREETING_ONLY = [
         "hello",
+        "q",
+    ]
+
+    # Single prediction request — the AutoAI tool MUST be invoked.
+    CHAT_PROMPTS_SINGLE_PREDICTION = [
         "sepal_length=0.1, sepal_width=0.1, petal_length=0.15, species=satosa",
-        "sepal_length=5.1, sepal_width=3.5, petal_length=1.4, species=setosa",
         "q",
     ]
 
@@ -267,19 +272,41 @@ class TestOrchestrateMCPAutoAITemplate:
     # Step 6 – chat interaction and tool-use assertions
     # ---------------------------------------------------------------------------
 
-    def test_07_chat_calls_autoai_tool(self, test_venv_path: Path) -> None:
-        """Interact with the deployed agent and verify the AutoAI tool is invoked."""
+    def _chat(
+        self, venv_path: Path, prompts: list[str]
+    ) -> subprocess.CompletedProcess[bytes]:
+        """Send *prompts* to the deployed agent and return the raw CLI result."""
         result = run_cli(
-            test_venv_path,
+            venv_path,
             ["chat", "ask", "-n", self.AGENT_NAME, "-r"],
             "orchestrate",
-            input="\n".join(self.CHAT_PROMPTS).encode(),
+            input="\n".join(prompts).encode(),
         )
-
         assert result.returncode == 0, (
             f"orchestrate chat ask failed.\nStdout:\n{result.stdout.decode()}"
         )
+        return result
 
+    def test_07a_greeting_does_not_invoke_tool(self, test_venv_path: Path) -> None:
+        """A greeting-only conversation must NOT trigger the AutoAI prediction tool.
+
+        The agent should respond conversationally without making any tool call
+        when the user has not supplied any iris feature values.
+        """
+        result = self._chat(
+            venv_path=test_venv_path, prompts=self.CHAT_PROMPTS_GREETING_ONLY
+        )
+        assert_tool_not_used(result, "get_autoai_prediction")
+
+    def test_07b_prediction_request_invokes_tool(self, test_venv_path: Path) -> None:
+        """A message containing iris feature values MUST trigger the AutoAI prediction tool.
+
+        The agent is expected to call ``get_autoai_prediction`` and receive a
+        response from it when valid feature data is provided.
+        """
+        result = self._chat(
+            venv_path=test_venv_path, prompts=self.CHAT_PROMPTS_SINGLE_PREDICTION
+        )
         assert_tool_used(result, "get_autoai_prediction")
 
     # ---------------------------------------------------------------------------
