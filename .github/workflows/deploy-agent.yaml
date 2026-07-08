@@ -24,13 +24,13 @@ jobs:
       _TYPER_STANDARD_TRACEBACK: 1 # Do not show rich logs from TYPER
     steps:
       - name: Checkout latest update
-        uses: actions/checkout@v4 # Checkout the latest code changes
+        uses: actions/checkout@v7 # Checkout the latest code changes
       - name: Set up Python
-        uses: actions/setup-python@v5 # Setup Python environment
+        uses: actions/setup-python@v6 # Setup Python environment
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Cache Poetry dependencies and venv
-        uses: actions/cache@v4 # Cache Poetry dependencies and virtual environment
+        uses: actions/cache@v6 # Cache Poetry dependencies and virtual environment
         with:
           path: |
             ~/.cache/pypoetry
@@ -73,13 +73,13 @@ jobs:
       _TYPER_STANDARD_TRACEBACK: 1 # Do not show rich logs from TYPER
     steps:
       - name: Checkout latest update
-        uses: actions/checkout@v4 # Checkout the latest code changes
+        uses: actions/checkout@v7 # Checkout the latest code changes
       - name: Set up Python
-        uses: actions/setup-python@v5 # Setup Python environment
+        uses: actions/setup-python@v6 # Setup Python environment
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Restore Poetry dependencies and venv cache to speed-up installation
-        uses: actions/cache@v4 # Restore cached Poetry dependencies and venv
+        uses: actions/cache@v6 # Restore cached Poetry dependencies and venv
         with:
           path: |
             ~/.cache/pypoetry
@@ -126,13 +126,13 @@ jobs:
       _TYPER_STANDARD_TRACEBACK: 1 # Do not show rich logs from TYPER
     steps:
       - name: Checkout latest update
-        uses: actions/checkout@v4 # Checkout the latest code changes
+        uses: actions/checkout@v7 # Checkout the latest code changes
       - name: Set up Python
-        uses: actions/setup-python@v5 # Setup Python environment
+        uses: actions/setup-python@v6 # Setup Python environment
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Restore Poetry dependencies and venv cache to speed-up installation
-        uses: actions/cache@v4 # Restore cached Poetry dependencies and venv
+        uses: actions/cache@v6 # Restore cached Poetry dependencies and venv
         with:
           path: |
             ~/.cache/pypoetry
