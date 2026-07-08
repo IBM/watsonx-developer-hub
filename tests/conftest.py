@@ -6,12 +6,12 @@ import subprocess
 import sys
 from tempfile import TemporaryDirectory
 from typing import Generator, cast
-from ibm_watsonx_ai.experiment.autoai.optimizers import RemoteAutoPipelines
 import pytest
 
 from ibm_watsonx_ai import Credentials, APIClient
 from ibm_watsonx_ai.deployment import WebService
 from ibm_watsonx_ai.experiment import AutoAI
+from ibm_watsonx_ai.experiment.autoai.optimizers import RemoteAutoPipelines
 from ibm_watsonx_ai.helpers import DataConnection, ContainerLocation
 from ibm_watsonx_ai.foundation_models.utils import VectorIndexes
 from ibm_watsonx_ai.foundation_models.embeddings import Embeddings
@@ -39,6 +39,10 @@ def fixture_context_free_api_client() -> APIClient:
 
 @pytest.fixture(scope="session", name="space_id")
 def fixture_space_id(context_free_api_client: APIClient) -> Generator[str, None, None]:
+    if space_id := os.environ.get("WATSONX_SPACE_ID"):
+        yield space_id
+        return
+
     delete_old_containers(context_free_api_client, "space")
 
     space_id, space_name = create_new_space(context_free_api_client)
@@ -56,6 +60,10 @@ def fixture_space_id(context_free_api_client: APIClient) -> Generator[str, None,
 def fixture_project_id(
     context_free_api_client: APIClient,
 ) -> Generator[str, None, None]:
+    if project_id := os.environ.get("WATSONX_PROJECT_ID"):
+        yield project_id
+        return
+
     delete_old_containers(context_free_api_client, "project")
 
     project_id, project_name = create_new_project(context_free_api_client)
@@ -106,6 +114,9 @@ def fixture_test_venv_path() -> Path:
 
 @pytest.fixture(scope="session", name="psql_connection_id")
 def fixture_psql_connection_id(space_api_client: APIClient) -> str:
+    if psql_connection_id := os.environ.get("WATSONX_PSQL_CONNECTION_ID"):
+        return psql_connection_id
+
     datasource_type = space_api_client.connections.get_datasource_type_id_by_name(
         "postgresql-ibmcloud"
     )
@@ -128,6 +139,9 @@ def fixture_psql_connection_id(space_api_client: APIClient) -> str:
 
 @pytest.fixture(scope="session", name="project_milvus_connection_id")
 def fixture_project_milvus_connection_id(project_api_client: APIClient) -> str:
+    if milvus_connection_id := os.environ.get("WATSONX_MILVUS_CONNECTION_ID"):
+        return milvus_connection_id
+
     datasource_type = project_api_client.connections.get_datasource_type_id_by_name(
         "milvuswxd"
     )
@@ -209,7 +223,13 @@ def fixture_vector_index_id(
 
 
 @pytest.fixture(scope="session", name="credit_risk_deployment_id")
-def fixture_credit_risk_deployment_id(space_api_client: APIClient) -> str:
+def fixture_credit_risk_deployment_id(
+    space_api_client: APIClient,
+) -> Generator[str, None, None]:
+    if credit_risk_deployment_id := os.environ.get("WATSONX_CREDIT_RISK_DEPLOYMENT_ID"):
+        yield credit_risk_deployment_id
+        return
+
     credit_risk_connection = DataConnection(ContainerLocation("credit_risk_light.csv"))
     credit_risk_connection.set_client(space_api_client)
     credit_risk_connection.write(
@@ -251,4 +271,6 @@ def fixture_credit_risk_deployment_id(space_api_client: APIClient) -> str:
     # Created during the fit process
     os.remove("request.json")
 
-    return service.id
+    yield service.id
+
+    service.delete()
