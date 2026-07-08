@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Generator
 
 import pytest
-from utils import clone_agent_template, create_env_file, run_cli
+from utils import clone_agent_template, create_env_file, get_env_vars, run_cli
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +59,6 @@ class TestMCPAutoAITemplate:
         self,
         test_venv_path: Path,
         tmp_dir: str,
-        env_file_values: dict[str, str],
         credit_risk_deployment_id: str,
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
@@ -69,10 +68,10 @@ class TestMCPAutoAITemplate:
 
         run_cli(test_venv_path, ["install", "-r", "requirements.txt"], "pip")
 
-        create_env_file(
-            env_file_values
-            | {"WATSONX_CREDIT_RISK_DEPLOYMENT_ID": credit_risk_deployment_id}
+        env_vars = get_env_vars(
+            {"WATSONX_CREDIT_RISK_DEPLOYMENT_ID": credit_risk_deployment_id}
         )
+        create_env_file(env_vars)
 
         with self._run_server(test_venv_path):
             for prompt, expected_outputs in self.EXPECTED_OUTPUTS_BY_PROMPT.items():

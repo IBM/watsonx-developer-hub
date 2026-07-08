@@ -3,7 +3,14 @@ from pathlib import Path
 
 import pytest
 
-from utils import AGENTS_PATH, clone_agent_template, create_env_file, use_cli, run_cli
+from utils import (
+    AGENTS_PATH,
+    clone_agent_template,
+    create_env_file,
+    get_env_vars,
+    use_cli,
+    run_cli,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -11,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 class TestAgents:
     SKIPPED_TESTS = {
+        "base/crewai-websearch-agent": "CrewAI is not compatible with genai-A25-py3.12 software specification",
         "community/langgraph-graph-rag": "Neo4j credentials required to run the AI service in the Cloud",
         "community/langgraph-tavily-tool": "Tavily credentials required to run the AI service in the Cloud",
     }
@@ -25,6 +33,8 @@ class TestAgents:
         'tool_config_vectorIndexId = "{}"': ("vector_index_id", "fixture"),
     }
 
+    USER_MESSAGE_CONTENT = "Use one of your available tools with any example input and tell me what it returned."
+
     @staticmethod
     def _get_agent_names(dir_name: str) -> list[str]:
         agents_path = AGENTS_PATH / dir_name
@@ -37,7 +47,7 @@ class TestAgents:
         ]
 
     def _create_config_toml_file(
-        self, env_file_values: dict[str, str], request: pytest.FixtureRequest
+        self, env_vars: dict[str, str], request: pytest.FixtureRequest
     ) -> None:
         with open("config.toml.example", encoding="utf-8") as file:
             config_toml_content = file.read()
@@ -49,7 +59,7 @@ class TestAgents:
             value, value_type = replacement
             match value_type:
                 case "env":
-                    value = env_file_values[value]
+                    value = env_vars[value]
                 case "fixture":
                     value = request.getfixturevalue(value)
 
@@ -80,11 +90,7 @@ class TestAgents:
     def _run_template_invoke(self, venv_path: Path) -> None:
         run_cli(
             venv_path,
-            [
-                "template",
-                "invoke",
-                "Call your tool with some example value and tell me what you asked for and what you received.",
-            ],
+            ["template", "invoke", self.USER_MESSAGE_CONTENT],
             input=b"y",  # for package installation
         )
 
@@ -99,7 +105,7 @@ class TestAgents:
         run_cli(venv_path, ["service", "get", deployment_id])
 
     def _run_service_invoke(self, venv_path: Path) -> None:
-        run_cli(venv_path, ["service", "invoke", "Hello"])
+        run_cli(venv_path, ["service", "invoke", self.USER_MESSAGE_CONTENT])
 
     def _run_service_delete(self, venv_path: Path, deployment_id: str) -> None:
         run_cli(
@@ -113,7 +119,6 @@ class TestAgents:
         venv_path: Path,
         agent_name: str,
         tmp_dir: str,
-        env_file_values: dict[str, str],
         monkeypatch: pytest.MonkeyPatch,
         request: pytest.FixtureRequest,
     ) -> None:
@@ -121,9 +126,10 @@ class TestAgents:
             pytest.skip(self.SKIPPED_TESTS[agent_name])
 
         clone_agent_template(venv_path, tmp_dir, agent_name, monkeypatch)
-        create_env_file(env_file_values)
 
-        self._create_config_toml_file(env_file_values, request)
+        env_vars = get_env_vars()
+        create_env_file(env_vars)
+        self._create_config_toml_file(env_vars, request)
 
     def _template_tests(self, venv_path: Path, agent_name: str) -> None:
         if use_cli():
@@ -141,11 +147,11 @@ class TestAgents:
         self._run_service_invoke(venv_path)
         self._run_service_delete(venv_path, deployment_id)
 
+    @pytest.mark.usefixtures("space_id")
     @pytest.mark.parametrize("agent_name", _get_agent_names("base"))
     def test_base_agent(
         self,
         agent_name: str,
-        env_file_values: dict[str, str],
         tmp_dir: str,
         test_venv_path: Path,
         monkeypatch: pytest.MonkeyPatch,
@@ -155,18 +161,17 @@ class TestAgents:
             test_venv_path,
             agent_name,
             tmp_dir,
-            env_file_values,
             monkeypatch,
             request,
         )
         self._template_tests(test_venv_path, agent_name)
         self._service_tests(test_venv_path)
 
+    @pytest.mark.usefixtures("space_id")
     @pytest.mark.parametrize("agent_name", _get_agent_names("community"))
     def test_community_agent(
         self,
         agent_name: str,
-        env_file_values: dict[str, str],
         tmp_dir: str,
         test_venv_path: Path,
         monkeypatch: pytest.MonkeyPatch,
@@ -176,7 +181,6 @@ class TestAgents:
             test_venv_path,
             agent_name,
             tmp_dir,
-            env_file_values,
             monkeypatch,
             request,
         )

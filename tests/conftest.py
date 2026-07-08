@@ -3,6 +3,7 @@ import logging
 import os
 from pathlib import Path
 import subprocess
+import sys
 from tempfile import TemporaryDirectory
 from typing import Generator, cast
 from ibm_watsonx_ai.experiment.autoai.optimizers import RemoteAutoPipelines
@@ -30,7 +31,7 @@ logger = logging.getLogger(__name__)
 @pytest.fixture(scope="session", name="context_free_api_client")
 def fixture_context_free_api_client() -> APIClient:
     credentials = Credentials(
-        url=os.environ["WX_URL"], api_key=os.environ["WX_API_KEY"]
+        url=os.environ["WATSONX_URL"], api_key=os.environ["WATSONX_API_KEY"]
     )
 
     return APIClient(credentials)
@@ -84,20 +85,6 @@ def fixture_project_api_client(
     return api_client
 
 
-@pytest.fixture(scope="session", name="env_file_values")
-def fixture_env_file_values(space_id: str) -> dict[str, str]:
-    os_vars_mapping = {
-        "WATSONX_APIKEY": "WX_API_KEY",  # pragma: allowlist secret
-        "WATSONX_API_KEY": "WX_API_KEY",  # pragma: allowlist secret
-        "WATSONX_URL": "WX_URL",
-    }
-
-    env_values = {cli: os.environ[env] for cli, env in os_vars_mapping.items()}
-    env_values["WATSONX_SPACE_ID"] = space_id
-
-    return env_values
-
-
 @pytest.fixture(name="tmp_dir")
 def fixture_tmp_dir() -> Generator[str, None, None]:
     with TemporaryDirectory() as tmp_dir:
@@ -107,9 +94,10 @@ def fixture_tmp_dir() -> Generator[str, None, None]:
 @pytest.fixture(name="test_venv_path")
 def fixture_test_venv_path() -> Path:
     venv_name = ".venv_test"
+    version = sys.version.split(" ", 1)[0]
 
     subprocess.run(
-        [Path(__file__).parent / "create_test_venv_with_uv.sh", venv_name, "3.11"],
+        [Path(__file__).parent / "create_test_venv_with_uv.sh", venv_name, version],
         check=True,
     )
 

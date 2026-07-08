@@ -59,7 +59,7 @@ def delete_container(
 
 
 def delete_old_containers(api_client: APIClient, container_type: ContainerType) -> None:
-    delete_threshold = datetime.now(tz=timezone.utc) - timedelta(days=0)
+    delete_threshold = datetime.now(tz=timezone.utc) - timedelta(days=1)
 
     if container_type == "project":
         container_df = api_client.projects.list()
@@ -88,8 +88,8 @@ def create_new_space(api_client: APIClient) -> tuple[str, str]:
             "resource_crn": os.environ["COS_RESOURCE_INSTANCE_ID"],
         },
         api_client.spaces.ConfigurationMetaNames.COMPUTE: {
-            "name": os.environ["WX_NAME"],
-            "crn": os.environ["WX_IAM_SERVICE_ID_CRN"],
+            "name": os.environ["WATSONX_COMPUTE_NAME"],
+            "crn": os.environ["WATSONX_IAM_SERVICE_ID_CRN"],
         },
         api_client.spaces.ConfigurationMetaNames.TYPE: "wx",
     }
@@ -111,7 +111,9 @@ def create_new_project(api_client: APIClient) -> tuple[str, str]:
     storage_guid = (
         os.environ["COS_RESOURCE_INSTANCE_ID"].replace("::", "").split(":")[-1]
     )
-    compute_guid = os.environ["WX_IAM_SERVICE_ID_CRN"].replace("::", "").split(":")[-1]
+    compute_guid = (
+        os.environ["WATSONX_IAM_SERVICE_ID_CRN"].replace("::", "").split(":")[-1]
+    )
 
     meta_props = {
         api_client.projects.ConfigurationMetaNames.NAME: project_name,
@@ -123,8 +125,8 @@ def create_new_project(api_client: APIClient) -> tuple[str, str]:
         },
         api_client.projects.ConfigurationMetaNames.COMPUTE: {
             "type": "machine_learning",
-            "name": os.environ["WX_NAME"],
-            "crn": os.environ["WX_IAM_SERVICE_ID_CRN"],
+            "name": os.environ["WATSONX_COMPUTE_NAME"],
+            "crn": os.environ["WATSONX_IAM_SERVICE_ID_CRN"],
             "guid": compute_guid,
         },
         api_client.projects.ConfigurationMetaNames.TYPE: "wx",
