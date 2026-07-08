@@ -138,7 +138,6 @@ class TestOrchestrateMCPAutoAITemplate:
 
     AGENT_NAME = "autoai_prediction_agent"
     TEMPLATE_PATH = "mcp/mcp-orchestrate-autoai-template-generic"
-    AUTOAI_DEPLOYMENT_ID = "019e8259-1d14-7361-9509-c89f174cce0d"
 
     # Greeting-only prompts — the AutoAI tool must NOT be invoked.
     CHAT_PROMPTS_GREETING_ONLY = [
@@ -148,7 +147,7 @@ class TestOrchestrateMCPAutoAITemplate:
 
     # Single prediction request — the AutoAI tool MUST be invoked.
     CHAT_PROMPTS_SINGLE_PREDICTION = [
-        "sepal_length=0.1, sepal_width=0.1, petal_length=0.15, species=satosa",
+        "CheckingStatus=0_to_200, LoanDuration=31, CreditHistory=credits_paid_to_date, LoanPurpose=other, LoanAmount=1889, ExistingSavings=100_to_500, EmploymentDuration=less_1, InstallmentPercent=3, Sex=female, OthersOnLoan=none, CurrentResidenceDuration=3, OwnsProperty=savings_insurance, Age=32, InstallmentPlans=none, Housing=own, ExistingCreditsCount=1, Job=skilled, Dependents=1, Telephone=none, ForeignWorker=yes",
         "q",
     ]
 
@@ -188,21 +187,21 @@ class TestOrchestrateMCPAutoAITemplate:
     # Step 2 – create .env file
     # ---------------------------------------------------------------------------
 
-    def test_02_create_env_file(self) -> None:
-        """Populate the .env file with required credentials."""
+    def test_02_create_env_file(self, credit_risk_deployment_id: str) -> None:
+        """Populate the .env file with the AutoAI deployment ID from the shared fixture."""
         env_vars = get_env_vars(
-            {"WATSONX_AUTOAI_DEPLOYMENT_ID": self.AUTOAI_DEPLOYMENT_ID}
+            {"WATSONX_AUTOAI_DEPLOYMENT_ID": credit_risk_deployment_id}
         )
         create_env_file(env_vars)
 
         assert os.path.isfile(".env"), ".env file was not created"
 
-        # with open(".env", encoding="utf-8") as fh:
-        #     content = fh.read()
+        with open(".env", encoding="utf-8") as fh:
+            content = fh.read()
 
-        # assert f"WATSONX_AUTOAI_DEPLOYMENT_ID={self.AUTOAI_DEPLOYMENT_ID}" in content, (
-        #     "WATSONX_AUTOAI_DEPLOYMENT_ID was not written to .env correctly"
-        # )
+        assert f"WATSONX_AUTOAI_DEPLOYMENT_ID={credit_risk_deployment_id}" in content, (
+            "WATSONX_AUTOAI_DEPLOYMENT_ID was not written to .env correctly"
+        )
 
     # ---------------------------------------------------------------------------
     # Step 3 – register and activate the Orchestrate environment
