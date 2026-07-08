@@ -6,8 +6,6 @@ import subprocess
 import sys
 from tempfile import TemporaryDirectory
 from typing import Generator, cast
-import uuid
-
 import pytest
 
 from ibm_watsonx_ai import Credentials, APIClient
@@ -101,20 +99,8 @@ def fixture_tmp_dir() -> Generator[str, None, None]:
         yield tmp_dir
 
 
-@pytest.fixture(scope="class", name="orchestrate_env_name")
-def fixture_orchestrate_env_name() -> str:
-    """Return a unique Orchestrate environment name for the current test class.
-
-    Using a short UUID suffix avoids collisions when multiple test runs execute
-    against the same Orchestrate instance in parallel.
-    """
-    short_id = uuid.uuid4().hex[:8]
-    return f"test_env_{short_id}"
-
-
-@pytest.fixture(scope="class", name="test_venv_path")
+@pytest.fixture(name="test_venv_path")
 def fixture_test_venv_path() -> Path:
-    """Build the shared test venv once per test class (not once per test method)."""
     venv_name = ".venv_test"
     version = sys.version.split(" ", 1)[0]
 
