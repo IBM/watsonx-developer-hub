@@ -213,11 +213,11 @@ class TestOrchestrateMCPAutoAITemplate:
         orchestrate_env_name: str,
     ) -> None:
         """Register a uniquely-named Orchestrate environment."""
-        orch_url = os.environ["ORCHESTRATE_URL"]
+        orchestrate_url = os.environ["ORCHESTRATE_URL"]
 
         result = run_cli(
             test_venv_path,
-            ["env", "add", "-n", orchestrate_env_name, "-u", orch_url],
+            ["env", "add", "-n", orchestrate_env_name, "-u", orchestrate_url],
             "orchestrate",
         )
 
@@ -230,11 +230,16 @@ class TestOrchestrateMCPAutoAITemplate:
         orchestrate_env_name: str,
     ) -> None:
         """Activate the registered Orchestrate environment with an API key."""
-        orch_api_key = os.environ["ORCHESTRATE_API_KEY"]
+        orchestrate_api_key = os.environ["ORCHESTRATE_API_KEY"]
 
         result = run_cli(
             test_venv_path,
-            ["env", "activate", orchestrate_env_name, f"--api-key={orch_api_key}"],
+            [
+                "env",
+                "activate",
+                orchestrate_env_name,
+                f"--api-key={orchestrate_api_key}",
+            ],
             "orchestrate",
         )
 
