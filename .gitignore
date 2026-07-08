@@ -5,7 +5,7 @@ cpd/data/credit_risk/.DS_Store
 .vscode
 __pycache__
 .pytest_cache
-.venv
+.venv*
 dist
 **/config.toml
 **/.env

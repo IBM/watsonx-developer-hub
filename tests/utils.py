@@ -7,6 +7,8 @@ import re
 
 import pytest
 
+ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-9;]*m")
+
 AGENTS_PATH = Path(__file__).parents[1] / "agents"
 
 ENV_VARS_MAPPING = {
@@ -49,8 +51,12 @@ def run_cli(
     allowed_exit_codes: set[int] | None = None,
     **kwargs,
 ) -> subprocess.CompletedProcess[bytes]:
+    venv_exec = venv_path / "bin" / exec_name
+    executable = (
+        venv_exec if venv_exec.exists() else shutil.which(exec_name) or exec_name
+    )
     result = subprocess.run(
-        [venv_path / "bin" / exec_name, *command],
+        [executable, *command],
         check=False,
         capture_output=True,
         **kwargs,
@@ -95,3 +101,21 @@ def create_env_file(env_vars: dict[str, str]) -> None:
 
     with open(".env", "w+", encoding="utf-8") as file:
         file.write(env_file_content)
+
+
+def strip_ansi(text: str) -> str:
+    return ANSI_ESCAPE_RE.sub("", text)
+
+
+def assert_tool_used(
+    result: subprocess.CompletedProcess[bytes], tool_name: str
+) -> None:
+    output = strip_ansi(result.stdout.decode())
+    assert f"Called tool '{tool_name}'" in output, (
+        f"Expected tool '{tool_name}' to be called, but it was not found in output.\n\n"
+        f"Stdout:\n{output}"
+    )
+    assert f"Tool '{tool_name}' responded" in output, (
+        f"Expected tool '{tool_name}' to respond, but it was not found in output.\n\n"
+        f"Stdout:\n{output}"
+    )
