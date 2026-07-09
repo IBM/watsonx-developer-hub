@@ -5,6 +5,13 @@ on:
     branches: [main]
   schedule:
     - cron: "0 7 * * 0"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to run tests on"
+        required: false
+        default: "main"
+        type: string
 
 jobs:
   run-tests:
@@ -15,6 +22,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
       - name: Set up Python
         uses: actions/setup-python@v6
