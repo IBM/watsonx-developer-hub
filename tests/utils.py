@@ -49,8 +49,12 @@ def run_cli(
     allowed_exit_codes: set[int] | None = None,
     **kwargs,
 ) -> subprocess.CompletedProcess[bytes]:
+    venv_exec = venv_path / "bin" / exec_name
+    executable = (
+        venv_exec if venv_exec.exists() else shutil.which(exec_name) or exec_name
+    )
     result = subprocess.run(
-        [venv_path / "bin" / exec_name, *command],
+        [executable, *command],
         check=False,
         capture_output=True,
         **kwargs,
