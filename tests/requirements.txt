@@ -1,4 +1,8 @@
 pytest>=9.1.1
 pytest-env>=1.6.0
 ibm-watsonx-ai-cli>=0.4.1
-ibm-watsonx-ai[rag]>=1.5.14
+ibm-watsonx-ai>=1.5.14
+langchain_milvus>=0.3.3
+pymilvus<=2.6.6
+langchain-text-splitters>=1.1.2
+ibm-watsonx-orchestrate>=2.12.0

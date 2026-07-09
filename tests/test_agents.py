@@ -33,7 +33,9 @@ class TestAgents:
         'tool_config_vectorIndexId = "{}"': ("vector_index_id", "fixture"),
     }
 
-    USER_MESSAGE_CONTENT = "Use one of your available tools with any example input and tell me what it returned."
+    USER_MESSAGE_CONTENT = (
+        "Use one of your available tools with any example input. Tool's output: "
+    )
 
     @staticmethod
     def _get_agent_names(dir_name: str) -> list[str]:
