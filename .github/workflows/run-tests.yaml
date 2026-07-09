@@ -12,6 +12,11 @@ on:
         required: false
         default: "main"
         type: string
+      pytest_k:
+        description: "Pytest -k expression to filter tests (e.g. test_base_agent or test_base_agent or test_other), leave empty to run all tests"
+        required: false
+        default: ""
+        type: string
 
 jobs:
   run-tests:
@@ -67,4 +72,4 @@ jobs:
           MILVUS_PORT: ${{ secrets.MILVUS_PORT }}
           MILVUS_USERNAME: ${{ secrets.MILVUS_USERNAME }}
           MILVUS_PASSWORD: ${{ secrets.MILVUS_PASSWORD }}
-        run: pytest -vv tests
+        run: pytest -vv tests ${{ github.event.inputs.pytest_k && format('-k "{0}"', github.event.inputs.pytest_k) || '' }}
