@@ -12,6 +12,11 @@ on:
         required: false
         default: "main"
         type: string
+      test_path:
+        description: "Test path or file to run (e.g. tests/test_agents.py::TestAgents::test_base_agent), leave empty to run all tests"
+        required: false
+        default: "tests"
+        type: string
 
 jobs:
   run-tests:
@@ -65,4 +70,4 @@ jobs:
           MILVUS_PORT: ${{ secrets.MILVUS_PORT }}
           MILVUS_USERNAME: ${{ secrets.MILVUS_USERNAME }}
           MILVUS_PASSWORD: ${{ secrets.MILVUS_PASSWORD }}
-        run: pytest -vv tests
+        run: pytest -vv ${{ github.event.inputs.test_path || 'tests' }}
