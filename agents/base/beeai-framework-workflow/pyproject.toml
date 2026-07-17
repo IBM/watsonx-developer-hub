@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "beeai_framework_workflow_base"
-version = "0.1.1"
+version = "0.1.2"
 description = "A template for a beeai-framework LLM app deployable on IBM Cloud as an ai_service."
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
@@ -14,6 +14,8 @@ python = ">=3.11,<3.14"
 beeai-framework = {extras = ["duckduckgo"], version = "^0.1.49"}
 litellm = "^1.81.1"
 pydantic = "^2.11.9"
+fastapi = "^0.139.2"
+orjson = "^3.11.9"
 
 [tool.poetry.group.dev]
 optional = true

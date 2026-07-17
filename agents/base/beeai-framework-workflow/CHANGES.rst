@@ -1,3 +1,8 @@
+Version 0.1.2
+-------------
+
+Added ``fastapi`` and ``orjson`` to dependencies.
+
 Version 0.1.1
 -------------
 
