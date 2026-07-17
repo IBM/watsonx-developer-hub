@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "beeai_framework_requirement_agent_base"
-version = "0.1.1"
+version = "0.1.2"
 description = "A template for a beeai-framework LLM app deployable on IBM Cloud as an ai_service."
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
