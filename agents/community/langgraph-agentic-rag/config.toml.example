@@ -14,13 +14,11 @@
   model_id = "mistral-large-2512"  # underlying model of WatsonxChat
   url = ""  # should follow the format: `https://{REGION}.ml.cloud.ibm.com`
 
-  # RAGQuery Tool configuration
+  # Configuration of vector store used by the RAG tool
   # Required:
-  tool_config_vectorIndexId = ""
-
-  # You must specify either `tool_config_spaceId` or `tool_config_projectId` — setting both or leaving both unset is not allowed.
-  tool_config_spaceId = ""
-  tool_config_projectId = ""
+  embedding_model_id = ""
+  vector_store_connection_id = ""
+  vector_store_index_name = ""
 
   # Optional:
   base_knowledge_description = ""
