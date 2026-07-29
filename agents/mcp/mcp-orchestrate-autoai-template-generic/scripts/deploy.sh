@@ -31,7 +31,7 @@ fi
 # 'orchestrate env list' is a lightweight read-only call that requires auth.
 echo ""
 echo "Pre-flight: Checking Orchestrate authentication..."
-if ! orchestrate env list &> /dev/null; then
+if ! orchestrate connections list &> /dev/null; then
     echo "❌ Error: Orchestrate session token is missing or expired."
     echo ""
     echo "   Run the following command, then re-run this script:"
