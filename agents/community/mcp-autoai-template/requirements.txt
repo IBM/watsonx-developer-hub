@@ -1,6 +1,6 @@
-langchain-ibm
-langchain
-langgraph
-python-dotenv
-mcp
-langchain_mcp_adapters
+langchain-ibm<2.0.0
+langchain<2.0.0
+langgraph<2.0.0
+python-dotenv<2.0.0
+mcp>=1.1.0,<2.0.0
+langchain_mcp_adapters<1.0.0
