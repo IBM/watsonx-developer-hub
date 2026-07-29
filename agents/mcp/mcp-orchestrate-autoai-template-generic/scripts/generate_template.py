@@ -190,18 +190,44 @@ def write_yaml(path: Path, content: dict[str, Any]) -> None:
         )
 
 
+def _format_fields(fields: list[dict[str, Any]], indent: int = 16) -> str:
+    """Return a wrapped, aligned string of 'name (type)' pairs."""
+    pad = " " * indent
+    items = [f"{f['name']} ({f.get('type', 'unknown')})" for f in fields]
+    lines: list[str] = []
+    current = ""
+    for item in items:
+        candidate = f"{current}, {item}" if current else item
+        if len(candidate) > 64 and current:
+            lines.append(current)
+            current = item
+        else:
+            current = candidate
+    if current:
+        lines.append(current)
+    return f"\n{pad}".join(lines)
+
+
 def main() -> None:
     load_env()
     client = prepare_api_client()
 
     deployment_id = require_env("WATSONX_AUTOAI_DEPLOYMENT_ID")
+    print(f"Fetching deployment details for {deployment_id}...")
 
     deployment_details = get_deployment_details(client, deployment_id)
     asset_id = get_model_asset_id(deployment_details)
+    print(f"✓ Found model asset: {asset_id}")
+
+    print("Fetching model metadata...")
     asset_details = get_model_asset_details(client, asset_id)
 
     input_fields = get_input_fields(asset_details)
     label_column = get_label_column(asset_details)
+
+    fields_str = _format_fields(input_fields)
+    print(f"✓ Input fields:  {fields_str}")
+    print(f"✓ Label column:  {label_column}")
 
     toolkit_yaml = build_toolkit_yaml()
     agent_yaml = build_agent_yaml(
