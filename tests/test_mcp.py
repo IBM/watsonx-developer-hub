@@ -207,7 +207,7 @@ class TestOrchestrateMCPAutoAITemplate:
     # Test
     # ---------------------------------------------------------------------------
 
-    def test_orchestrate_mcp_autoai_template(
+    def test_orchestrate_mcp_autoai_template_generic(
         self,
         test_venv_path: Path,
         tmp_dir: str,
