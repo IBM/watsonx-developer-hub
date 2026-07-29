@@ -1,20 +1,21 @@
 # Use watsonx AutoAI and MCP server with IBM watsonx Orchestrate (generic template).
 
-Table of contents:  
-* [Introduction](#introduction)  
-* [AutoAI experiment](#autoai-experiment)  
-* [Directory structure and files description](#directory-structure-and-files-description)  
-* [Prerequisites](#prerequisites)  
-* [Cloning and setting up the template](#cloning-and-setting-up-the-template)  
-* [Configuring the environment](#configuring-the-environment)  
-* [Generating configs](#generating-configs)  
-* [Running the MCP server locally](#running-the-mcp-server-locally)  
-* [Importing into Orchestrate](#importing-into-orchestrate)  
-* [Cleanup](#cleanup)  
-* [How the tool works](#how-the-get_autoai_prediction-tool-works)  
-* [Regeneration cycle](#regeneration-cycle)  
-* [Known limitations](#known-limitations)  
+Table of contents:
 
+- [Introduction](#introduction)
+- [AutoAI experiment](#autoai-experiment)
+- [Directory structure and files description](#directory-structure-and-files-description)
+- [Prerequisites](#prerequisites)
+- [Cloning and setting up the template](#cloning-and-setting-up-the-template)
+- [Configuring the environment](#configuring-the-environment)
+- [Setting up the watsonx Orchestrate CLI](#setting-up-the-watsonx-orchestrate-cli)
+- [Generating configs](#generating-configs)
+- [Running the MCP server locally](#running-the-mcp-server-locally)
+- [Importing into Orchestrate](#importing-into-orchestrate)
+- [Cleanup](#cleanup)
+- [How the tool works](#how-the-get_autoai_prediction-tool-works)
+- [Regeneration cycle](#regeneration-cycle)
+- [Known limitations](#known-limitations)
 
 ## Introduction
 
@@ -50,6 +51,7 @@ mcp-orchestrate-autoai-template-generic
 ```
 
 Notable files:
+
 - `template.env`: Template file with placeholders for the required environment variables.
 - `requirements-dev.txt`: Local dependencies used by the generator script and the Orchestrate CLI.
 - `scripts/generate_template.py`: Queries watsonx.ai, then writes `toolkit.yaml` and `agent.yaml`.
@@ -111,6 +113,44 @@ WATSONX_SPACE_ID=your_space_id
 WATSONX_AUTOAI_DEPLOYMENT_ID=your_autoai_deployment_id
 ```
 
+## Setting up the watsonx Orchestrate CLI
+
+The `ibm-watsonx-orchestrate` package was already installed in the previous step via `requirements-dev.txt`. Now configure it to point at your Orchestrate instance.
+
+**Register your Orchestrate environment:**
+
+```sh
+orchestrate env add \
+  -n my-orchestrate-env \
+  -u https://<your-orchestrate-instance-url>
+```
+
+**Activate the environment (authenticate):**
+
+```sh
+orchestrate env activate my-orchestrate-env \
+  --api-key <your-orchestrate-api-key>
+```
+
+Expected output:
+
+```
+Activating environment: my-orchestrate-env
+✓ Session token obtained. Token valid for 60 minutes.
+✓ Active environment: my-orchestrate-env
+```
+
+> [!NOTE]
+> **Token expiry** — Orchestrate session tokens expire after 60 minutes. If `deploy.sh` reports an authentication error, re-run `orchestrate env activate` and retry.
+
+**Verify connectivity:**
+
+```sh
+orchestrate connections list
+```
+
+A successful response lists your available connections (the list may be empty on a fresh instance — that is expected).
+
 ## Generating configs
 
 Run the generator script:
@@ -120,6 +160,7 @@ python scripts/generate_template.py
 ```
 
 The script:
+
 1. Loads `.env`.
 2. Connects to watsonx.ai (`APIClient`).
 3. Fetches deployment details (`deployments.get_details`).
@@ -149,6 +190,7 @@ To generate configs and import everything into Orchestrate in one step, execute:
 ```
 
 This script runs the generator (step equivalent to [Generating configs](#generating-configs)) and additionally:
+
 - Creates and configures the `autoai-prediction-connection` (draft + live).
 - Imports `toolkit.yaml` and `agent.yaml`.
 - Deploys the agent.
