@@ -29,8 +29,9 @@ class TestAgents:
         'tool_config_connection_id = "{}"': ("psql_connection_id", "fixture"),
         'tool_config_dialect = "{}"': ("PostgreSQL", "text"),
         'tool_config_schema = "{}"': ("public", "text"),
-        'tool_config_spaceId = "{}"': ("space_id", "fixture"),
-        'tool_config_vectorIndexId = "{}"': ("vector_index_id", "fixture"),
+        'embedding_model_id = "{}"': ("embedding_model_id", "fixture"),
+        'vector_store_connection_id = "{}"': ("milvus_connection_id", "fixture"),
+        'vector_store_index_name = "{}"': ("milvus_index_name", "fixture"),
     }
 
     USER_MESSAGE_CONTENT = (

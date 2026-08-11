@@ -13,7 +13,6 @@ from ibm_watsonx_ai.deployment import WebService
 from ibm_watsonx_ai.experiment import AutoAI
 from ibm_watsonx_ai.experiment.autoai.optimizers import RemoteAutoPipelines
 from ibm_watsonx_ai.helpers import DataConnection, ContainerLocation
-from ibm_watsonx_ai.foundation_models.utils import VectorIndexes
 from ibm_watsonx_ai.foundation_models.embeddings import Embeddings
 from ibm_watsonx_ai.foundation_models.extensions.rag import VectorStore
 
@@ -137,19 +136,19 @@ def fixture_psql_connection_id(space_api_client: APIClient) -> str:
     return space_api_client.connections.get_id(connection_details)
 
 
-@pytest.fixture(scope="session", name="project_milvus_connection_id")
-def fixture_project_milvus_connection_id(project_api_client: APIClient) -> str:
+@pytest.fixture(scope="session", name="milvus_connection_id")
+def fixture_milvus_connection_id(space_api_client: APIClient) -> str:
     if milvus_connection_id := os.environ.get("WATSONX_MILVUS_CONNECTION_ID"):
         return milvus_connection_id
 
-    datasource_type = project_api_client.connections.get_datasource_type_id_by_name(
+    datasource_type = space_api_client.connections.get_datasource_type_id_by_name(
         "milvuswxd"
     )
 
     meta_props = {
-        project_api_client.connections.ConfigurationMetaNames.DATASOURCE_TYPE: datasource_type,
-        project_api_client.connections.ConfigurationMetaNames.NAME: "Milvus connection",
-        project_api_client.connections.ConfigurationMetaNames.PROPERTIES: {
+        space_api_client.connections.ConfigurationMetaNames.DATASOURCE_TYPE: datasource_type,
+        space_api_client.connections.ConfigurationMetaNames.NAME: "Milvus connection",
+        space_api_client.connections.ConfigurationMetaNames.PROPERTIES: {
             "host": os.environ["MILVUS_HOST"],
             "port": os.environ["MILVUS_PORT"],
             "username": os.environ["MILVUS_USERNAME"],
@@ -158,68 +157,36 @@ def fixture_project_milvus_connection_id(project_api_client: APIClient) -> str:
         },
     }
 
-    connection_details = project_api_client.connections.create(meta_props)
-    return project_api_client.connections.get_id(connection_details)
+    connection_details = space_api_client.connections.create(meta_props)
+    return space_api_client.connections.get_id(connection_details)
 
 
-@pytest.fixture(scope="session", name="project_vector_index_id")
-def fixture_project_vector_index_id(
-    project_api_client: APIClient, project_milvus_connection_id: str
+@pytest.fixture(name="embedding_model_id")
+def fixture_embedding_model_id(space_api_client: APIClient) -> str:
+    return str(
+        space_api_client.foundation_models.EmbeddingModels.SLATE_125M_ENGLISH_RTRVR_V2
+    )
+
+
+@pytest.fixture(name="milvus_index_name")
+def fixture_milvus_index_name(
+    space_api_client: APIClient, milvus_connection_id: str, embedding_model_id: str
 ) -> str:
     index_name = f"watsonxdeveloperhubindex{int(datetime.now().timestamp())}"
     database_name = "default"
-    embedding_model_id = (
-        project_api_client.foundation_models.EmbeddingModels.SLATE_125M_ENGLISH_RTRVR_V2  # type: ignore
-    )
 
-    vector_indexes = VectorIndexes(project_api_client)
-    vector_index_details = vector_indexes.create(
-        name=f"vector_index_{datetime.now().isoformat()}",
-        store={
-            "type": "watsonx.data",
-            "connection_id": project_milvus_connection_id,
-            "index": index_name,
-            "database": database_name,
-        },
-        settings={
-            "chunk_size": 2000,
-            "chunk_overlap": 200,
-            "split_pdf_pages": True,
-            "top_k": 5,
-            "rerank": False,
-            "embedding_model_id": embedding_model_id,
-            "schema_fields": {
-                "document_name": "document_name",
-                "text": "text",
-                "page_number": "page",
-            },
-        },
-    )
-
-    embeddings = Embeddings(model_id=embedding_model_id, api_client=project_api_client)
+    embeddings = Embeddings(model_id=embedding_model_id, api_client=space_api_client)
 
     vector_store = VectorStore(
-        project_api_client,
-        connection_id=project_milvus_connection_id,
+        space_api_client,
+        connection_id=milvus_connection_id,
         index_name=index_name,
         database=database_name,
         embeddings=embeddings,
     )
     vector_store.add_documents(["Example document"])
 
-    return vector_index_details["id"]
-
-
-@pytest.fixture(scope="session", name="vector_index_id")
-def fixture_vector_index_id(
-    context_free_api_client: APIClient,
-    project_vector_index_id: str,
-    project_id: str,
-    space_id: str,
-) -> str:
-    return context_free_api_client.spaces.promote(
-        project_vector_index_id, project_id, space_id
-    )
+    return index_name
 
 
 @pytest.fixture(scope="session", name="credit_risk_deployment_id")

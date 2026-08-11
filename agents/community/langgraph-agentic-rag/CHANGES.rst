@@ -1,3 +1,8 @@
+Version 0.1.2
+-------------
+
+- Removed usage of Utility Agent Tools
+
 Version 0.1.1
 -------------
 

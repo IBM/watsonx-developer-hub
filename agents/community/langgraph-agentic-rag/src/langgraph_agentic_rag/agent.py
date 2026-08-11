@@ -21,7 +21,9 @@ from langgraph_agentic_rag import retriever_tool_watsonx
 def get_graph_closure(
     client: APIClient,
     model_id: str,
-    tool_config: dict,
+    embedding_model_id: str,
+    vector_store_connection_id: str,
+    vector_store_index_name: str,
     base_knowledge_description: str | None = None,
 ) -> Callable:
     """Graph generator closure."""
@@ -31,8 +33,10 @@ def get_graph_closure(
 
     TOOLS = [
         retriever_tool_watsonx(
-            api_client=client,
-            tool_config=tool_config,
+            client,
+            embedding_model_id,
+            vector_store_connection_id,
+            vector_store_index_name,
         )
     ]
 

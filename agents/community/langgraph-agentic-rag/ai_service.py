@@ -2,9 +2,9 @@ def deployable_ai_service(
     context,
     url,
     model_id,
-    tool_config_spaceId,
-    tool_config_projectId,
-    tool_config_vectorIndexId,
+    embedding_model_id,
+    vector_store_connection_id,
+    vector_store_index_name,
     base_knowledge_description=None,
 ):
     import urllib
@@ -32,29 +32,13 @@ def deployable_ai_service(
         space_id=context.get_space_id(),
     )
 
-    tool_config = {"vectorIndexId": tool_config_vectorIndexId}
-
-    space_is_set = bool(tool_config_spaceId and tool_config_spaceId.strip())
-    project_is_set = bool(tool_config_projectId and tool_config_projectId.strip())
-
-    if space_is_set == project_is_set:
-        raise ValueError(
-            "Config error in `config.toml`: exactly one of "
-            "`tool_config_spaceId` or `tool_config_projectId` must be set. "
-            "You must specify either `tool_config_spaceId` or `tool_config_projectId` — "
-            "setting both or leaving both unset is not allowed."
-        )
-
-    if space_is_set:
-        tool_config["spaceId"] = tool_config_spaceId
-    else:
-        tool_config["projectId"] = tool_config_projectId
-
     graph = get_graph_closure(
         client,
         model_id,
-        tool_config=tool_config,
-        base_knowledge_description=base_knowledge_description,
+        embedding_model_id,
+        vector_store_connection_id,
+        vector_store_index_name,
+        base_knowledge_description,
     )
 
     def get_formatted_message(
