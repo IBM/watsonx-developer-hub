@@ -142,10 +142,9 @@ The template works with any model type: AutoAI experiments, custom Python models
 # Install CLI
 pip install -U "ibm_watsonx_ai_cli>=0.5.0"
 
-# Browse templates
+# Browse templates and select mcp-orchestrate-autoai-template-generic from the list
 watsonx-ai template new
 
-# Select mcp-orchestrate-autoai-template-generic from the list
 # Output: ✓ Template downloaded to ./mcp-orchestrate-autoai-template-generic
 
 cd mcp-orchestrate-autoai-template-generic
