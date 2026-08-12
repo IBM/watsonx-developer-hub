@@ -189,18 +189,18 @@ Edit `.env` with your credentials:
 WATSONX_URL=https://us-south.ml.cloud.ibm.com
 WATSONX_API_KEY=<your-ibm-cloud-iam-api-key>
 WATSONX_SPACE_ID=<your-deployment-space-id>
-WATSONX_AUTO_DEPLOYMENT_ID=<your-deployment-id>
+WATSONX_AUTOAI_DEPLOYMENT_ID=<your-deployment-id>
 
 # Optional: override LLM (default: groq/openai/gpt-oss-120b)
 # LLM_NAME=groq/openai/gpt-oss-120b
 ```
 
-| Variable                     | Where to find it                                                     |
-| ---------------------------- | -------------------------------------------------------------------- |
-| `WATSONX_URL`                | Region-specific endpoint (e.g., `https://us-south.ml.cloud.ibm.com`) |
-| `WATSONX_API_KEY`            | IBM Cloud → Manage → Access (IAM) → API keys                         |
-| `WATSONX_SPACE_ID`           | watsonx.ai → Deployment space → Manage tab                           |
-| `WATSONX_AUTO_DEPLOYMENT_ID` | watsonx.ai → Deployments → select model                              |
+| Variable                       | Where to find it                                                     |
+| ------------------------------ | -------------------------------------------------------------------- |
+| `WATSONX_URL`                  | Region-specific endpoint (e.g., `https://us-south.ml.cloud.ibm.com`) |
+| `WATSONX_API_KEY`              | IBM Cloud → Manage → Access (IAM) → API keys                         |
+| `WATSONX_SPACE_ID`             | watsonx.ai → Deployment space → Manage tab                           |
+| `WATSONX_AUTOAI_DEPLOYMENT_ID` | watsonx.ai → Deployments → select model                              |
 
 > **Security:** Never commit `.env` to version control. The `.gitignore` already excludes it.
 
@@ -275,7 +275,7 @@ env:
   - WATSONX_URL
   - WATSONX_API_KEY
   - WATSONX_SPACE_ID
-  - WATSONX_AUTO_DEPLOYMENT_ID
+  - WATSONX_AUTOAI_DEPLOYMENT_ID
 tools:
   - "*"
 package_root: ./mcp_server
@@ -475,7 +475,7 @@ Change your deployment in three steps:
 1. **Update `.env`:**
 
    ```bash
-   WATSONX_AUTO_DEPLOYMENT_ID=<new-deployment-id>
+   WATSONX_AUTOAI_DEPLOYMENT_ID=<new-deployment-id>
    ```
 
 2. **Regenerate configs:**
@@ -600,7 +600,7 @@ python scripts/generate_template.py
 ./scripts/deploy.sh   # or manual import via orchestrate CLI
 ```
 
-> The MCP server fetches schema dynamically at startup - just update `WATSONX_AUTO_DEPLOYMENT_ID` and restart the server. No regeneration needed for simple credential changes.
+> The MCP server fetches schema dynamically at startup - just update `WATSONX_AUTOAI_DEPLOYMENT_ID` and restart the server. No regeneration needed for simple credential changes.
 
 ---
 
