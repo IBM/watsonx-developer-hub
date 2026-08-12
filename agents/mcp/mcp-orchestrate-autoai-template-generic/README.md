@@ -90,7 +90,7 @@ mcp-orchestrate-autoai-template-generic/
 - **`scripts/generate_template.py`**: Queries watsonx.ai, writes `toolkit.yaml` and `agent.yaml`.
 - **`scripts/deploy.sh`**: One-command deployment (generates + imports + deploys).
 - **`scripts/cleanup.sh`**: Removes all Orchestrate resources and local artifacts.
-- **`mcp_server/server.py`**: MCP server that exposes the `get_prediction` tool.
+- **`mcp_server/server.py`**: MCP server that exposes the `get_autoai_prediction` tool.
 - **`mcp_server/utils.py`**: Dynamic schema fetching, scoring helpers, validation.
 - **`mcp_server/requirements.txt`**: Runtime dependencies (packaged into Orchestrate).
 
@@ -222,7 +222,7 @@ Before deploying, let's clarify what the MCP server does and how you control it.
 
 1. User asks question to Orchestrate agent
 2. Agent evaluates what tool(s) to call
-3. Agent calls `get_prediction` tool via MCP
+3. Agent calls `get_autoai_prediction` tool via MCP
 4. MCP server validates inputs and calls watsonx.ai deployment
 5. watsonx.ai returns prediction (e.g., risk score + confidence)
 6. MCP server formats response
@@ -267,8 +267,8 @@ Generated /path/to/agent.yaml
 ```yaml
 spec_version: v1
 kind: mcp
-name: prediction-toolkit
-description: Generic watsonx.ai model prediction toolkit
+name: autoai-generic-toolkit
+description: Generic watsonx.ai AutoAI prediction toolkit
 command: python server.py
 env:
   - WATSONX_URL
@@ -295,7 +295,7 @@ instructions: |
 
   STRICT RULES - follow these without exception:
   1. NEVER answer from your own knowledge.
-  2. ALWAYS call get_prediction when all required fields provided.
+  2. ALWAYS call get_autoai_prediction when all required fields provided.
   3. Ask only for missing fields, one at a time.
   4. After tool returns, report prediction clearly.
   5. Do NOT perform your own calculations.
@@ -305,7 +305,7 @@ instructions: |
        - balance
        - ticket_count
 tools:
-  - prediction-toolkit:get_prediction
+  - autoai-generic-toolkit:get_autoai_prediction
 collaborators: []
 ```
 
@@ -449,7 +449,7 @@ You: tenure=24, balance=15000, ticket_count=2
 
 [Reasoning]
   All required fields provided.
-  Calling tool: get_prediction({
+  Calling tool: get_autoai_prediction({
     "tenure": 24,
     "balance": 15000,
     "ticket_count": 2
@@ -569,7 +569,7 @@ python scripts/generate_template.py
 bash scripts/deploy.sh
 
 # 6. Test
-orchestrate chat ask --agent-name risk_prediction_agent --include-reasoning
+orchestrate chat ask --agent-name autoai_prediction_agent --include-reasoning
 
 # 7. Cleanup
 bash scripts/cleanup.sh
@@ -577,7 +577,7 @@ bash scripts/cleanup.sh
 
 ---
 
-## How the `get_prediction` Tool Works
+## How the `get_autoai_prediction` Tool Works
 
 1. At server startup, `utils._fetch_deployment_schema()` queries watsonx API for `INPUT_FIELDS` and `PREDICTION_COLUMN` (cached via `lru_cache`).
 2. LLM collects all required fields from the user.
