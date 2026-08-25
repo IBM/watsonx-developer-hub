@@ -20,14 +20,14 @@ fi
 
 echo ""
 echo "Pre-flight: Checking Orchestrate authentication..."
-if ! orchestrate env list &> /dev/null; then
+if ! orchestrate connections list &> /dev/null; then
     echo "❌ Error: Orchestrate session token is missing or expired."
     echo ""
     echo "   Run the following command, then re-run this script:"
     echo "     orchestrate env activate <your-env-name>"
     echo ""
     echo "   To list available environments:"
-    echo "     orchestrate env list --all"
+    echo "     orchestrate env list"
     exit 1
 fi
 echo "✓ Orchestrate authentication OK"

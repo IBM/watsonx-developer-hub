@@ -33,9 +33,11 @@ def invoke_autoai_prediction(input_data: AutoAIInput):
 
     payload = build_scoring_payload(input_data)
     response = api_client.deployments.score(deployment_id, meta_props=payload)
+    result = extract_prediction(response, prediction_column=prediction_column)
     return {
         "prediction_column": prediction_column,
-        "prediction": extract_prediction(response),
+        "prediction": result["prediction"],
+        "all_fields": result["all_fields"],
     }
 
 

@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from functools import lru_cache
@@ -52,18 +53,37 @@ def _fetch_deployment_schema() -> tuple[list[dict[str, Any]], str]:
     """
     Fetches INPUT_FIELDS and PREDICTION_COLUMN from the watsonx API on first call.
     The result is cached for the lifetime of the process — the API is queried only once.
+
+    The repository method used to fetch asset details is chosen automatically
+    based on ``entity.deployed_asset_type`` in the deployment response:
+      - "model"      → client.repository.get_model_details()
+      - "function"   → client.repository.get_function_details()
+      - "ai_service" → client.repository.get_ai_service_details()
     """
     client = prepare_api_client()
     deployment_id = get_autoai_deployment_id()
 
     deployment_details = client.deployments.get_details(deployment_id)
     asset_id = _get_model_asset_id(deployment_details)
-    asset_details = client.repository.get_model_details(asset_id)
+    deployed_asset_type = _get_deployed_asset_type(deployment_details)
+    logger.debug(
+        "deployed_asset_type=%r for deployment %s", deployed_asset_type, deployment_id
+    )
+
+    asset_details = _fetch_asset_details(client, asset_id, deployed_asset_type)
 
     input_fields = _extract_input_fields(asset_details)
     label_column = _extract_label_column(asset_details)
 
     return input_fields, label_column
+
+
+# Mapping from deployed_asset_type values to the repository client method name.
+_ASSET_TYPE_TO_REPO_METHOD: dict[str, str] = {
+    "model": "get_model_details",
+    "function": "get_function_details",
+    "ai_service": "get_ai_service_details",
+}
 
 
 def _get_model_asset_id(deployment_details: dict[str, Any]) -> str:
@@ -77,23 +97,94 @@ def _get_model_asset_id(deployment_details: dict[str, Any]) -> str:
     return asset_id
 
 
+def _get_deployed_asset_type(deployment_details: dict[str, Any]) -> str:
+    """Return the normalised deployed_asset_type string (lower-case, stripped)."""
+    entity = deployment_details.get("entity", {})
+    return str(entity.get("deployed_asset_type", "model")).lower().strip()
+
+
+def _fetch_asset_details(
+    client: APIClient,
+    asset_id: str,
+    deployed_asset_type: str,
+) -> dict[str, Any]:
+    """Call the correct repository method based on *deployed_asset_type*.
+
+    Supported values: ``"model"``, ``"function"``, ``"ai_service"``.
+    Falls back to ``get_model_details`` for unknown types and logs a warning.
+    """
+    method_name = _ASSET_TYPE_TO_REPO_METHOD.get(deployed_asset_type)
+    if method_name is None:
+        logger.warning(
+            "Unknown deployed_asset_type %r — falling back to get_model_details. "
+            "Add an entry to _ASSET_TYPE_TO_REPO_METHOD if this is incorrect.",
+            deployed_asset_type,
+        )
+        method_name = "get_model_details"
+
+    repo_method = getattr(client.repository, method_name)
+    try:
+        return repo_method(asset_id)
+    except Exception as error:
+        raise RuntimeError(
+            f"Failed to fetch asset details for asset_id={asset_id!r} "
+            f"using client.repository.{method_name}() "
+            f"(deployed_asset_type={deployed_asset_type!r}). "
+            f"Original error: {error}"
+        ) from error
+
+
+def _input_fields_from_env() -> list[dict[str, Any]] | None:
+    """Return input fields from AUTOAI_INPUT_FIELDS env var, or None if not set."""
+    raw = os.getenv("AUTOAI_INPUT_FIELDS", "").strip()
+    if not raw:
+        return None
+    try:
+        parsed = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise ValueError(
+            "AUTOAI_INPUT_FIELDS is set but is not valid JSON. "
+            "Expected a JSON array of field objects, e.g.: "
+            '[{"name":"age","type":"integer"},{"name":"city","type":"string"}]. '
+            f"Parse error: {exc}"
+        ) from exc
+    if not isinstance(parsed, list):
+        raise ValueError(
+            "AUTOAI_INPUT_FIELDS must be a JSON array of field objects, "
+            f"got {type(parsed).__name__}."
+        )
+    return parsed
+
+
 def _extract_input_fields(asset_details: dict[str, Any]) -> list[dict[str, Any]]:
     entity = asset_details.get("entity", {})
     schemas = entity.get("schemas") or entity.get("wml_model", {}).get("schemas")
-    if not schemas or "input" not in schemas or not schemas["input"]:
-        raise RuntimeError(
-            "Input schema not found in model metadata. Dump "
-            "asset_details to JSON, locate the input schema and adjust "
-            "_extract_input_fields()."
+    fields: list[dict[str, Any]] | None = None
+
+    if schemas and "input" in schemas and schemas["input"]:
+        first_input = schemas["input"][0]
+        if "fields" in first_input:
+            fields = first_input["fields"]
+
+    if fields is not None:
+        return fields
+
+    # Model metadata is missing the schema — try the env-var fallback.
+    env_fields = _input_fields_from_env()
+    if env_fields is not None:
+        logger.warning(
+            "Input schema not found in model metadata. "
+            "Using AUTOAI_INPUT_FIELDS from environment variables."
         )
-    first_input = schemas["input"][0]
-    if "fields" not in first_input:
-        raise RuntimeError(
-            "'fields' key missing from the first input schema entry. Dump "
-            "asset_details to JSON, locate the fields list and adjust "
-            "_extract_input_fields()."
-        )
-    return first_input["fields"]
+        return env_fields
+
+    raise RuntimeError(
+        "Input schema not found in model metadata and AUTOAI_INPUT_FIELDS is not set.\n"
+        "To fix this, set the following variable in your environment (or .env file) "
+        "and restart the server:\n\n"
+        '    AUTOAI_INPUT_FIELDS=\'[{"name":"field1","type":"string"}]\'\n\n'
+        "Replace the example with the actual input fields for your model."
+    )
 
 
 def _extract_label_column(asset_details: dict[str, Any]) -> str:
@@ -101,13 +192,26 @@ def _extract_label_column(asset_details: dict[str, Any]) -> str:
     label_column = entity.get("label_column") or entity.get("wml_model", {}).get(
         "label_column"
     )
-    if not label_column:
-        raise RuntimeError(
-            "label_column not found in model metadata. Dump "
-            "asset_details to JSON, locate the target column and adjust "
-            "_extract_label_column()."
+
+    if label_column:
+        return label_column
+
+    # Model metadata is missing label_column — try the env-var fallback.
+    env_label = os.getenv("AUTOAI_LABEL_COLUMN", "").strip()
+    if env_label:
+        logger.warning(
+            "label_column not found in model metadata. "
+            "Using AUTOAI_LABEL_COLUMN from environment variables."
         )
-    return label_column
+        return env_label
+
+    raise RuntimeError(
+        "label_column not found in model metadata and AUTOAI_LABEL_COLUMN is not set.\n"
+        "To fix this, set the following variable in your environment (or .env file) "
+        "and restart the server:\n\n"
+        "    AUTOAI_LABEL_COLUMN=your_target_column\n\n"
+        "Replace 'your_target_column' with the actual prediction target for your model."
+    )
 
 
 def get_input_fields() -> list[dict[str, Any]]:
@@ -159,13 +263,26 @@ def build_scoring_payload(input_model: BaseModel) -> dict[str, Any]:
     }
 
 
-def extract_prediction(response: dict[str, Any]) -> Any:
+def extract_prediction(
+    response: dict[str, Any], prediction_column: str | None = None
+) -> dict[str, Any]:
+    """Parse the deployment scoring response into a structured result.
+
+    Returns a dict with two keys:
+    - ``"prediction"``  – the scalar value of the target column (or the full
+                          values list when the column cannot be identified).
+    - ``"all_fields"``  – ordered dict mapping every response field name to
+                          its value so callers have the full row available.
+
+    Example response shape expected from watsonx.ai::
+
+        {'predictions': [{'fields': ['Gender', 'Status', ..., 'Prediction', 'Probability'],
+                          'values': [['Male', 'M', ..., 1, 0.9]]}]}
+    """
     try:
-        predictions = response["predictions"][0]
-        values = predictions["values"][0]
-        if len(values) == 1:
-            return values[0]
-        return values
+        prediction_block = response["predictions"][0]
+        fields: list[str] = prediction_block.get("fields", [])
+        values: list[Any] = prediction_block["values"][0]
     except (KeyError, IndexError, TypeError) as error:
         logger.debug("Unexpected deployment response: %s", response)
         predictions = (
@@ -179,3 +296,27 @@ def extract_prediction(response: dict[str, Any]) -> Any:
         raise RuntimeError(
             f"Unexpected response structure from deployment: {safe_summary}"
         ) from error
+
+    # Build a named mapping of every field returned by the model.
+    all_fields: dict[str, Any] = dict(zip(fields, values)) if fields else {}
+
+    # Identify the scalar prediction value.
+    # Priority: (1) field matching prediction_column, (2) field named
+    # "Prediction" / "prediction", (3) fall back to the raw values list.
+    predicted_value: Any
+    if prediction_column and prediction_column in all_fields:
+        predicted_value = all_fields[prediction_column]
+    else:
+        # Try common default names used by AutoAI responses.
+        for candidate in ("Prediction", "prediction"):
+            if candidate in all_fields:
+                predicted_value = all_fields[candidate]
+                break
+        else:
+            # Last resort: single value or full list.
+            predicted_value = values[0] if len(values) == 1 else values
+
+    return {
+        "prediction": predicted_value,
+        "all_fields": all_fields,
+    }

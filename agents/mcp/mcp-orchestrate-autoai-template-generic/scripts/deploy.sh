@@ -69,6 +69,9 @@ set +a
 if [ -n "${WATSONX_URL:-}" ] && [ -n "${WATSONX_API_KEY:-}" ] \
    && [ -n "${WATSONX_SPACE_ID:-}" ] && [ -n "${WATSONX_AUTOAI_DEPLOYMENT_ID:-}" ]; then
     echo "✓ Environment variables loaded"
+    if [ -z "${AUTOAI_INPUT_FIELDS:-}" ] || [ -z "${AUTOAI_LABEL_COLUMN:-}" ]; then
+        echo "  ℹ  AUTOAI_INPUT_FIELDS / AUTOAI_LABEL_COLUMN not set — will be read from model metadata."
+    fi
 else
     echo "❌ One or more required variables are missing from .env:"
     echo "   WATSONX_URL, WATSONX_API_KEY, WATSONX_SPACE_ID, WATSONX_AUTOAI_DEPLOYMENT_ID"
@@ -110,13 +113,19 @@ for env in draft live; do
     fi
     echo "  ✓ Connection configured for $env"
 
-    cred_output=$(orchestrate connections set-credentials \
-        -a autoai-prediction-connection \
-        --env "$env" \
-        -e "WATSONX_URL=$WATSONX_URL" \
-        -e "WATSONX_API_KEY=$WATSONX_API_KEY" \
-        -e "WATSONX_SPACE_ID=$WATSONX_SPACE_ID" \
-        -e "WATSONX_AUTOAI_DEPLOYMENT_ID=$WATSONX_AUTOAI_DEPLOYMENT_ID" 2>&1)
+    # Build credential flags; include optional fallback vars only when set.
+    cred_flags=(
+        -a autoai-prediction-connection
+        --env "$env"
+        -e "WATSONX_URL=$WATSONX_URL"
+        -e "WATSONX_API_KEY=$WATSONX_API_KEY"
+        -e "WATSONX_SPACE_ID=$WATSONX_SPACE_ID"
+        -e "WATSONX_AUTOAI_DEPLOYMENT_ID=$WATSONX_AUTOAI_DEPLOYMENT_ID"
+    )
+    [ -n "${AUTOAI_INPUT_FIELDS:-}" ] && cred_flags+=(-e "AUTOAI_INPUT_FIELDS=$AUTOAI_INPUT_FIELDS")
+    [ -n "${AUTOAI_LABEL_COLUMN:-}" ]  && cred_flags+=(-e "AUTOAI_LABEL_COLUMN=$AUTOAI_LABEL_COLUMN")
+
+    cred_output=$(orchestrate connections set-credentials "${cred_flags[@]}" 2>&1)
     cred_exit=$?
     if [ $cred_exit -ne 0 ]; then
         echo "  ❌ Failed to set credentials for $env:"
