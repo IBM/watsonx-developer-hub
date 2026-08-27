@@ -1,14 +1,14 @@
 #!/bin/bash
 set -uo pipefail
 
-# Deployment script for AutoAI orchestration resources.
+# Deployment script for watsonx.ai prediction orchestration resources.
 # Run from the template root directory: ./scripts/deploy.sh
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 cd "$ROOT_DIR" || exit 1
 
-echo "Starting deployment of AutoAI orchestration resources..."
+echo "Starting deployment of prediction orchestration resources..."
 echo "========================================================="
 
 # ── Pre-flight checks ────────────────────────────────────────────────────────
@@ -45,7 +45,7 @@ echo "✓ Orchestrate authentication OK"
 
 # ── Step 1: Generate template files ──────────────────────────────────────────
 echo ""
-echo "Step 1: Generating template files from AutoAI deployment..."
+echo "Step 1: Generating template files from deployment..."
 if python "$SCRIPT_DIR/generate_template.py"; then
     echo "✓ Template files generated successfully"
     echo "  - toolkit.yaml"
@@ -55,7 +55,7 @@ else
     echo "   Please ensure:"
     echo "   - Python dependencies from requirements-dev.txt are installed"
     echo "   - .env file contains valid watsonx.ai credentials"
-    echo "   - WATSONX_AUTOAI_DEPLOYMENT_ID is correct"
+    echo "   - WATSONX_DEPLOYMENT_ID is correct"
     exit 1
 fi
 
@@ -67,21 +67,21 @@ set -a
 source "$ROOT_DIR/.env"
 set +a
 if [ -n "${WATSONX_URL:-}" ] && [ -n "${WATSONX_API_KEY:-}" ] \
-   && [ -n "${WATSONX_SPACE_ID:-}" ] && [ -n "${WATSONX_AUTOAI_DEPLOYMENT_ID:-}" ]; then
+   && [ -n "${WATSONX_SPACE_ID:-}" ] && [ -n "${WATSONX_DEPLOYMENT_ID:-}" ]; then
     echo "✓ Environment variables loaded"
-    if [ -z "${AUTOAI_INPUT_FIELDS:-}" ] || [ -z "${AUTOAI_LABEL_COLUMN:-}" ]; then
-        echo "  ℹ  AUTOAI_INPUT_FIELDS / AUTOAI_LABEL_COLUMN not set — will be read from model metadata."
+    if [ -z "${DEPLOYMENT_INPUT_FIELDS:-}" ] || [ -z "${DEPLOYMENT_LABEL_COLUMN:-}" ]; then
+        echo "  ℹ  DEPLOYMENT_INPUT_FIELDS / DEPLOYMENT_LABEL_COLUMN not set — will be read from deployment metadata."
     fi
 else
     echo "❌ One or more required variables are missing from .env:"
-    echo "   WATSONX_URL, WATSONX_API_KEY, WATSONX_SPACE_ID, WATSONX_AUTOAI_DEPLOYMENT_ID"
+    echo "   WATSONX_URL, WATSONX_API_KEY, WATSONX_SPACE_ID, WATSONX_DEPLOYMENT_ID"
     exit 1
 fi
 
 # ── Step 3: Add connection ────────────────────────────────────────────────────
 echo ""
-echo "Step 3: Adding connection 'autoai-prediction-connection'..."
-add_output=$(orchestrate connections add -a autoai-prediction-connection 2>&1)
+echo "Step 3: Adding connection 'prediction-connection'..."
+add_output=$(orchestrate connections add -a prediction-connection 2>&1)
 add_exit=$?
 if [ $add_exit -eq 0 ]; then
     echo "✓ Connection added successfully"
@@ -101,7 +101,7 @@ for env in draft live; do
     echo "  [$env] Configuring..."
 
     cfg_output=$(orchestrate connections configure \
-        -a autoai-prediction-connection \
+        -a prediction-connection \
         --env "$env" \
         --type team \
         --kind key_value 2>&1)
@@ -115,15 +115,15 @@ for env in draft live; do
 
     # Build credential flags; include optional fallback vars only when set.
     cred_flags=(
-        -a autoai-prediction-connection
+        -a prediction-connection
         --env "$env"
         -e "WATSONX_URL=$WATSONX_URL"
         -e "WATSONX_API_KEY=$WATSONX_API_KEY"
         -e "WATSONX_SPACE_ID=$WATSONX_SPACE_ID"
-        -e "WATSONX_AUTOAI_DEPLOYMENT_ID=$WATSONX_AUTOAI_DEPLOYMENT_ID"
+        -e "WATSONX_DEPLOYMENT_ID=$WATSONX_DEPLOYMENT_ID"
     )
-    [ -n "${AUTOAI_INPUT_FIELDS:-}" ] && cred_flags+=(-e "AUTOAI_INPUT_FIELDS=$AUTOAI_INPUT_FIELDS")
-    [ -n "${AUTOAI_LABEL_COLUMN:-}" ]  && cred_flags+=(-e "AUTOAI_LABEL_COLUMN=$AUTOAI_LABEL_COLUMN")
+    [ -n "${DEPLOYMENT_INPUT_FIELDS:-}" ] && cred_flags+=(-e "DEPLOYMENT_INPUT_FIELDS=$DEPLOYMENT_INPUT_FIELDS")
+    [ -n "${DEPLOYMENT_LABEL_COLUMN:-}" ]  && cred_flags+=(-e "DEPLOYMENT_LABEL_COLUMN=$DEPLOYMENT_LABEL_COLUMN")
 
     cred_output=$(orchestrate connections set-credentials "${cred_flags[@]}" 2>&1)
     cred_exit=$?
@@ -143,7 +143,7 @@ if [ ! -f "$ROOT_DIR/toolkit.yaml" ]; then
     exit 1
 fi
 
-tk_output=$(orchestrate toolkits import -f "$ROOT_DIR/toolkit.yaml" -a autoai-prediction-connection 2>&1)
+tk_output=$(orchestrate toolkits import -f "$ROOT_DIR/toolkit.yaml" -a prediction-connection 2>&1)
 tk_exit=$?
 if [ $tk_exit -eq 0 ]; then
     echo "✓ Toolkit imported successfully"
@@ -177,8 +177,8 @@ fi
 
 # ── Step 7: Deploy agent ──────────────────────────────────────────────────────
 echo ""
-echo "Step 7: Deploying agent 'autoai_prediction_agent'..."
-dep_output=$(orchestrate agents deploy --name autoai_prediction_agent 2>&1)
+echo "Step 7: Deploying agent 'auto_prediction_agent'..."
+dep_output=$(orchestrate agents deploy --name "auto_prediction_agent" 2>&1)
 dep_exit=$?
 if [ $dep_exit -eq 0 ]; then
     echo "✓ Agent deployed successfully"
@@ -201,4 +201,7 @@ echo "  orchestrate toolkits list"
 echo "  orchestrate connections list"
 echo ""
 echo "To run a conversation with the agent:"
-echo "  orchestrate chat ask --agent-name autoai_prediction_agent --include-reasoning"
+echo "  orchestrate chat ask --agent-name auto_prediction_agent --include-reasoning"
+echo ""
+echo "Note: the agent name 'auto_prediction_agent' is set in agent.yaml and"
+echo "      can be changed by editing DEFAULT_AGENT_NAME in scripts/generate_template.py"

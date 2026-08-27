@@ -1,13 +1,13 @@
 #!/bin/bash
 set -uo pipefail
 
-# Cleanup script for AutoAI orchestration resources.
+# Cleanup script for watsonx.ai prediction orchestration resources.
 # Run from the template root directory: ./scripts/cleanup.sh
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 
-echo "Starting cleanup of AutoAI orchestration resources..."
+echo "Starting cleanup of prediction orchestration resources..."
 echo "=================================================="
 
 # ── Pre-flight checks ────────────────────────────────────────────────────────
@@ -43,8 +43,8 @@ _is_not_found() {
 
 # ── Step 1: Undeploy agent ───────────────────────────────────────────────────
 echo ""
-echo "Step 1: Undeploying agent 'autoai_prediction_agent'..."
-undep_output=$(orchestrate agents undeploy --name autoai_prediction_agent 2>&1)
+echo "Step 1: Undeploying agent 'auto_prediction_agent'..."
+undep_output=$(orchestrate agents undeploy --name auto_prediction_agent 2>&1)
 undep_exit=$?
 if _is_not_found "$undep_output"; then
     echo "  ℹ️  Agent not deployed — skipping"
@@ -58,8 +58,8 @@ fi
 
 # ── Step 2: Remove agent ─────────────────────────────────────────────────────
 echo ""
-echo "Step 2: Removing agent 'autoai_prediction_agent'..."
-rem_ag_output=$(orchestrate agents remove --name autoai_prediction_agent --kind native 2>&1)
+echo "Step 2: Removing agent 'auto_prediction_agent'..."
+rem_ag_output=$(orchestrate agents remove --name auto_prediction_agent --kind native 2>&1)
 rem_ag_exit=$?
 if _is_not_found "$rem_ag_output"; then
     echo "  ℹ️  Agent not found — skipping"
@@ -73,8 +73,8 @@ fi
 
 # ── Step 3: Remove toolkit ───────────────────────────────────────────────────
 echo ""
-echo "Step 3: Removing toolkit 'autoai-generic-toolkit'..."
-rem_tk_output=$(orchestrate toolkits remove --name autoai-generic-toolkit 2>&1)
+echo "Step 3: Removing toolkit 'auto-prediction-generic-toolkit'..."
+rem_tk_output=$(orchestrate toolkits remove --name auto-prediction-generic-toolkit 2>&1)
 rem_tk_exit=$?
 if _is_not_found "$rem_tk_output"; then
     echo "  ℹ️  Toolkit not found — skipping"
@@ -88,8 +88,8 @@ fi
 
 # ── Step 4: Remove connection ────────────────────────────────────────────────
 echo ""
-echo "Step 4: Removing connection 'autoai-prediction-connection'..."
-rem_con_output=$(orchestrate connections remove --app-id autoai-prediction-connection 2>&1)
+echo "Step 4: Removing connection 'prediction-connection'..."
+rem_con_output=$(orchestrate connections remove --app-id prediction-connection 2>&1)
 rem_con_exit=$?
 if _is_not_found "$rem_con_output"; then
     echo "  ℹ️  Connection not found — skipping"

@@ -14,8 +14,8 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-SERVER_NAME = "autoai-generic-toolkit"
-TOOL_NAME = "get_autoai_prediction"
+SERVER_NAME = "auto-prediction-generic-toolkit"
+TOOL_NAME = "get_auto_prediction"
 
 
 def require_env(name: str) -> str:
@@ -36,8 +36,8 @@ def prepare_api_client() -> APIClient:
     )
 
 
-def get_autoai_deployment_id() -> str:
-    return require_env("WATSONX_AUTOAI_DEPLOYMENT_ID")
+def get_deployment_id() -> str:
+    return require_env("WATSONX_DEPLOYMENT_ID")
 
 
 def get_server_name() -> str:
@@ -61,7 +61,7 @@ def _fetch_deployment_schema() -> tuple[list[dict[str, Any]], str]:
       - "ai_service" → client.repository.get_ai_service_details()
     """
     client = prepare_api_client()
-    deployment_id = get_autoai_deployment_id()
+    deployment_id = get_deployment_id()
 
     deployment_details = client.deployments.get_details(deployment_id)
     asset_id = _get_model_asset_id(deployment_details)
@@ -135,22 +135,22 @@ def _fetch_asset_details(
 
 
 def _input_fields_from_env() -> list[dict[str, Any]] | None:
-    """Return input fields from AUTOAI_INPUT_FIELDS env var, or None if not set."""
-    raw = os.getenv("AUTOAI_INPUT_FIELDS", "").strip()
+    """Return input fields from DEPLOYMENT_INPUT_FIELDS env var, or None if not set."""
+    raw = os.getenv("DEPLOYMENT_INPUT_FIELDS", "").strip()
     if not raw:
         return None
     try:
         parsed = json.loads(raw)
     except json.JSONDecodeError as exc:
         raise ValueError(
-            "AUTOAI_INPUT_FIELDS is set but is not valid JSON. "
+            "DEPLOYMENT_INPUT_FIELDS is set but is not valid JSON. "
             "Expected a JSON array of field objects, e.g.: "
             '[{"name":"age","type":"integer"},{"name":"city","type":"string"}]. '
             f"Parse error: {exc}"
         ) from exc
     if not isinstance(parsed, list):
         raise ValueError(
-            "AUTOAI_INPUT_FIELDS must be a JSON array of field objects, "
+            "DEPLOYMENT_INPUT_FIELDS must be a JSON array of field objects, "
             f"got {type(parsed).__name__}."
         )
     return parsed
@@ -169,21 +169,21 @@ def _extract_input_fields(asset_details: dict[str, Any]) -> list[dict[str, Any]]
     if fields is not None:
         return fields
 
-    # Model metadata is missing the schema — try the env-var fallback.
+    # Asset metadata is missing the schema — try the env-var fallback.
     env_fields = _input_fields_from_env()
     if env_fields is not None:
         logger.warning(
-            "Input schema not found in model metadata. "
-            "Using AUTOAI_INPUT_FIELDS from environment variables."
+            "Input schema not found in asset metadata. "
+            "Using DEPLOYMENT_INPUT_FIELDS from environment variables."
         )
         return env_fields
 
     raise RuntimeError(
-        "Input schema not found in model metadata and AUTOAI_INPUT_FIELDS is not set.\n"
+        "Input schema not found in asset metadata and DEPLOYMENT_INPUT_FIELDS is not set.\n"
         "To fix this, set the following variable in your environment (or .env file) "
         "and restart the server:\n\n"
-        '    AUTOAI_INPUT_FIELDS=\'[{"name":"field1","type":"string"}]\'\n\n'
-        "Replace the example with the actual input fields for your model."
+        '    DEPLOYMENT_INPUT_FIELDS=\'[{"name":"field1","type":"string"}]\'\n\n'
+        "Replace the example with the actual input fields for your deployment."
     )
 
 
@@ -196,21 +196,21 @@ def _extract_label_column(asset_details: dict[str, Any]) -> str:
     if label_column:
         return label_column
 
-    # Model metadata is missing label_column — try the env-var fallback.
-    env_label = os.getenv("AUTOAI_LABEL_COLUMN", "").strip()
+    # Asset metadata is missing label_column — try the env-var fallback.
+    env_label = os.getenv("DEPLOYMENT_LABEL_COLUMN", "").strip()
     if env_label:
         logger.warning(
-            "label_column not found in model metadata. "
-            "Using AUTOAI_LABEL_COLUMN from environment variables."
+            "label_column not found in asset metadata. "
+            "Using DEPLOYMENT_LABEL_COLUMN from environment variables."
         )
         return env_label
 
     raise RuntimeError(
-        "label_column not found in model metadata and AUTOAI_LABEL_COLUMN is not set.\n"
+        "label_column not found in asset metadata and DEPLOYMENT_LABEL_COLUMN is not set.\n"
         "To fix this, set the following variable in your environment (or .env file) "
         "and restart the server:\n\n"
-        "    AUTOAI_LABEL_COLUMN=your_target_column\n\n"
-        "Replace 'your_target_column' with the actual prediction target for your model."
+        "    DEPLOYMENT_LABEL_COLUMN=your_target_column\n\n"
+        "Replace 'your_target_column' with the actual prediction target for your deployment."
     )
 
 
@@ -246,7 +246,7 @@ def create_input_model() -> type[BaseModel]:
             Field(..., description=description),
         )
 
-    return create_model("AutoAIInput", **model_fields)
+    return create_model("DeploymentInput", **model_fields)
 
 
 def build_scoring_payload(input_model: BaseModel) -> dict[str, Any]:
@@ -307,7 +307,7 @@ def extract_prediction(
     if prediction_column and prediction_column in all_fields:
         predicted_value = all_fields[prediction_column]
     else:
-        # Try common default names used by AutoAI responses.
+        # Try common default names used by watsonx.ai scoring responses.
         for candidate in ("Prediction", "prediction"):
             if candidate in all_fields:
                 predicted_value = all_fields[candidate]
