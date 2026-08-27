@@ -173,10 +173,24 @@ def get_input_fields(asset_details: dict[str, Any]) -> list[dict[str, Any]]:
         return env_fields
 
     raise RuntimeError(
-        "Input schema not found in asset metadata and DEPLOYMENT_INPUT_FIELDS is not set.\n"
-        "To fix this, add the following variable to your .env file and re-run:\n\n"
-        '    DEPLOYMENT_INPUT_FIELDS=\'[{"name":"field1","type":"string"}]\'\n\n'
-        "Replace the example with the actual input fields for your deployment."
+        "Could not determine input fields for this deployment.\n"
+        "\n"
+        "The asset metadata does not contain an input schema (entity.schemas.input\n"
+        "or entity.wml_model.schemas.input is absent or empty), and the\n"
+        "DEPLOYMENT_INPUT_FIELDS environment variable is not set.\n"
+        "\n"
+        "To fix this, add the following line to your .env file and re-run:\n"
+        "\n"
+        '    DEPLOYMENT_INPUT_FIELDS=\'[{"name":"field1","type":"string"}]\'\n'
+        "\n"
+        'Each object must have at least a "name" key. Supported types are:\n'
+        '  "string", "integer", "double", "float", "boolean"\n'
+        "\n"
+        "Example with multiple fields:\n"
+        '    DEPLOYMENT_INPUT_FIELDS=\'[{"name":"age","type":"integer"},{"name":"city","type":"string"},{"name":"score","type":"double"}]\'\n'
+        "\n"
+        "You can find the expected fields in your watsonx.ai deployment's\n"
+        "Input data schema section, or in the training data used for the model."
     )
 
 
@@ -199,10 +213,22 @@ def get_label_column(asset_details: dict[str, Any]) -> str:
         return env_label
 
     raise RuntimeError(
-        "label_column not found in asset metadata and DEPLOYMENT_LABEL_COLUMN is not set.\n"
-        "To fix this, add the following variable to your .env file and re-run:\n\n"
-        "    DEPLOYMENT_LABEL_COLUMN=your_target_column\n\n"
-        "Replace 'your_target_column' with the actual prediction target for your deployment."
+        "Could not determine the prediction target (label column) for this deployment.\n"
+        "\n"
+        "The asset metadata does not contain a label_column field\n"
+        "(entity.label_column and entity.wml_model.label_column are both absent),\n"
+        "and the DEPLOYMENT_LABEL_COLUMN environment variable is not set.\n"
+        "\n"
+        "To fix this, add the following line to your .env file and re-run:\n"
+        "\n"
+        "    DEPLOYMENT_LABEL_COLUMN=your_target_column\n"
+        "\n"
+        "Replace 'your_target_column' with the name of the column your model predicts.\n"
+        "For example, if your model predicts whether a customer will churn:\n"
+        "    DEPLOYMENT_LABEL_COLUMN=churn\n"
+        "\n"
+        "You can find this value in your watsonx.ai deployment details or\n"
+        "in the training data used to build the model."
     )
 
 

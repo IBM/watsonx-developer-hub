@@ -51,11 +51,7 @@ if python "$SCRIPT_DIR/generate_template.py"; then
     echo "  - toolkit.yaml"
     echo "  - agent.yaml"
 else
-    echo "❌ Failed to generate template files"
-    echo "   Please ensure:"
-    echo "   - Python dependencies from requirements-dev.txt are installed"
-    echo "   - .env file contains valid watsonx.ai credentials"
-    echo "   - WATSONX_DEPLOYMENT_ID is correct"
+    echo "❌ Failed to generate template files — see the error above for details."
     exit 1
 fi
 
