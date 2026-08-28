@@ -88,19 +88,26 @@ class TestMCPAutoAITemplate:
                 )
 
 
-class TestOrchestrateMCPAutoAITemplate:
-    """End-to-end tests for the MCP Orchestrate AutoAI template."""
+class OrchestrateTemplateTestBase:
+    """Shared helpers for MCP Orchestrate template end-to-end tests.
 
-    AGENT_NAME = "autoai_prediction_agent"
-    TEMPLATE_NAME = "mcp/mcp-orchestrate-autoai-template-generic"
+    Subclasses must define:
+        AGENT_NAME   – name of the deployed Orchestrate agent
+        TEMPLATE_NAME – path under agents/ used by clone_agent_template
+        TOOL_NAME    – MCP tool name asserted in chat output
+        DEPLOYMENT_ENV_KEY – .env key that receives credit_risk_deployment_id
+    """
 
-    # Greeting-only prompts — the AutoAI tool must NOT be invoked.
+    AGENT_NAME: str
+    TEMPLATE_NAME: str
+    TOOL_NAME: str
+    DEPLOYMENT_ENV_KEY: str
+
     CHAT_PROMPTS_GREETING_ONLY = [
         "hello",
         "q",
     ]
 
-    # Single prediction request — the AutoAI tool MUST be invoked.
     CHAT_PROMPTS_SINGLE_PREDICTION = [
         "CheckingStatus=0_to_200, LoanDuration=31, CreditHistory=credits_paid_to_date, LoanPurpose=other, LoanAmount=1889, ExistingSavings=100_to_500, EmploymentDuration=less_1, InstallmentPercent=3, Sex=female, OthersOnLoan=none, CurrentResidenceDuration=3, OwnsProperty=savings_insurance, Age=32, InstallmentPlans=none, Housing=own, ExistingCreditsCount=1, Job=skilled, Dependents=1, Telephone=none, ForeignWorker=yes",
         "q",
@@ -147,9 +154,7 @@ class TestOrchestrateMCPAutoAITemplate:
         run_cli(venv_path, ["install", "-r", "requirements-dev.txt"], "pip")
 
     def _create_env_file(self, credit_risk_deployment_id: str) -> None:
-        env_vars = get_env_vars(
-            {"WATSONX_AUTOAI_DEPLOYMENT_ID": credit_risk_deployment_id}
-        )
+        env_vars = get_env_vars({self.DEPLOYMENT_ENV_KEY: credit_risk_deployment_id})
         create_env_file(env_vars)
 
     def _register_orchestrate_env(self, venv_path: Path, env_name: str) -> None:
@@ -207,7 +212,7 @@ class TestOrchestrateMCPAutoAITemplate:
     # Test
     # ---------------------------------------------------------------------------
 
-    def test_mcp_orchestrate_autoai_template_generic(
+    def _run_e2e_test(
         self,
         test_venv_path: Path,
         tmp_dir: str,
@@ -226,10 +231,50 @@ class TestOrchestrateMCPAutoAITemplate:
             self._deploy(test_venv_path)
 
             result = self._chat(test_venv_path, self.CHAT_PROMPTS_GREETING_ONLY)
-            self._assert_tool_not_used(result, "get_autoai_prediction")
+            self._assert_tool_not_used(result, self.TOOL_NAME)
 
             result = self._chat(test_venv_path, self.CHAT_PROMPTS_SINGLE_PREDICTION)
-            self._assert_tool_used(result, "get_autoai_prediction")
+            self._assert_tool_used(result, self.TOOL_NAME)
         finally:
             self._run_cleanup(test_venv_path)
             self._remove_orchestrate_env(test_venv_path, env_name)
+
+
+class TestOrchestrateMCPAutoAITemplate(OrchestrateTemplateTestBase):
+    """End-to-end tests for the MCP Orchestrate AutoAI template."""
+
+    AGENT_NAME = "autoai_prediction_agent"
+    TEMPLATE_NAME = "mcp/mcp-orchestrate-autoai-template-generic"
+    TOOL_NAME = "get_autoai_prediction"
+    DEPLOYMENT_ENV_KEY = "WATSONX_AUTOAI_DEPLOYMENT_ID"
+
+    def test_mcp_orchestrate_autoai_template_generic(
+        self,
+        test_venv_path: Path,
+        tmp_dir: str,
+        credit_risk_deployment_id: str,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        self._run_e2e_test(
+            test_venv_path, tmp_dir, credit_risk_deployment_id, monkeypatch
+        )
+
+
+class TestOrchestrateMCPAutoPredictionTemplate(OrchestrateTemplateTestBase):
+    """End-to-end tests for the MCP Orchestrate Auto Prediction template."""
+
+    AGENT_NAME = "auto_prediction_agent"
+    TEMPLATE_NAME = "mcp/mcp-orchestrate-auto-prediction-template"
+    TOOL_NAME = "get_auto_prediction"
+    DEPLOYMENT_ENV_KEY = "WATSONX_DEPLOYMENT_ID"
+
+    def test_mcp_orchestrate_auto_prediction_template(
+        self,
+        test_venv_path: Path,
+        tmp_dir: str,
+        credit_risk_deployment_id: str,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        self._run_e2e_test(
+            test_venv_path, tmp_dir, credit_risk_deployment_id, monkeypatch
+        )
