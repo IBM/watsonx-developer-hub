@@ -52,7 +52,7 @@ The MCP server fetches the model's input schema and target column **dynamically 
 
 | Requirement                          | Notes                                                                                                      |
 | ------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
-| **Python 3.10+**                     | Required for both the generator and the MCP server runtime.                                                |
+| **Python 3.11+**                     | Required for both the generator and the MCP server runtime.                                                |
 | **IBM watsonx.ai access**            | Active IBM Cloud account with watsonx.ai service provisioned.                                              |
 | **A deployed model or service**      | Any model, function, or AI service deployed to a watsonx.ai online endpoint.                               |
 | **Deployment ID**                    | The `deployment_id` of your deployed asset (visible in the watsonx.ai UI).                                 |
