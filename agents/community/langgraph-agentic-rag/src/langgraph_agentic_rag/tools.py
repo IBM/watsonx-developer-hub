@@ -1,6 +1,8 @@
-from typing import Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
-from langchain_core.tools import tool
+from ibm_watsonx_ai.foundation_models import Embeddings
+from ibm_watsonx_ai.foundation_models.extensions.rag import VectorStore
+from langchain_core.tools import BaseTool, tool
 
 if TYPE_CHECKING:
     from ibm_watsonx_ai import APIClient
@@ -8,14 +10,18 @@ if TYPE_CHECKING:
 
 def retriever_tool_watsonx(
     api_client: "APIClient",
-    tool_config: dict,
-) -> Callable:
-    from langchain_ibm.agent_toolkits.utility import WatsonxToolkit
+    embedding_model_id: str,
+    vector_store_connection_id: str,
+    vector_store_index_name: str,
+) -> BaseTool:
+    embeddings = Embeddings(model_id=embedding_model_id, api_client=api_client)
 
-    toolkit = WatsonxToolkit(watsonx_client=api_client)
-
-    rag_tool = toolkit.get_tool("RAGQuery")
-    rag_tool.set_tool_config(tool_config)
+    vector_store = VectorStore(
+        api_client=api_client,
+        connection_id=vector_store_connection_id,
+        embeddings=embeddings,
+        index_name=vector_store_index_name,
+    )
 
     @tool("retriever", parse_docstring=True)
     def retriever_tool(query: str) -> str:
@@ -28,6 +34,6 @@ def retriever_tool_watsonx(
         Returns:
             Retrieved chunk.
         """
-        return rag_tool.invoke({"input": query})["output"]
+        return vector_store.search(query, 1)[0].page_content
 
     return retriever_tool

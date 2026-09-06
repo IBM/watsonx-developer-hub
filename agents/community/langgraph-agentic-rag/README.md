@@ -1,4 +1,4 @@
-# The Agentic RAG LangGraph template with watsonx Utility Agent Tool  
+# The Agentic RAG LangGraph template
 
 Table of contents:  
 - [Introduction](#introduction)  
@@ -15,17 +15,19 @@ Table of contents:
 ## Introduction  
 
 This repository provides an Agentic RAG template for LLM apps built using LangGraph framework. It also makes it easy to deploy them as an AI service as part of IBM watsonx.ai for IBM Cloud[^1].  
-An AI service is a deployable unit of code that captures the logic of your generative AI use case. For and in-depth description of the topic please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).  
+An AI service is a deployable unit of code that captures the logic of your generative AI use case. For and in-depth description of the topic please refer to the [IBM watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/ai-services-templates.html?context=wx&audience=wdp).
 
-
-The template builds an application with IBM watsonx Utility Agent Tool for addressing RAG use case. The structure of RAG graph is as follows
+The template builds an Agentic RAG application using a vector store integration for addressing the RAG use case. The structure of the RAG graph is as follows:
 
 ![alt text](agentic_rag.png "LangGraph Agentic RAG")
 
 > [!NOTE]
-> The template uses predefined `Vector Index Asset` as a source of base knowledge for RAG. For more details about `Vector Index Asset` see [documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-prompt-data-index-create.html?context=wx&audience=wdp) . 
-> 
-> To run following Agentic RAG app you should set `tool_config_spaceId`/`tool_config_projectId` and `tool_config_vectorIndexId` in section `deployment.online.parameters` in `config.toml`. Moreover, to help the Agent correctly choose whether to use the retriever tool or not, a description of the underlying knowledge contained in the Vector Index Asset can also be provided in field `base_knowledge_description`.
+> The template uses a vector store as the source of base knowledge for RAG. To run the Agentic RAG app you must configure the following fields in the `deployment.online.parameters` section of `config.toml`:
+> - `embedding_model_id` — the ID of the embedding model used to encode queries and documents,
+> - `vector_store_connection_id` — the ID of the watsonx connection to the vector store,
+> - `vector_store_index_name` — the name of the index within the vector store to search against.
+>
+> Optionally, a description of the underlying knowledge contained in the vector store can be provided in the `base_knowledge_description` field to help the agent decide when to invoke the retriever tool.
 
 
 [^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
