@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "langgraph_agentic_rag"
-version = "0.1.1"
+version = "0.2.0"
 description = "A template for an Agentic RAG LangGraph app deployable on IBM Cloud as an ai_service. This particular example focuses on a WatsonX chatbot enhanced with watsonx Utility Agent Tool 'RAGQuery'."
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
@@ -12,10 +12,10 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.14"
-langchain-ibm = "^0.3.20"
 ibm-watsonx-ai = "^1.5.0"
-langgraph = "^0.6.11"
-langchain = "^0.3.27"
+langgraph = "^1.2.11"
+langchain-ibm = "^1.1.0"
+langchain = "^1.4.0"
 
 [tool.poetry.group.dev]
 optional = true

@@ -35,5 +35,5 @@ class TestTools:
 
         monkeypatch.setattr(httpx, "get", mock_get)
 
-        result = get_arxiv_contents(url)
+        result = get_arxiv_contents.invoke(url)
         assert result == expected_output

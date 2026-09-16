@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "langgraph-tavily-tool"
-version = "0.1.1"
+version = "0.2.0"
 description = "A LangGraph-based template for building and deploying LLM applications as AI services on IBM Cloud. This example demonstrates secure integration with tavily tool via function calling, using credentials managed through IBM Secrets Manager."
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
@@ -11,10 +11,10 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.14"
-langchain-ibm = "^0.3.8"
+langgraph = "^1.2.11"
+langchain-ibm = "^1.1.0"
 langchain-tavily = "^0.2.17"
 ibm-watsonx-ai = "^1.5.1"
-langgraph = "^0.6.11"
 ibm_secrets_manager_sdk = "^2.1.13"
 
 [tool.poetry.group.dev]
