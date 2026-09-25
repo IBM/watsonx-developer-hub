@@ -11,17 +11,17 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.14"
-langchain-ibm = "^0.3.20"
+langchain-ibm = "^1.1.1"
 ibm-watsonx-ai = "^1.5.0"
-langgraph = "^0.6.11"
-langchain = "^0.3.27"
+langgraph = "^1.2.12"
+langchain = "^1.4.2"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-ibm-watsonx-ai-cli = ">=0.4.1"
-pytest = "^8.3.3"
+ibm-watsonx-ai-cli = ">=0.6.0"
+pytest = "^9.1.1"
 
 
 [build-system]
