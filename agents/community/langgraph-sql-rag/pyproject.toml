@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "langgraph_sql_rag"
-version = "0.2.0"
+version = "0.1.0"
 description = "A template for an Agentic SQL RAG LangGraph app deployable on IBM Cloud as an ai_service. This particular example focuses on a WatsonX chatbot enhanced with watsonx SQL DB Utility Tools."
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
@@ -11,10 +11,10 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.14"
-langchain-ibm = "^1.1.1"
+langchain-ibm = "^0.3.20"
 ibm-watsonx-ai = "^1.5.0"
-langgraph = "^1.2.12"
-langchain = "^1.4.2"
+langgraph = "^0.6.11"
+langchain = "^0.3.27"
 
 [tool.poetry.group.dev]
 optional = true
