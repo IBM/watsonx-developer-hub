@@ -24,7 +24,7 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 ibm-watsonx-ai-cli = ">=0.4.0"
-pytest = "^8.3.3"
+pytest = "^9.1.1"
 
 [build-system]
 requires = ["poetry-core"]
