@@ -1,17 +1,18 @@
+import json
 import logging
+from collections.abc import Generator
 from pathlib import Path
+from subprocess import CompletedProcess
 
 import pytest
-
 from utils import (
     AGENTS_PATH,
     clone_agent_template,
     create_env_file,
     get_env_vars,
-    use_cli,
     run_cli,
+    use_cli,
 )
-
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +37,8 @@ class TestAgents:
     USER_MESSAGE_CONTENT = (
         "Use one of your available tools with any example input. Tool's output: "
     )
+
+    SCORE_THRESHOLD = 0.35
 
     @staticmethod
     def _get_agent_names(dir_name: str) -> list[str]:
@@ -89,6 +92,53 @@ class TestAgents:
     def _run_template_unit_tests(self, venv_path: Path) -> None:
         run_cli(venv_path, ["tests"], exec_name="pytest", allowed_exit_codes={0, 5})
 
+    def _get_eval_results(
+        self, completed_process: CompletedProcess[bytes]
+    ) -> Generator[dict]:
+        decoder = json.JSONDecoder()
+        stdout = completed_process.stdout.decode()
+        index = 0
+
+        while index < len(stdout):
+            # skip whitespace and non-JSON characters
+            if stdout[index] != "{":
+                index += 1
+                continue
+            try:
+                metric, end = decoder.raw_decode(stdout, index)
+                yield metric
+                index = end
+            except json.JSONDecodeError:
+                index += 1
+                continue
+
+    def _run_template_eval(self, venv_path: Path) -> None:
+        jsonl_files = sorted(Path.cwd().glob("benchmarking_data/*.jsonl"))
+        if not jsonl_files:
+            logger.info("No benchmarking data found, skipping template eval")
+            return
+
+        tests_arg = ",".join(str(f) for f in jsonl_files)
+        result = run_cli(venv_path, ["template", "eval", "--tests", tests_arg])
+
+        for i, metric in enumerate(self._get_eval_results(result)):
+            # only check metrics with a lower_limit threshold
+            lower_limits = (
+                t["value"]
+                for t in metric.get("thresholds", [])
+                if t["type"] == "lower_limit"
+            )
+
+            if (payload_threshold := next(lower_limits, None)) is None:
+                continue
+
+            threshold = min(payload_threshold, self.SCORE_THRESHOLD)
+            name, mean = metric["name"], metric["mean"]
+
+            assert mean >= threshold, (
+                f"Quality gate failed for metric '{name}' (index {i}): {mean:.3f} < {threshold}"
+            )
+
     def _run_template_invoke(self, venv_path: Path) -> None:
         run_cli(
             venv_path,
@@ -141,6 +191,7 @@ class TestAgents:
 
         self._run_template_invoke(venv_path)
         self._run_template_unit_tests(venv_path)
+        self._run_template_eval(venv_path)
 
     def _service_tests(self, venv_path: Path) -> None:
         deployment_id = self._run_service_new(venv_path)
