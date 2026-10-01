@@ -17,13 +17,14 @@ from utils import (
 logger = logging.getLogger(__name__)
 
 
-class TestAgents:
-    SKIPPED_TESTS = {
-        "base/crewai-websearch-agent": "CrewAI is not compatible with genai-A25-py3.12 software specification",
-        "community/langgraph-graph-rag": "Neo4j credentials required to run the AI service in the Cloud",
-        "community/langgraph-tavily-tool": "Tavily credentials required to run the AI service in the Cloud",
-    }
+SKIPPED_TESTS = {
+    "base/crewai-websearch-agent": "CrewAI is not compatible with genai-A25-py3.12 software specification",
+    "community/langgraph-graph-rag": "Neo4j credentials required to run the AI service in the Cloud",
+    "community/langgraph-tavily-tool": "Tavily credentials required to run the AI service in the Cloud",
+}
 
+
+class TestAgents:
     CONFIG_TOML_REPLACEMENTS = {
         'url = "{}"': ("WATSONX_URL", "env"),
         'postgres_db_connection_id = "{}"': ("psql_connection_id", "fixture"),
@@ -43,13 +44,26 @@ class TestAgents:
     @staticmethod
     def _get_agent_names(dir_name: str) -> list[str]:
         agents_path = AGENTS_PATH / dir_name
+        agent_names = []
 
-        return [
-            f"{dir_name}/{item.name}"
-            for item in agents_path.iterdir()
-            if item.is_dir()
-            and "mcp" not in item.name  # MCP templates tested in separate class
-        ]
+        for item in agents_path.iterdir():
+            if (
+                not item.is_dir() or "mcp" in item.name
+            ):  # MCP templates tested in separate class
+                continue
+
+            name = f"{dir_name}/{item.name}"
+
+            if name in SKIPPED_TESTS:
+                agent_names.append(
+                    pytest.param(
+                        name, marks=pytest.mark.skip(reason=SKIPPED_TESTS[name])
+                    )
+                )
+            else:
+                agent_names.append(name)
+
+        return agent_names
 
     def _create_config_toml_file(
         self, env_vars: dict[str, str], request: pytest.FixtureRequest
@@ -174,9 +188,6 @@ class TestAgents:
         monkeypatch: pytest.MonkeyPatch,
         request: pytest.FixtureRequest,
     ) -> None:
-        if agent_name in self.SKIPPED_TESTS:
-            pytest.skip(self.SKIPPED_TESTS[agent_name])
-
         clone_agent_template(venv_path, tmp_dir, agent_name, monkeypatch)
 
         env_vars = get_env_vars()
