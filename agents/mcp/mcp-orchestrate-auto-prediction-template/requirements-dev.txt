@@ -1,0 +1,8 @@
+# Dependencies needed ONLY locally: for generating configs
+# (scripts/generate_template.py) and for the `orchestrate` CLI.
+# This file is never packaged into the MCP server (package_root=./mcp_server).
+
+ibm-watsonx-ai
+python-dotenv
+pyyaml
+ibm-watsonx-orchestrate

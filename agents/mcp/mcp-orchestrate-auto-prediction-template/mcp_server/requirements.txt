@@ -1,0 +1,8 @@
+# Runtime dependencies of the MCP server.
+# This file MUST reside inside package_root (./mcp_server), because only that
+# folder is packaged during `orchestrate toolkits import`.
+
+mcp>=1.1.0,<2.0.0
+ibm-watsonx-ai<2.0.0
+pydantic<3.0.0
+python-dotenv<2.0.0
