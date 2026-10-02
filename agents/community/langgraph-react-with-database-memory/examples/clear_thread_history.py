@@ -11,7 +11,7 @@ online_parameters = dep_config["online"]["parameters"]
 
 
 hostname = urllib.parse.urlparse(dep_config["watsonx_url"]).hostname or ""
-is_cloud_url = hostname.lower().endswith("cloud.ibm.com")
+is_cloud_url = hostname.lower().endswith(".cloud.ibm.com")
 instance_id = None if is_cloud_url else "openshift"
 
 url = dep_config["watsonx_url"]

@@ -25,7 +25,7 @@ def deployable_ai_service(context, url=None, model_id=None):
     ).start()  # We run a persistent loop in a separate daemon thread
 
     hostname = urllib.parse.urlparse(url).hostname or ""
-    is_cloud_url = hostname.lower().endswith("cloud.ibm.com")
+    is_cloud_url = hostname.lower().endswith(".cloud.ibm.com")
     instance_id = None if is_cloud_url else "openshift"
 
     def get_formatted_message(resp: ChatMessage) -> dict | None:
