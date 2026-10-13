@@ -1,0 +1,5 @@
+mcp
+python-dotenv
+ibm-watsonx-ai
+pydantic
+pyyaml
