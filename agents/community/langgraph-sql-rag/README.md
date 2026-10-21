@@ -27,6 +27,9 @@ The template builds an application with IBM DB2 (on Cloud) and `WatsonxSQLDataba
 > To run following Agentic SQL RAG app you should set `tool_config_connection_id`, `tool_config_model_id`, `tool_config_dialect` and `tool_config_schema` in section `deployment.online.parameters` in `config.toml`.
 > Moreover, to help the Agent correctly choose whether to use the SQL retriever tool or not, a description of the underlying knowledge can also be provided in field `base_knowledge_description`.
 
+> [!IMPORTANT]
+> The agent must not modify the database. As defense in depth, every query passed to the SQL tools is validated in `tools.py` (only a single `SELECT`/`WITH`/`VALUES` statement is accepted; DML/DDL keywords are rejected). This is a best-effort keyword check and **not** a security boundary. Always use a connection whose database user has **read-only privileges** to avoid issues with possible prompt injection.
+
 
 [^1]: _IBM watsonx.ai for IBM Cloud_ is a full and proper name of the component we're using in this template and only a part of the whole suite of products offered in the SaaS model within IBM Cloud environment. Throughout this README, for the sake of simplicity, we'll be calling it just an **IBM Cloud**.  
 
