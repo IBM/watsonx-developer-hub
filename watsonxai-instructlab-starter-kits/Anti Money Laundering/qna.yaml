@@ -1,0 +1,336 @@
+created_by: parsa-i
+version: 3
+domain: laws and regulations
+seed_examples:
+  - context: >
+      ## Overview
+
+      This guidance came into effect on June 1, 2021.
+
+
+      This guidance explains the methods that can be used by reporting entities
+      (REs) to verify the identity of a person or an entity.
+
+
+      ## 1. Meaning of verifying the identity of a person or an entity
+
+      It means to use the methods described in this guidance to ensure that the
+      information in an identification document or from other informational
+      sources matches the information that the person or entity provided.
+
+
+      Verifying identity is a foundational element of Canada's anti-money
+      laundering and anti-terrorist financing regime and a key component of an
+      RE's relationship with clients. It helps you to know your clients and to
+      understand and assess any risk that may be associated to their
+      transactions or activities.
+
+
+      ## 2. How to verify the identity of a person
+
+      You can use any of the 5 methods described below to identify a person:
+
+      - 2.1 Government-issued photo identification method
+
+      - 2.2 Credit file method
+
+      - 2.3 Dual-process method
+
+      - 2.4 Affiliate or member method
+
+      - 2.5 Reliance method
+    questions_and_answers:
+      - question: |
+          In Canada, what are the methods for verifying someone's identity?
+        answer: >
+          You can use any of these 5 methods described below to identify a
+          person:
+
+          - Government-issued photo identification method
+
+          - Credit file method
+
+          - Dual-process method
+
+          - Affiliate or member method
+
+          - Reliance method
+      - question: |
+          In Canada, why is it important to confirm a client's identity?
+        answer: >
+          It's important to confirm a client's identity to comply with
+          anti-money laundering and anti-terrorist financing regulations and to
+          assess any risks associated with their transactions or activities.
+      - question: |
+          In Canada, can I use Reliance method to verify identity of a person?
+        answer: |
+          Yes, Reliance method can be used to verify someone's identity.
+  - context: >
+      Entity
+
+      To verify the identity of an entity other than a corporation, you may
+      refer to:
+
+      - a partnership agreement;
+
+      - articles of association; or
+
+      - the most recent version of any other record that confirms its existence
+      and contains its name and address.
+
+
+      The record you refer to must be authentic, valid and current.
+
+
+      Record keeping requirements when verifying the identity of a corporation
+      or other entity
+
+      If you refer to a paper record or an electronic version of a record, you
+      must keep the record or a copy of it.
+
+
+      If the electronic version of the record that you refer to is contained in
+      a database that is accessible to the public, you must keep a record that
+      includes the corporation or other entity's registration number, the type
+      of record referred to and the source of the electronic version of the
+      record.
+
+
+      Your compliance program's policies and procedures must describe the
+      processes you follow when using the confirmation of existence method to
+      verify the identity of corporations and other entities, and how you will
+      ensure that the information is authentic, valid and current.
+
+
+      ### 7.2 Reliance method
+
+      You may verify the identity of a corporation or other entity by relying on
+      the measures that were previously taken by:
+
+      - another RE (a person or entity that is referred to in section 5 of the
+      PCMLTFA);or
+
+      - an entity that is affiliated with you or with another RE and carries out
+      activities outside of Canada that are similar to those of a person or
+      entity referred to in any of paragraphs 5(a) to (g) of the PCMLTFA (an
+      affiliated foreign entity).
+
+
+      Measures previously taken by an affiliated foreign entity
+
+      To rely on measures previously taken by an affiliated foreign entity, you
+      must be satisfied, after considering the risk of a money laundering or
+      terrorist activity financing offence in the foreign state in which it
+      carries out its activities, that:
+
+      - the affiliated foreign entity has policies in place similar to the
+      record keeping, verifying identity, and compliance program requirements
+      under the PCMLTFA, including the requirement to develop and apply policies
+      to assess, in the course of their activities, the risk of a money
+      laundering offence or a terrorist activity financing offence, and the
+      requirement to take enhanced measures where the risk has been identified
+      as high; and
+
+      - the affiliated foreign entity's compliance with those policies is
+      subject to the supervision of a competent authority under the legislation
+      of that foreign state.
+    questions_and_answers:
+      - question: >
+          In Canada, what types of records can be used to verify the identity of an entity
+          other than a corporation?
+        answer: >
+          To verify the identity of an entity other than a corporation, you can
+          refer to a partnership agreement, articles of association, or the most
+          recent version of any other record that confirms its existence and
+          contains its name and address.
+      - question: >
+          In Canada, explain the "Reliance method" for verifying the identity of a
+          corporation or other entity.
+        answer: >
+          The Reliance method involves verifying the identity of a corporation
+          or other entity by relying on the measures previously taken by another
+          reporting entity (RE) or an affiliated foreign entity. This method
+          requires ensuring that the external entity has robust policies and
+          compliance measures in place similar to those required under the
+          PCMLTFA and that their compliance is supervised by a competent
+          authority in their jurisdiction.
+      - question: >
+          In Canada, True or False: When using the Reliance method, it is acceptable to
+          rely on any foreign entity's verification measures without assessing
+          their compliance programs.
+        answer: >
+          False.
+
+
+          When using the Reliance method, you must assess the foreign entity's
+          compliance programs to ensure they have appropriate policies, risk
+          assessments, and are supervised by a competent authority.
+  - context: >
+      ## 4. Verifying a person's identity if it has been previously verified
+
+      You do not need to verify a person's identity for subsequent transactions
+      or activities, as required, if you have already verified the identity of
+      the person using:
+
+      - one of the methods explained in this guidance; or
+
+      - the methods specified in the PCMLTFR prior to June 1, 2021 as it read at
+      the time, and have kept the required record.
+
+
+      You must not have doubts about the information that was previously used to
+      verify the person's identity. If you have doubts, you must verify their
+      identity again using the methods explained in this guidance.
+
+
+      Note: In the context of a business merger or acquisition, you are not
+      required to re-identify the acquired clients if their identities were
+      verified in accordance with the methods in the PCMLTFR at the time the
+      verification took place. As a best practice, you are encouraged to review
+      and update client information (for example, name, address, occupation,
+      etc.), in accordance with your risk assessment process. The acquired
+      clients become the responsibility of the acquiring entity which must
+      ensure compliance with the PCMLTFA and associated Regulations. This
+      includes reviewing any money laundering or terrorist financing risks that
+      may be associated with these clients.
+    questions_and_answers:
+      - question: >
+          In Canada, under what circumstances is it unnecessary to verify a person's
+          identity for subsequent transactions?
+        answer: >
+          It is unnecessary to verify a person's identity for subsequent
+          transactions if their identity has already been verified using one of
+          the methods outlined in the current guidance or the methods specified
+          in the PCMLTFR prior to June 1, 2021, and the required records have
+          been maintained.
+      - question: >
+          In Canada, what must you do if you have doubts about the information previously
+          used to verify a person's identity?
+        answer: >
+          If you have doubts about the information previously used to verify a
+          person's identity, you must verify their identity again using the
+          methods explained in the current guidance.
+      - question: >
+          In Canada, explain the responsibilities of an acquiring entity in a business
+          merger regarding client identity verification.
+        answer: >
+          The acquiring entity is responsible for ensuring compliance with the
+          PCMLTFA and associated Regulations. This includes reviewing and
+          updating client information, such as name, address, and occupation,
+          and assessing any money laundering or terrorist financing risks
+          associated with the acquired clients.
+  - context: >
+      To use an agent or mandatary to verify the identity of a person you must:
+
+      - have a written agreement or arrangement in place with the agent or
+      mandatary before you use them;
+
+      - obtain, as soon as feasible, all of the information that  the agent or
+      mandatary referred to in order to verify the person's identity, and the
+      information that the agent or mandatory confirmed as being that of the
+      person;and
+
+      - be satisfied that:
+        - the information that the agent or mandatary confirmed as being that of the person is valid and current, and
+        - the person's identity was verified using the government-issued photo identification method, the credit file
+        method or the dual-process method, or, if the person's identity was verified prior to June 1, 2021, using the
+        methods in accordance with the PCMLTFR in place at the time.
+
+      Example 1 — Acceptable
+
+      Jane Smith would like to open an account with you. Your agent—with whom
+      you have a written agreement for this purpose—verified Jane Smith's
+      identity in 2019 using the government-issued photo identification method,
+      by referring to her driver's licence, which expired in February 2021. In
+      2019, Jane Smith's name and appearance matched the name and photograph on
+      the driver's licence, and the document was determined to be authentic,
+      valid and current, therefore, her identity was verified by the agent in
+      accordance with the method. Jane's name and appearance have not changed.
+      When you obtain the information from the agent, you are satisfied that the
+      information the agent confirmed as being Jane's (her name and photo) is
+      still valid and current and is therefore acceptable. It does not matter
+      that her licence (the identification document used by the agent) has
+      expired, as it is the information that you must be satisfied is valid and
+      current, not the document.
+    questions_and_answers:
+      - question: >
+          In Canada, what must be in place before using an agent or mandatary to verify a
+          person's identity?
+        answer: >
+          Before using an agent or mandatary to verify a person's identity,
+          there must be a written agreement or arrangement in place with the
+          agent or mandatary.
+      - question: >
+          In Canada, list two conditions that must be satisfied to ensure the validity and
+          currency of the information provided by an agent or mandatary.
+        answer: >
+          1. The information confirmed by the agent or mandatary as being that
+          of the person must be valid and current.
+
+          2. The person's identity must have been verified using the
+          government-issued photo identification method, the credit file method,
+          or the dual-process method, or using compliant methods prior to June
+          1, 2021.
+      - question: >
+          In Canada, describe the process you must follow to verify a person's identity
+          using an agent or mandatary.
+        answer: >
+          To verify a person's identity using an agent or mandatary, you must:
+
+
+          1. Have a written agreement or arrangement in place with the agent or
+          mandatary before using their services.
+
+          2. Obtain, as soon as feasible, all the information that the agent or
+          mandatary referred to in order to verify the person's identity, as
+          well as the information they confirmed as belonging to the person.
+
+          3. Ensure that:
+             - The information confirmed by the agent or mandatary is valid and current.
+             - The identity was verified using one of the approved methods: government-issued photo identification,
+             credit file method, dual-process method, or methods compliant with the PCMLTFR in place before June 1,
+             2021
+  - context: >
+      ## 9. Restrictions on the use of personal information
+
+      The use of personal information in Canadian commercial activities is
+      protected by the Personal Information Protection and Electronic Documents
+      Act (PIPEDA), or by similar provincial legislation. You have to inform
+      clients about the collection of their personal information. However, you
+      do not have to inform them when you include their personal information in
+      the reports you are required to submit to FINTRAC.
+
+
+      The Office of the Privacy Commissioner of Canada can provide further
+      guidance, and has created a Question and Answer document about PIPEDA and
+      the Proceeds of Crime (Money Laundering) and Terrorist Financing Act, to
+      help clarify your responsibilities under PIPEDA.
+    questions_and_answers:
+      - question: >
+          In Canada, are reporting entities required to inform clients about the collection
+          of their personal information?
+        answer: >
+          Yes, reporting entities are required to inform clients about the
+          collection of their personal information.
+      - question: >
+          In Canada, do reporting entities have to inform clients when including their
+          personal information in reports submitted to FINTRAC?
+        answer: >
+          No, reporting entities do not have to inform clients when including
+          their personal information in the reports they are required to submit
+          to FINTRAC.
+      - question: >
+          In Canada, which organization provides further guidance on the use of personal
+          information under PIPEDA in Canada?
+        answer: >
+          The Office of the Privacy Commissioner of Canada provides further
+          guidance on the use of personal information under PIPEDA in Canada.
+document_outline: |
+  The provided document contain excerpts from regulations set by the Financial Transactions and Reports
+  Analysis Centre of Canada (FINTRAC). FINTRAC's regulations are aimed at combating money laundering
+  and terrorist financing activities in Canada.
+document:
+  repo: 'https://github.com/parsa-i/taxonomy/'
+  commit: 337db5303498689d08e162102dbf7dea4ca9e460
+  patterns:
+    - markdown/fintrac/*.md
