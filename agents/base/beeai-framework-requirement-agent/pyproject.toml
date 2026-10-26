@@ -12,7 +12,7 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.11,<3.14"
 beeai-framework = {extras = ["duckduckgo"], version = "^0.1.49"}
-litellm = "^1.81.1"
+litellm = "<1.106.0"
 pydantic = "^2.11.9"
 
 [tool.poetry.group.dev]
