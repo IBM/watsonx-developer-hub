@@ -24,6 +24,9 @@ def test_read_only_queries_allowed(query):
     "query",
     [
         "",
+        "123",
+        "$1",
+        "42 = 42",
         "INSERT INTO t VALUES (1)",
         "UPDATE t SET a = 1",
         "DELETE FROM t",

@@ -70,7 +70,7 @@ def validate_read_only_query(query: str) -> None:
 
     words = re.findall(r"[A-Za-z_][A-Za-z0-9_]*", stripped.upper())
 
-    if words[0] not in _ALLOWED_FIRST_KEYWORDS:
+    if not words or words[0] not in _ALLOWED_FIRST_KEYWORDS:
         raise ReadOnlyViolationError(
             "Only read-only queries (SELECT / WITH / VALUES) are allowed."
         )
