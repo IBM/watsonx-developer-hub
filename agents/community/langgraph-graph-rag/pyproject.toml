@@ -23,7 +23,7 @@ neo4j-graphrag = "^1.7.0"
 [tool.poetry.group.dev.dependencies]
 langchain-text-splitters = "^1.1.2"
 python-dotenv = "^1.0.1"
-ibm-watsonx-ai-cli = "^0.6.0"
+ibm-watsonx-ai-cli = "^0.7.0"
 
 [build-system]
 requires = ["poetry-core"]

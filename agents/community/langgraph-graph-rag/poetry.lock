@@ -269,18 +269,18 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.43.119"
+version = "1.43.120"
 description = "The AWS SDK for Python (Boto3)"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "boto3-1.43.119-py3-none-any.whl", hash = "sha256:d1718edae48c3241d289c0ece8a515399a7242c406e35328b9685c4d24039186"},
-    {file = "boto3-1.43.119.tar.gz", hash = "sha256:e12c3b1d81713e14bd6947b7412d9d0ea49b320642d795ded1d64d6483ca6f49"},
+    {file = "boto3-1.43.120-py3-none-any.whl", hash = "sha256:86978245a7b911549a44df3f805ae4ce94a8154f4ebe4a166631b8a6d7af2697"},
+    {file = "boto3-1.43.120.tar.gz", hash = "sha256:9d85840e721869f8202ab5f6b4ec3e697ac46343116cc8d1d0804ec58f90c503"},
 ]
 
 [package.dependencies]
-botocore = ">=1.43.119,<1.44.0"
+botocore = ">=1.43.120,<1.44.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.19.0,<0.20.0"
 
@@ -289,14 +289,14 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.43.119"
+version = "1.43.120"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "botocore-1.43.119-py3-none-any.whl", hash = "sha256:6026aec97914a4fa116915fd3b05af899912eff51b93fb8dff95aa228a3e761b"},
-    {file = "botocore-1.43.119.tar.gz", hash = "sha256:ed11934be6e6d398ac21b7fe03778c9584368eeff8ba5371581f19bb47db0b6a"},
+    {file = "botocore-1.43.120-py3-none-any.whl", hash = "sha256:7f54674f26f0d9a500bf44a1f858e88b70b03c82b2aca385ddf51f6e968bfd01"},
+    {file = "botocore-1.43.120.tar.gz", hash = "sha256:f479cbb7273b9c0ea589a91a7abe38badda6353fb7c237a22c7461a06d279ee2"},
 ]
 
 [package.dependencies]
@@ -773,14 +773,14 @@ files = [
 
 [[package]]
 name = "filelock"
-version = "3.32.7"
+version = "4.2.4"
 description = "A platform independent file lock."
 optional = false
-python-versions = ">=3.10"
+python-versions = ">=3.11"
 groups = ["dev"]
 files = [
-    {file = "filelock-3.32.7-py3-none-any.whl", hash = "sha256:65ff0d0190ea42038b32bda4b77834fb05be2cad4c5b9b01aa4dfb3614536e52"},
-    {file = "filelock-3.32.7.tar.gz", hash = "sha256:37b8a3d9811b0f9aef7e5ec5c71bb320de52df51e6ca9bcd6f5ad81187660da7"},
+    {file = "filelock-4.2.4-py3-none-any.whl", hash = "sha256:301241438c57936ef93f4243a94f2559022268bfcf9b375a9a72eb0f8db8358e"},
+    {file = "filelock-4.2.4.tar.gz", hash = "sha256:c6d8663535e1650ee430507b4ffbac7b464dd64b7647ea0112a9f406499d163d"},
 ]
 
 [[package]]
@@ -1001,7 +1001,7 @@ description = "Fast transfer of large files with the Hugging Face Hub."
 optional = false
 python-versions = ">=3.8"
 groups = ["dev"]
-markers = "platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"arm64\" or platform_machine == \"aarch64\""
+markers = "platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"arm64\" or platform_machine == \"ARM64\" or platform_machine == \"aarch64\""
 files = [
     {file = "hf_xet-1.7.0-cp314-cp314t-macosx_10_12_x86_64.whl", hash = "sha256:fa029678be1ba7f953c409b0b27bf15cc69cd1c9b3a674fbd78856ebefca1052"},
     {file = "hf_xet-1.7.0-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:57bc157b8b7fe3bee9dcb9af7f3da8de41801c3b31a9ef68a77a33c6a6be382f"},
@@ -1151,37 +1151,37 @@ files = [
 
 [[package]]
 name = "huggingface-hub"
-version = "1.33.0"
+version = "2.3.0"
 description = "Client library to download and publish models, datasets and other repos on the huggingface.co hub"
 optional = false
 python-versions = ">=3.10.0"
 groups = ["dev"]
 files = [
-    {file = "huggingface_hub-1.33.0-py3-none-any.whl", hash = "sha256:04e434b06e100eddbce9a6e817d72693a7884b10a79bd67ab48080d5c07eb899"},
-    {file = "huggingface_hub-1.33.0.tar.gz", hash = "sha256:367be21a201db9523eddf8aeac7048f2602c1b308691c97640d5e72ed188007e"},
+    {file = "huggingface_hub-2.3.0-py3-none-any.whl", hash = "sha256:5da369600233568a126eb5578754935b2add9446b42d9e2fc0927d56840ac1a5"},
+    {file = "huggingface_hub-2.3.0.tar.gz", hash = "sha256:0b783b37f200f1d25bef2344a997c7d410f4437fbe9d8fd965f958e75cec7aef"},
 ]
 
 [package.dependencies]
 click = ">=8.4.2,<9.0.0"
 filelock = ">=3.10.0"
 fsspec = ">=2023.5.0"
-hf-xet = {version = ">=1.6.0,<2.0.0", markers = "platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"arm64\" or platform_machine == \"aarch64\""}
-httpx = ">=0.23.0,<1"
+hf-xet = {version = ">=1.6.0,<2.0.0", markers = "platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"arm64\" or platform_machine == \"ARM64\" or platform_machine == \"aarch64\""}
+httpx2 = ">=2.0.0,<3"
 packaging = ">=20.9"
 pyyaml = ">=5.1"
 tqdm = ">=4.42.1"
 typing-extensions = ">=4.1.0"
 
 [package.extras]
-all = ["Jinja2", "Pillow", "authlib (>=1.3.2)", "duckdb", "fastapi", "fastapi", "httpx", "itsdangerous", "jedi", "libcst (>=1.4.0)", "mypy (==1.15.0)", "numpy", "pytest (>=8.4.2)", "pytest-asyncio", "pytest-cov", "pytest-env", "pytest-mock", "pytest-rerunfailures (>=16.2)", "pytest-vcr", "pytest-xdist", "ruff (>=0.9.0)", "soundfile", "ty", "types-PyYAML", "types-simplejson", "types-toml", "types-tqdm", "types-urllib3", "typing-extensions (>=4.8.0)", "urllib3 (<2.0)"]
-dev = ["Jinja2", "Pillow", "authlib (>=1.3.2)", "duckdb", "fastapi", "fastapi", "httpx", "itsdangerous", "jedi", "libcst (>=1.4.0)", "mypy (==1.15.0)", "numpy", "pytest (>=8.4.2)", "pytest-asyncio", "pytest-cov", "pytest-env", "pytest-mock", "pytest-rerunfailures (>=16.2)", "pytest-vcr", "pytest-xdist", "ruff (>=0.9.0)", "soundfile", "ty", "types-PyYAML", "types-simplejson", "types-toml", "types-tqdm", "types-urllib3", "typing-extensions (>=4.8.0)", "urllib3 (<2.0)"]
+all = ["Jinja2", "Pillow", "authlib (>=1.8.0)", "duckdb ; python_version < \"3.15\"", "fastapi", "fastapi", "itsdangerous", "jedi", "libcst (>=1.4.0)", "mypy (==1.15.0)", "numpy", "pytest (>=8.4.2)", "pytest-asyncio", "pytest-cov", "pytest-env", "pytest-mock", "pytest-rerunfailures (>=16.2)", "pytest-vcr", "pytest-xdist", "ruff (>=0.9.0)", "soundfile", "ty", "types-PyYAML", "types-simplejson", "types-toml", "types-tqdm", "types-urllib3", "typing-extensions (>=4.8.0)", "urllib3 (<2.0)"]
+dev = ["Jinja2", "Pillow", "authlib (>=1.8.0)", "duckdb ; python_version < \"3.15\"", "fastapi", "fastapi", "itsdangerous", "jedi", "libcst (>=1.4.0)", "mypy (==1.15.0)", "numpy", "pytest (>=8.4.2)", "pytest-asyncio", "pytest-cov", "pytest-env", "pytest-mock", "pytest-rerunfailures (>=16.2)", "pytest-vcr", "pytest-xdist", "ruff (>=0.9.0)", "soundfile", "ty", "types-PyYAML", "types-simplejson", "types-toml", "types-tqdm", "types-urllib3", "typing-extensions (>=4.8.0)", "urllib3 (<2.0)"]
 fastai = ["fastai (>=2.4)", "fastcore (>=1.3.27)", "toml"]
 gradio = ["gradio (>=5.0.0)", "requests"]
 hf-xet = ["hf-xet (>=1.6.0,<2.0.0)"]
 mcp = ["mcp (>=1.9.4,<2.0.0)"]
-oauth = ["authlib (>=1.3.2)", "fastapi", "httpx", "itsdangerous"]
+oauth = ["authlib (>=1.8.0)", "fastapi", "itsdangerous"]
 quality = ["libcst (>=1.4.0)", "mypy (==1.15.0)", "ruff (>=0.9.0)", "ty"]
-testing = ["Jinja2", "Pillow", "authlib (>=1.3.2)", "duckdb", "fastapi", "fastapi", "httpx", "itsdangerous", "jedi", "numpy", "pytest (>=8.4.2)", "pytest-asyncio", "pytest-cov", "pytest-env", "pytest-mock", "pytest-rerunfailures (>=16.2)", "pytest-vcr", "pytest-xdist", "soundfile", "urllib3 (<2.0)"]
+testing = ["Jinja2", "Pillow", "authlib (>=1.8.0)", "duckdb ; python_version < \"3.15\"", "fastapi", "fastapi", "itsdangerous", "jedi", "numpy", "pytest (>=8.4.2)", "pytest-asyncio", "pytest-cov", "pytest-env", "pytest-mock", "pytest-rerunfailures (>=16.2)", "pytest-vcr", "pytest-xdist", "soundfile", "urllib3 (<2.0)"]
 torch = ["safetensors[torch]", "torch"]
 typing = ["types-PyYAML", "types-simplejson", "types-toml", "types-tqdm", "types-urllib3", "typing-extensions (>=4.8.0)"]
 
@@ -1350,30 +1350,24 @@ rag = ["beautifulsoup4 (>=4.12.3,<=4.13.5)", "grpcio (>=1.54.3) ; python_version
 
 [[package]]
 name = "ibm-watsonx-ai-cli"
-version = "0.6.0"
+version = "0.7.0"
 description = "CLI for deploying AI services with Agents to watsonx.ai."
 optional = false
 python-versions = "<3.14,>=3.11"
 groups = ["dev"]
 files = [
-    {file = "ibm_watsonx_ai_cli-0.6.0-py3-none-any.whl", hash = "sha256:1f5c7f61c454110983494584174983be5ffa60c9576e1cf89554b8f1d790ef71"},
-    {file = "ibm_watsonx_ai_cli-0.6.0.tar.gz", hash = "sha256:99c8aa0c6eae0b1cf2e894ee69f5f3dc5d797dc623ec676e672178da30639d2b"},
+    {file = "ibm_watsonx_ai_cli-0.7.0-py3-none-any.whl", hash = "sha256:9d59b21bcf1f4f3ff7853f115786c09a0cc59f3f5d5ee5b4f4850c5aebd62e01"},
+    {file = "ibm_watsonx_ai_cli-0.7.0.tar.gz", hash = "sha256:5d6f44436b2a5fdf0edaf56d15c9e28ce3ad6b213112acea25786936427d818b"},
 ]
 
 [package.dependencies]
+filelock = ">=4.2.1"
 ibm-watsonx-ai = ">=1.3.18"
-ibm-watsonx-gov = ">=1.2.0,<2.0.0"
-jsonschema = ">=4.19.0,<5.0.0"
-litellm = ">=1.48.0,<2.0.0"
-nest-asyncio = ">=1.6.0,<2.0.0"
+ibm-watsonx-gov = {version = ">=1.2.0,<2.0.0", extras = ["metrics"]}
 python-dotenv = ">=1.1.0,<2.0.0"
-scikit-learn = ">=1.5.1,<1.8"
-setuptools = ">=83.0.0,<=84.0.0"
-textstat = ">=0.7.7,<0.8.0"
 tomli = ">=2.0,<3.0.0"
 tomlkit = "<1.0.0"
 typer = ">=0.13.0,<1.0.0"
-unitxt = ">=1.22.0,<1.27"
 
 [[package]]
 name = "ibm-watsonx-gov"
@@ -1398,13 +1392,19 @@ files = [
 aiohttp = ">=3.14.0,<4.0.0"
 cachetools = ">=6.0.0,<7.0.0"
 ibm_watson_openscale = ">=3.1.0,<3.2.0"
+jsonschema = {version = ">=4.19.0,<5.0.0", optional = true, markers = "extra == \"metrics\""}
 lazy-imports = ">=1.0.0,<2.0.0"
+litellm = {version = ">=1.83.10,<2.0.0", optional = true, markers = "extra == \"metrics\""}
+numpy = {version = ">=2.0.0,<3.0.0", optional = true, markers = "extra == \"metrics\""}
 pandas = ">=2.2.0,<2.3.0"
 protobuf = ">=5.29.6,<7.0.0"
 pydantic = ">=2.10.3,<3.0.0"
 pyjwt = ">=2.13.0,<3.0.0"
 requests = ">=2.32.4,<3.0.0"
+scikit-learn = {version = ">=1.5.1,<1.8", optional = true, markers = "extra == \"metrics\""}
+textstat = {version = ">=0.7.7,<0.8.0", optional = true, markers = "extra == \"metrics\""}
 typing-extensions = ">=4.12,<5.0"
+unitxt = {version = ">=1.22.0,<1.27", optional = true, markers = "extra == \"metrics\""}
 wrapt = ">=1.11.0,<2.0.0"
 
 [package.extras]
@@ -1960,14 +1960,14 @@ websockets = ">=14"
 
 [[package]]
 name = "langsmith"
-version = "0.14.13"
+version = "0.14.14"
 description = "Client library to connect to the LangSmith Observability and Evaluation Platform."
 optional = false
 python-versions = ">=3.10"
 groups = ["main", "dev"]
 files = [
-    {file = "langsmith-0.14.13-py3-none-any.whl", hash = "sha256:a07e0b59909792be4b16099bf74d87bdb8b8282bbfa95d0bbe110fd4539fba0f"},
-    {file = "langsmith-0.14.13.tar.gz", hash = "sha256:d8ff66381a5db2051546f1d15e7f0add87cc88fd771cb6fe238964418db394c4"},
+    {file = "langsmith-0.14.14-py3-none-any.whl", hash = "sha256:9265529ed9a592110cc75fa21f088ed34eb5f56ae680f6e9490e7f65e177386c"},
+    {file = "langsmith-0.14.14.tar.gz", hash = "sha256:fc28d1981656918f145d8d8089ed924dbf93d95e4959d0c1882cb5aec1563a0d"},
 ]
 
 [package.dependencies]
@@ -2022,20 +2022,20 @@ testing = ["packaging", "pytest"]
 
 [[package]]
 name = "litellm"
-version = "1.106.4"
+version = "1.103.10"
 description = "Library to easily interface with LLM API providers"
 optional = false
 python-versions = "<3.15,>=3.10"
 groups = ["dev"]
 files = [
-    {file = "litellm-1.106.4-cp310-abi3-macosx_10_12_x86_64.whl", hash = "sha256:fb5dbe12d8789cc8c44dcf6a7f76eeef5e219007384b6a0ac74b3784203c216c"},
-    {file = "litellm-1.106.4-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:9ea61a1660528d5d72459acefa38762de3bda3c20fe1f44eab674ec3b72f9238"},
-    {file = "litellm-1.106.4-cp310-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:1c2b7d072a47c3f04032764d8143ed6ade8c354a331f4ad5ab9b9d5b1ba2dd4c"},
-    {file = "litellm-1.106.4-cp310-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:d4cd1c1cab5c1e7f32d6a06a74e88176575fcbf427e8a4b6a434207aca007fb4"},
-    {file = "litellm-1.106.4-cp310-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:9f36a1d4a58fec0286e87f1bae5eab2819077b28efb9d77a310a0d78b4ae07f5"},
-    {file = "litellm-1.106.4-cp310-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:7dd40a6c2a495bdf0b80151d140c8b65fe77f7fecadef989c244d78c646c3a97"},
-    {file = "litellm-1.106.4-cp310-abi3-win_amd64.whl", hash = "sha256:1dc78af5a710715b1807a73d1b378d4d1fd82a4f4a13e45179b76287cbbabba9"},
-    {file = "litellm-1.106.4.tar.gz", hash = "sha256:f99a2c5615f26c7cb3b38b3d7657643d866852495a1d48b8c847b27cc1727949"},
+    {file = "litellm-1.103.10-cp310-abi3-macosx_10_12_x86_64.whl", hash = "sha256:0085bb61fdb321ce17014eac697d8d7513f36e6681d490af845e8d8b9af8e613"},
+    {file = "litellm-1.103.10-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:7451792391b9e268e812b17a4a5cc0d34dba9bac8d51615798ebcc58f10e1b09"},
+    {file = "litellm-1.103.10-cp310-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:ca4cbf0492f65c383de264da0ff98f48d4eb56e4edf4a55713d2562a554b986f"},
+    {file = "litellm-1.103.10-cp310-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:f639bd02ac34869080b7792732336345bc066ffb04be301093090425f6caa2bc"},
+    {file = "litellm-1.103.10-cp310-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:5774a19560e93b1da1838b160d0ac4fec5238c11bde2cd2411422a06fb4f5e7f"},
+    {file = "litellm-1.103.10-cp310-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:a7d2b6a0de7c0abfc97fe89184cb2b719a5f76170a4cac9ffd4d14e85fbb3b73"},
+    {file = "litellm-1.103.10-cp310-abi3-win_amd64.whl", hash = "sha256:adbcbb663a9cc96331de0f6ddd60e81d883288b901b7a4f6fbbfeb66edb669cd"},
+    {file = "litellm-1.103.10.tar.gz", hash = "sha256:b1bf12810b6565156c6b23bda2ccaf115c6edafbbf92e98220ecbc73f89d6972"},
 ]
 
 [package.dependencies]
@@ -2044,21 +2044,16 @@ boto3 = ">=1.43.117,<2.0"
 certifi = ">=2026.10.19"
 click = ">=8.0.0,<9.0"
 fastuuid = ">=0.14.0,<1.0"
-filelock = ">=3.16.1,<4.0"
 httpx = {version = ">=0.28.0,<1.0", extras = ["http2"]}
-huggingface-hub = ">=0.34.0,<2.0"
 importlib-metadata = ">=8.0.0,<9.0"
 jinja2 = ">=3.1.6,<4.0"
 jsonschema = ">=4.0.0,<5.0"
 openai = ">=2.20.0,<3.0.0"
-packaging = ">=24.0"
 pydantic = {version = ">=2.11.0,<3.0.0", markers = "python_full_version < \"3.14.0\""}
 pydantic-settings = ">=2.14.1,<3.0"
 python-dotenv = ">=1.0.0,<2.0"
-pyyaml = ">=6.0.3,<7.0"
 tiktoken = {version = ">=0.8.0,<1.0", markers = "python_full_version < \"3.14.0\""}
 tokenizers = ">=0.21.0,<1.0"
-typing-extensions = ">=4.13.0,<5.0"
 
 [package.extras]
 bedrock-realtime = ["aws-sdk-bedrock-runtime[awscrt] (>=0.10.0,<0.12.0) ; python_full_version >= \"3.12.0\""]
@@ -2069,8 +2064,8 @@ google = ["google-cloud-aiplatform (>=1.133.0,<2.0)"]
 grpc = ["grpcio (==1.84.1)"]
 mcp = ["httpx2 (>=2.5.0,<3)", "mcp (>=2.2.0,<3)", "pydantic (>=2.12.0,<3)"]
 mlflow = ["mlflow (>=3.11.1,<4.0)"]
-proxy = ["apscheduler (>=3.11.2,<4.0)", "azure-identity (>=1.25.2,<2.0)", "azure-storage-blob (>=12.28.0,<13.0)", "backoff (>=2.2.1,<3.0)", "boto3 (>=1.43.117,<2.0)", "cryptography (>=49.0.0,<51.0)", "expression (>=5.6.0,<6.0)", "fastapi (>=0.136.3,<1.0)", "fastapi-sso (>=0.19.0,<1.0)", "granian (>=2.7.4,<3.0)", "gunicorn (>=23.0.0,<24.0)", "hiredis (>=3.0.0,<4.0)", "httpx2 (>=2.5.0,<3)", "inquirerpy (>=0.3.4,<1.0)", "litellm-enterprise (==0.1.76.post1)", "litellm-proxy-extras (==0.4.108)", "mcp (>=2.2.0,<3)", "orjson (>=3.11.6,<4.0)", "polars (>=1.38.1,<2.0)", "pydantic (>=2.12.0,<3)", "pyjwt (>=2.13.0,<3.0)", "pynacl (>=1.6.2,<2.0)", "pyroscope-io (>=0.8.16,<1.0) ; sys_platform != \"win32\"", "python-multipart (>=0.0.27,<1.0)", "pyyaml (>=6.0.3,<7.0)", "restrictedpython (>=8.5,<9.0)", "rich (>=13.9.4,<14.0)", "rq (>=2.7.0,<3.0)", "soundfile (>=0.12.1,<1.0)", "starlette (>=1.0.1,<2.0)", "tomlkit (>=0.13.3,<1.0)", "uvicorn (>=0.33.0,<1.0)", "uvloop (>=0.22.1,<1.0) ; sys_platform != \"win32\"", "websockets (>=15.0.1,<16.0)"]
-proxy-runtime = ["anthropic[vertex] (>=0.84.0,<1.0)", "azure-ai-contentsafety (>=1.0.0,<2.0)", "azure-storage-file-datalake (>=12.20.0,<13.0)", "ddtrace (>=4.8.2,<5.0)", "detect-secrets (>=1.5.0,<2.0)", "google-cloud-aiplatform (>=1.133.0,<2.0)", "google-cloud-speech (>=2.40.0,<3.0)", "google-genai (>=1.37.0,<2.0)", "grpcio (==1.84.1)", "langfuse (>=4.7,<5.0)", "llm-sandbox (>=0.3.39,<1.0)", "mangum (>=0.17.0,<1.0)", "opentelemetry-api (==1.45.1)", "opentelemetry-exporter-otlp (==1.45.1)", "opentelemetry-instrumentation-fastapi (==0.66b1)", "opentelemetry-sdk (==1.45.1)", "prometheus-client (>=0.20.0,<1.0)", "pypdf (>=6.16.1,<7.0)", "sentry-sdk (>=2.21.0,<3.0)"]
+proxy = ["apscheduler (>=3.11.2,<4.0)", "azure-identity (>=1.25.2,<2.0)", "azure-storage-blob (>=12.28.0,<13.0)", "backoff (>=2.2.1,<3.0)", "boto3 (>=1.43.117,<2.0)", "cryptography (>=49.0.0,<51.0)", "expression (>=5.6.0,<6.0)", "fastapi (>=0.136.3,<1.0)", "fastapi-sso (>=0.19.0,<1.0)", "granian (>=2.7.4,<3.0)", "gunicorn (>=23.0.0,<24.0)", "hiredis (>=3.0.0,<4.0)", "httpx2 (>=2.5.0,<3)", "inquirerpy (>=0.3.4,<1.0)", "litellm-enterprise (==0.1.69.post2)", "litellm-proxy-extras (==0.4.100.post1)", "mcp (>=2.2.0,<3)", "orjson (>=3.11.6,<4.0)", "polars (>=1.38.1,<2.0)", "pydantic (>=2.12.0,<3)", "pyjwt (>=2.13.0,<3.0)", "pynacl (>=1.6.2,<2.0)", "pyroscope-io (>=0.8.16,<1.0) ; sys_platform != \"win32\"", "python-multipart (>=0.0.27,<1.0)", "pyyaml (>=6.0.3,<7.0)", "restrictedpython (>=8.5,<9.0)", "rich (>=13.9.4,<14.0)", "rq (>=2.7.0,<3.0)", "soundfile (>=0.12.1,<1.0)", "starlette (>=1.0.1,<2.0)", "tomlkit (>=0.13.3,<1.0)", "uvicorn (>=0.33.0,<1.0)", "uvloop (>=0.22.1,<1.0) ; sys_platform != \"win32\"", "websockets (>=15.0.1,<16.0)"]
+proxy-runtime = ["anthropic[vertex] (>=0.84.0,<1.0)", "azure-ai-contentsafety (>=1.0.0,<2.0)", "azure-storage-file-datalake (>=12.20.0,<13.0)", "ddtrace (>=4.8.2,<5.0)", "detect-secrets (>=1.5.0,<2.0)", "google-cloud-aiplatform (>=1.133.0,<2.0)", "google-cloud-speech (>=2.40.0,<3.0)", "google-genai (>=1.37.0,<2.0)", "grpcio (==1.84.1)", "langfuse (>=2.59.7,<3.0)", "llm-sandbox (>=0.3.39,<1.0)", "mangum (>=0.17.0,<1.0)", "opentelemetry-api (==1.45.1)", "opentelemetry-exporter-otlp (==1.45.1)", "opentelemetry-instrumentation-fastapi (==0.66b1)", "opentelemetry-sdk (==1.45.1)", "prometheus-client (>=0.20.0,<1.0)", "pypdf (>=6.16.1,<7.0)", "sentry-sdk (>=2.21.0,<3.0)"]
 saml = ["python3-saml (>=1.16.0,<2.0)"]
 semantic-router = ["aurelio-sdk (>=0.0.19,<1.0) ; python_full_version < \"3.14.0\"", "semantic-router (>=0.1.15,<1.0) ; python_full_version < \"3.14.0\""]
 stt-nvidia-riva = ["audioread (>=3.0.1)", "numpy (>=1.26.0)", "nvidia-riva-client (>=2.15.0)", "soundfile (>=0.12.1)"]
@@ -4206,23 +4201,23 @@ test = ["Cython", "array-api-strict (>=2.3.1)", "asv", "gmpy2", "hypothesis (>=6
 
 [[package]]
 name = "setuptools"
-version = "84.0.0"
+version = "84.2.1"
 description = "Most extensible Python build backend with support for C/C++ extension modules"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "setuptools-84.0.0-py3-none-any.whl", hash = "sha256:51a52592b3b99e102b609654876bd65f19f999935166d1352678931132b0c670"},
-    {file = "setuptools-84.0.0.tar.gz", hash = "sha256:f4695c21257f0d9b537ec2692c941d02ee143b7cc1276941349a546573b2ef73"},
+    {file = "setuptools-84.2.1-py3-none-any.whl", hash = "sha256:ca140b45d5325a9478f880e351484f62fef15f336462e449ca0c03c873d589c2"},
+    {file = "setuptools-84.2.1.tar.gz", hash = "sha256:3ff8b3b5492a0aa66960f4419365a86b84e013070d4313e4d4a6894f5d64d6bc"},
 ]
 
 [package.extras]
 check = ["pytest-checkdocs (>=2.14)", "pytest-ruff (>=0.2.1) ; sys_platform != \"cygwin\"", "ruff (>=0.13.0) ; sys_platform != \"cygwin\""]
-core = ["importlib_metadata (>=6) ; python_version < \"3.10\"", "jaraco.functools (>=4)", "jaraco.text (>=3.7)", "more_itertools", "more_itertools (>=8.8)", "packaging (>=24.2)", "tomli (>=2.0.1) ; python_version < \"3.11\"", "wheel (>=0.43.0)"]
+core = ["importlib_metadata (>=6) ; python_version < \"3.10\"", "jaraco.functools (>=4)", "jaraco.text (>=3.7)", "more_itertools", "more_itertools (>=8.8)", "packaging (>=26.3)", "tomli (>=2.0.1) ; python_version < \"3.11\"", "wheel (>=0.43.0)"]
 cover = ["pytest-cov"]
 doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "pyproject-hooks (!=1.1)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (>=1,<2)", "sphinx-reredirects", "sphinxcontrib-towncrier", "towncrier (<24.7)"]
 enabler = ["pytest-enabler (>=3.4)"]
-test = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "ini2toml[lite] (>=0.14)", "jaraco.develop (>=7.21) ; python_version >= \"3.9\" and sys_platform != \"cygwin\"", "jaraco.envs (>=2.2)", "jaraco.path (>=3.7.2)", "jaraco.test (>=5.5)", "packaging (>=24.2)", "pip (>=19.1)", "pyproject-hooks (!=1.1)", "pytest (>=6,!=8.1.*)", "pytest-home (>=0.5)", "pytest-perf ; sys_platform != \"cygwin\"", "pytest-subprocess", "pytest-timeout", "pytest-xdist (>=3)", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel (>=0.44.0)"]
+test = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "ini2toml[lite] (>=0.14)", "jaraco.develop (>=7.21) ; python_version >= \"3.9\" and sys_platform != \"cygwin\"", "jaraco.envs (>=2.2)", "jaraco.path (>=3.7.2)", "jaraco.test (>=5.5)", "packaging (>=26.3)", "pip (>=19.1)", "pyproject-hooks (!=1.1)", "pytest (>=6,!=8.1.*)", "pytest-home (>=0.5)", "pytest-perf ; sys_platform != \"cygwin\"", "pytest-subprocess", "pytest-timeout", "pytest-xdist (>=3)", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel (>=0.44.0)"]
 type = ["importlib_metadata (>=7.0.2) ; python_version < \"3.10\"", "jaraco.develop (>=7.21) ; sys_platform != \"cygwin\"", "mypy (==1.18.*)", "pytest-mypy (>=1.0.1) ; platform_python_implementation != \"PyPy\""]
 
 [[package]]
@@ -5639,4 +5634,4 @@ cffi = ["cffi (>=1.17,<2.0) ; platform_python_implementation != \"PyPy\" and pyt
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.13"
-content-hash = "b78d0ad109756d66644ebdd4478263097a02968f952ec7cebb37de7ff7baed4c"
+content-hash = "af78a600e6815160595397a2a1c7b88fd835c5d76a8ed9a2165b74f4b66802ab"

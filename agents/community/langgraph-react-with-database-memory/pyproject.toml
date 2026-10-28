@@ -24,7 +24,7 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.1.1"
-ibm-watsonx-ai-cli = ">=0.4.1"
+ibm-watsonx-ai-cli = "^0.7.0"
 
 [build-system]
 requires = ["poetry-core"]

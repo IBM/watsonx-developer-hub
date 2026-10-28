@@ -18,14 +18,13 @@ langchain = "^1.4.0"
 langchain-community = "^0.3.29"
 ddgs = "^9.5.5"
 markdownify = "^1.1.0"
-httpx = "^0.28.1"
 beautifulsoup4 = "^4.13.5"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-ibm-watsonx-ai-cli = ">=0.3.0"
+ibm-watsonx-ai-cli = "^0.7.0"
 pytest = "^9.1.1"
 
 [build-system]

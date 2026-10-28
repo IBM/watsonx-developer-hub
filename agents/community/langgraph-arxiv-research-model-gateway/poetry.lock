@@ -292,18 +292,18 @@ lxml = ["lxml"]
 
 [[package]]
 name = "boto3"
-version = "1.43.119"
+version = "1.43.120"
 description = "The AWS SDK for Python (Boto3)"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "boto3-1.43.119-py3-none-any.whl", hash = "sha256:d1718edae48c3241d289c0ece8a515399a7242c406e35328b9685c4d24039186"},
-    {file = "boto3-1.43.119.tar.gz", hash = "sha256:e12c3b1d81713e14bd6947b7412d9d0ea49b320642d795ded1d64d6483ca6f49"},
+    {file = "boto3-1.43.120-py3-none-any.whl", hash = "sha256:86978245a7b911549a44df3f805ae4ce94a8154f4ebe4a166631b8a6d7af2697"},
+    {file = "boto3-1.43.120.tar.gz", hash = "sha256:9d85840e721869f8202ab5f6b4ec3e697ac46343116cc8d1d0804ec58f90c503"},
 ]
 
 [package.dependencies]
-botocore = ">=1.43.119,<1.44.0"
+botocore = ">=1.43.120,<1.44.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.19.0,<0.20.0"
 
@@ -312,14 +312,14 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.43.119"
+version = "1.43.120"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "botocore-1.43.119-py3-none-any.whl", hash = "sha256:6026aec97914a4fa116915fd3b05af899912eff51b93fb8dff95aa228a3e761b"},
-    {file = "botocore-1.43.119.tar.gz", hash = "sha256:ed11934be6e6d398ac21b7fe03778c9584368eeff8ba5371581f19bb47db0b6a"},
+    {file = "botocore-1.43.120-py3-none-any.whl", hash = "sha256:7f54674f26f0d9a500bf44a1f858e88b70b03c82b2aca385ddf51f6e968bfd01"},
+    {file = "botocore-1.43.120.tar.gz", hash = "sha256:f479cbb7273b9c0ea589a91a7abe38badda6353fb7c237a22c7461a06d279ee2"},
 ]
 
 [package.dependencies]
@@ -1976,14 +1976,14 @@ websockets = ">=14"
 
 [[package]]
 name = "langsmith"
-version = "0.14.13"
+version = "0.14.14"
 description = "Client library to connect to the LangSmith Observability and Evaluation Platform."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "langsmith-0.14.13-py3-none-any.whl", hash = "sha256:a07e0b59909792be4b16099bf74d87bdb8b8282bbfa95d0bbe110fd4539fba0f"},
-    {file = "langsmith-0.14.13.tar.gz", hash = "sha256:d8ff66381a5db2051546f1d15e7f0add87cc88fd771cb6fe238964418db394c4"},
+    {file = "langsmith-0.14.14-py3-none-any.whl", hash = "sha256:9265529ed9a592110cc75fa21f088ed34eb5f56ae680f6e9490e7f65e177386c"},
+    {file = "langsmith-0.14.14.tar.gz", hash = "sha256:fc28d1981656918f145d8d8089ed924dbf93d95e4959d0c1882cb5aec1563a0d"},
 ]
 
 [package.dependencies]
@@ -2038,20 +2038,20 @@ testing = ["packaging", "pytest"]
 
 [[package]]
 name = "litellm"
-version = "1.103.9"
+version = "1.103.10"
 description = "Library to easily interface with LLM API providers"
 optional = false
 python-versions = "<3.15,>=3.10"
 groups = ["dev"]
 files = [
-    {file = "litellm-1.103.9-cp310-abi3-macosx_10_12_x86_64.whl", hash = "sha256:7ba71c59404c825c38b5f346077c56ecfa228f9b847617c431d240357a7c3243"},
-    {file = "litellm-1.103.9-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:987904624a0e05fc974b68673f67c0660d945ecaac5be32068558dd1dc5f0c9b"},
-    {file = "litellm-1.103.9-cp310-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:98853dbf04e20f61971fa268be8a378df148c9e6a01c42985645ff682f0b5db3"},
-    {file = "litellm-1.103.9-cp310-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:3222f34985e389added27e5dc796dfd63d5996c4254605b772b36e6d4ec28c3f"},
-    {file = "litellm-1.103.9-cp310-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:fea6e5e026855173aafa967791e86d1ae3b13764a41806d92235f5ae8c24fcce"},
-    {file = "litellm-1.103.9-cp310-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:c81ab50d7900109e38ab8755f9e6c4ba33449ef68ef346b3be81dfac1aab90bd"},
-    {file = "litellm-1.103.9-cp310-abi3-win_amd64.whl", hash = "sha256:e7b0eebe85557cb95d1b07bf3347a1b7bd638e7ce446048c2ea8dd9c001f3718"},
-    {file = "litellm-1.103.9.tar.gz", hash = "sha256:be071c425260b4717c069bba953153c2336e81d5cc804bc3fa2afb5292ca1c64"},
+    {file = "litellm-1.103.10-cp310-abi3-macosx_10_12_x86_64.whl", hash = "sha256:0085bb61fdb321ce17014eac697d8d7513f36e6681d490af845e8d8b9af8e613"},
+    {file = "litellm-1.103.10-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:7451792391b9e268e812b17a4a5cc0d34dba9bac8d51615798ebcc58f10e1b09"},
+    {file = "litellm-1.103.10-cp310-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:ca4cbf0492f65c383de264da0ff98f48d4eb56e4edf4a55713d2562a554b986f"},
+    {file = "litellm-1.103.10-cp310-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:f639bd02ac34869080b7792732336345bc066ffb04be301093090425f6caa2bc"},
+    {file = "litellm-1.103.10-cp310-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:5774a19560e93b1da1838b160d0ac4fec5238c11bde2cd2411422a06fb4f5e7f"},
+    {file = "litellm-1.103.10-cp310-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:a7d2b6a0de7c0abfc97fe89184cb2b719a5f76170a4cac9ffd4d14e85fbb3b73"},
+    {file = "litellm-1.103.10-cp310-abi3-win_amd64.whl", hash = "sha256:adbcbb663a9cc96331de0f6ddd60e81d883288b901b7a4f6fbbfeb66edb669cd"},
+    {file = "litellm-1.103.10.tar.gz", hash = "sha256:b1bf12810b6565156c6b23bda2ccaf115c6edafbbf92e98220ecbc73f89d6972"},
 ]
 
 [package.dependencies]
@@ -3714,25 +3714,25 @@ test = ["pytest", "ruff"]
 
 [[package]]
 name = "pytest"
-version = "9.1.1"
+version = "9.2.0"
 description = "pytest: simple powerful testing with Python"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pytest-9.1.1-py3-none-any.whl", hash = "sha256:37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c"},
-    {file = "pytest-9.1.1.tar.gz", hash = "sha256:1088fbde8f2b49d95a549a195707afa7a76a3ce9bcadc26b6d71f0ffda5fe313"},
+    {file = "pytest-9.2.0-py3-none-any.whl", hash = "sha256:07acdcf88ec174f907dc01af70bf52d49b014bbab03faeeade31c96b18c2e588"},
+    {file = "pytest-9.2.0.tar.gz", hash = "sha256:97c4f3b1f3c7414aa36465e09b8220f1d03627993bd51b1282e193753c80557b"},
 ]
 
 [package.dependencies]
 colorama = {version = ">=0.4", markers = "sys_platform == \"win32\""}
-iniconfig = ">=1.0.1"
-packaging = ">=22"
-pluggy = ">=1.5,<2"
-pygments = ">=2.7.2"
+iniconfig = ">=2"
+packaging = ">=24"
+pluggy = ">=1.6,<2"
+pygments = ">=2.15"
 
 [package.extras]
-dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "requests", "setuptools", "xmlschema"]
+dev = ["argcomplete", "asynctest ; python_version < \"3.11\"", "attrs (>=23.1)", "coverage (>=7.5)", "hypothesis (>=6.75)", "mock", "numpy (>=1.26)", "pexpect (>=4.9)", "pytest-xdist (>=3.5)", "pyyaml", "requests", "setuptools", "xmlschema"]
 
 [[package]]
 name = "python-dateutil"
@@ -5909,4 +5909,4 @@ cffi = ["cffi (>=1.17,<2.0) ; platform_python_implementation != \"PyPy\" and pyt
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11, <3.14"
-content-hash = "310f12813990d17fae32950a5639c26b5b11ae5950397758aa7e91847fe7cbff"
+content-hash = "40c54a75d64975f45d007c67c9d366aca5fee6d54684d662054ef629c800d2f0"

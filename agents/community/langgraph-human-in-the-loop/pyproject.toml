@@ -23,7 +23,7 @@ ddgs = "^9.5.5"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-ibm-watsonx-ai-cli = ">=0.3.0"
+ibm-watsonx-ai-cli = "^0.7.0"
 pytest = "^9.1.1"
 
 [build-system]

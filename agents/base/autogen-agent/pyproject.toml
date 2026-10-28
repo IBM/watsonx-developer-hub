@@ -24,9 +24,8 @@ ibm-watsonx-ai = "^1.5.0"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-ibm-watsonx-ai-cli = ">=0.4.0"
+ibm-watsonx-ai-cli = ">=0.7.0"
 pytest = "^9.1.1"
-numpy = "<2.0.0"
 
 
 [build-system]

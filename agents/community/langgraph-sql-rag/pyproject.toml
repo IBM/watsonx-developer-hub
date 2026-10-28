@@ -20,7 +20,7 @@ langchain = "^1.4.2"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-ibm-watsonx-ai-cli = ">=0.6.0"
+ibm-watsonx-ai-cli = "^0.7.0"
 pytest = "^9.1.1"
 
 

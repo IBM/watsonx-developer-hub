@@ -17,13 +17,12 @@ llama-index-core = "^0.14.2"
 llama-index-llms-ibm = "^0.6.1"
 llama-index-utils-workflow = "^0.8.0"
 ibm-watsonx-ai = "^1.5.0"
-numpy = "<2"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-ibm-watsonx-ai-cli = ">=0.4.0"
+ibm-watsonx-ai-cli = "^0.7.0"
 pytest = "^9.1.1"
 
 [build-system]
