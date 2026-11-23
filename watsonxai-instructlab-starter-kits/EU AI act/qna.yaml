@@ -1,0 +1,205 @@
+created_by: syedame1
+version: 3
+domain: financial_regulation under EU AI Act
+document_outline: >-
+  Regulation (EU) 2024/1689 establishes rules for AI use in financial products
+  to ensure fairness, transparency, and risk mitigation.
+document:
+  repo: 'https://link-to-your-repo'
+  commit: commit hash
+  patterns:
+    - path/to/files/file.md
+seed_examples:
+  - context: >-
+      As per the EU AI Act, financial institutions using AI-driven
+      decision-making for loan approvals must ensure transparency, fairness,
+      and non-discrimination. The Act mandates that high-risk AI systems undergo
+      rigorous bias testing and explainability review.  Moreover, AI models must
+      incorporate human oversight (Article 16) and maintain clear documentation
+      along with regular risk assessments  (Article 53) to enable effective
+      regulatory audits. Customers have the right to contest automated decisions
+      as provided in Article 16.
+    questions_and_answers:
+      - question: >-
+          What are the key compliance requirements for AI-driven financial
+          products under the EU AI Act, and does our product comply?
+        answer: >-
+          AI-driven financial products must ensure transparency, fairness, and
+          non-discrimination. High-risk AI systems must undergo regular bias
+          testing and risk assessments (Article 53) while providing human
+          oversight (Article 16). If our loan approval model includes
+          structured  bias audits, documented risk management procedures, and a
+          mechanism for customer appeals as prescribed by Article 16, it
+          complies;  any missing component would indicate non-compliance with
+          these sections.
+      - question: >-
+          How does the EU AI Act address bias in AI-based loan approvals, and
+          what would cause a product to be non-compliant?
+        answer: >-
+          The Act requires that financial institutions perform rigorous bias
+          testing and document mitigation measures (Article 53). A product
+          becomes non-compliant if it fails to conduct regular bias assessments
+          or lacks transparent documentation and oversight (Article 16).
+      - question: >-
+          What rights do customers have under the EU AI Act regarding AI-driven
+          financial decisions, and how can we verify our product supports these
+          rights?
+        answer: >-
+          Customers have the right to contest automated decisions and request
+          human intervention as stated in Article 16. Verification involves
+          ensuring  that our products documentation includes processes for human
+          oversight and avenues for redress, meeting the standards set out in
+          Article 16.
+  - context: >-
+      The EU AI Act classifies certain financial AI applications, such as
+      algorithmic trading, credit risk assessments, and loan approvals,  as
+      high-risk systems. Such systems are subject to strict transparency and
+      explainability requirements (Article 52), as well as robust  risk
+      management practices (Article 53). Non-compliance with these standards may
+      result in significant regulatory penalties.
+    questions_and_answers:
+      - question: >-
+          What AI applications in finance are considered high-risk under the EU
+          AI Act, and does our system fully comply with these requirements?
+        answer: >-
+          The Act designates credit risk assessments, algorithmic trading, and
+          AI-based loan approvals as high-risk systems, governed mainly by
+          Articles 52 and 53. Full compliance requires that these applications
+          incorporate comprehensive risk management, transparency, and human
+          oversight  (Article 16). Our system must adhere to all these
+          provisions to be compliant.
+      - question: >-
+          What are the regulatory expectations for high-risk AI systems in
+          financial services, and how can our platform demonstrate compliance?
+        answer: >-
+          High-risk systems must provide full transparency regarding their
+          decision processes (Article 52), implement continuous risk assessments
+          and bias audits  (Article 53), and include mandatory human oversight
+          (Article 16). Our platform should document these processes thoroughly
+          to demonstrate compliance.
+      - question: >-
+          What penalties can financial institutions face for non-compliance with
+          the EU AI Act regarding high-risk AI applications?
+        answer: >-
+          Non-compliance can lead to substantial fines, restrictions on market
+          deployment, and mandatory corrective actions as defined in the penalty
+          provisions  of the Act. These penalties are intended to enforce the
+          strict requirements laid out in Articles 52, 53, and 16.
+  - context: >-
+      Under the EU AI Act, financial institutions must disclose when financial
+      product recommendations are generated using AI. Transparency is mandated
+      by Article 52, which requires that customers be informed about the AI role
+      in decision-making. Additionally, Article 53 reinforces that key decision
+      factors must be documented and accessible, ensuring the fairness and
+      explainability of the recommendations. Institutions must also allow
+      customers to  opt out and seek human advice as per Article 16.
+    questions_and_answers:
+      - question: >-
+          What disclosure requirements apply to AI-driven financial product
+          recommendations, and does our recommendation system comply with these
+          requirements?
+        answer: >-
+          Financial institutions must notify customers of AI involvement in
+          generating recommendations (Article 52) and ensure that the
+          decision-making factors  are clearly documented (Article 53).
+          Moreover, customers must have the right to opt out as provided in
+          Article 16. Our system complies if it includes clear  AI involvement
+          notifications, transparent explanation of the underlying rationale,
+          and an opt-out mechanism.
+      - question: >-
+          How should AI-driven pricing mechanisms be communicated to customers
+          to ensure compliance with the EU AI Act?
+        answer: >-
+          The Act requires that pricing mechanisms driven by AI are transparent
+          (Article 52). Institutions must clearly outline the factors
+          influencing  pricing decisions and ensure that customers understand
+          these mechanisms. Without such transparency, the system would not meet
+          the fairness requirements.
+      - question: >-
+          Can customers opt out of AI-based financial recommendations under the
+          EU AI Act, and what is required for compliance?
+        answer: >-
+          Yes, customers must be provided with an opt-out option (Article 16).
+          Compliance involves informing users of the AI’s involvement in
+          decision-making  and offering a clear, accessible process for opting
+          out, ensuring that customers can request human-based advice if
+          desired.
+  - context: >-
+      The EU AI Act designates AI-driven financial services such as credit
+      scoring and risk assessments as high-risk systems that require strict
+      compliance  with transparency, explainability, and human oversight
+      measures. As outlined in Article 53, financial AI models must undergo bias
+      audits and maintain  detailed risk management documentation, while Article
+      16 mandates the inclusion of human oversight in decision-making processes.
+    questions_and_answers:
+      - question: >-
+          Our mortgage product uses AI for credit assessment, with integrated
+          risk management and human oversight. Does it comply with the EU AI
+          Act,  and which articles confirm its compliance?
+        answer: >-
+          The product is compliant if it fulfills the risk management and bias
+          auditing requirements of Article 53 and includes the mandatory human
+          oversight  provisions specified in Article 16. These articles ensure
+          that the credit assessment process is transparent, regularly
+          monitored, and subject to human review.
+      - question: >-
+          Our lending platform uses an AI-driven credit scoring model that
+          evaluates customer profiles autonomously without manual review. Does
+          this system  comply, and if not, which sections would it be violating?
+        answer: >-
+          The system does not fully comply as the absence of human oversight
+          violates the mandates of Article 16. Moreover, without documented bias
+          testing and  risk assessments as required by Article 53, the model
+          fails to meet the transparency and accountability standards set by the
+          Act.
+      - question: >-
+          We use an AI-powered fraud detection system that monitors transactions
+          in real time without human involvement. Does our system comply with
+          the Act,  and what regulatory measures must be in place?
+        answer: >-
+          AI-driven fraud detection must incorporate human oversight and ensure
+          transparency in decision-making processes per Articles 52 and 53.
+          Compliance requires that flagged transactions are subject to human
+          review to mitigate risks, otherwise the system would be non-compliant.
+  - context: >-
+      The EU AI Act requires transparency and explainability in all AI-driven
+      financial product recommendations. Financial institutions must notify
+      customers  of AI involvement and allow them to opt out, as required by
+      Article 52. Additionally, AI models in investment and lending must
+      disclose key decision  factors under Article 53, and consumers must have
+      the right to contest decisions as provided in Article 16.
+    questions_and_answers:
+      - question: >-
+          Our investment platform recommends portfolios using an AI-driven risk
+          assessment model that provides optimized asset allocations based on
+          customers' financial goals. Does our platform comply with the EU AI
+          Act, and which articles indicate either compliance or non-compliance?
+        answer: >-
+          The platform complies if it meets the transparency and explainability
+          requirements of Article 52 and the risk management and documentation
+          provisions  of Article 53, as well as the customer rights under
+          Article 16. Missing any of these key elements would render the system
+          non-compliant.
+      - question: >-
+          We use AI to determine loan interest rates based on dynamic risk
+          factors, adjusting pricing in real time without disclosing this
+          process to customers. Does this system comply with the EU AI Act, and
+          what sections are being violated?
+        answer: >-
+          This system is non-compliant because it fails to meet the transparency
+          requirements set out in Article 52, which mandate that customers must
+          be informed  about AI role in pricing decisions. Without disclosure of
+          the key pricing factors, the system violates the fairness and
+          transparency provisions.
+      - question: >-
+          Our AI-driven personal finance assistant provides automated budgeting
+          and savings recommendations without human oversight. Is this compliant
+          under the EU AI Act, and which articles determine the compliance
+          status?
+        answer: >-
+          Although a personal finance assistant might not be classified as
+          high-risk, it must still adhere to the transparency requirements of
+          Article 52  and ensure explainability as per Article 53. Moreover, to
+          safeguard consumer rights under Article 16, the assistant should offer
+          human intervention  options. Without these measures, the system would
+          be partially non-compliant.
